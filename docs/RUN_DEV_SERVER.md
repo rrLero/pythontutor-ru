@@ -7,11 +7,11 @@
 
 2. Склонируйте репозиотрий себе:
     
-    git clone git@github.com:vpavlenko/pythontutor-ru.git
+        git clone git@github.com:vpavlenko/pythontutor-ru.git
 
 3. Перейдите в папку с репозиторием и скажите
 
-    vagrant up
+        vagrant up
 
 Всё. К вам сейчас прилетит Ubuntu 12.04, на её основе развернётся виртуальная машина,
 в неё накатятся nginx, gunicorn и все используемые питоновские пакеты. Папка репозитория будет
