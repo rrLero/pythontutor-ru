@@ -60,7 +60,7 @@ def load_error_information():
             errors.append(Error(**curError[0]))
             curError[0] = {}
 
-    for line in open(ABSOLUTE_PATH_TO_FILE_WITH_ERRORS):
+    for line in open(ABSOLUTE_PATH_TO_FILE_WITH_ERRORS, encoding="utf-8"):
         # only strip TRAILING spaces and not leading spaces
         line = line.rstrip()
 

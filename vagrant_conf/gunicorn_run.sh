@@ -20,6 +20,7 @@ export PYTHONPATH=$DJANGODIR:$PYTHONPATH
  
 cat vagrant_conf/db_admin_credentials.txt | python3 manage.py syncdb
 python3 manage.py migrate tutorial
+python3 manage.py collectstatic --noinput
 
 # Create the run directory if it doesn't exist
 # RUNDIR=$(dirname $SOCKFILE)
