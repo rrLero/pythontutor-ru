@@ -105,10 +105,12 @@ def profile(request):
 
 def home(request):
     raw_courses = list(Course.objects.all())
-    if request.user.is_authenticated():
-        user_course = request.user.get_profile().course
-    else:
-        user_course = None
+    user_course = None
+    try:
+        if request.user.is_authenticated():
+            user_course = request.user.get_profile().course
+    except UserProfile.DoesNotExist:
+        pass
     lessons = {course: [lic for lic in sorted(course.lessonincourse_set.all(), 
                         key=operator.attrgetter('order'))]
                         for course in raw_courses}

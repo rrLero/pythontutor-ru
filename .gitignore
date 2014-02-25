@@ -49,3 +49,7 @@ logs/*.log
 
 # Vagrant locals
 .vagrant
+logs
+
+# Static files
+collected_static
