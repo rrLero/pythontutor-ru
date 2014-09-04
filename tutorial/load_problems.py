@@ -59,7 +59,7 @@ def parseProblemFile(filename):
 
   for line in open(filename):
     # only strip TRAILING spaces and not leading spaces
-    line = line.rstrip().decode('utf-8')
+    line = line.rstrip()
 
     # comments are denoted by a leading '//', so ignore those lines.
     # Note that I don't use '#' as the comment token since sometimes I
