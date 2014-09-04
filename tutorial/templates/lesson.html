@@ -10,14 +10,14 @@
 <p><h3>Задачи:</h3>
     {% for problem in problems %}
         <p style="padding-left: 10pt;">
-        <a href="{% url courses %}{{ course.urlname }}/lessons/{{ lesson.urlname }}/problems/{{ problem.urlname }}/">
+        <a href="{% url 'courses' %}{{ course.urlname }}/lessons/{{ lesson.urlname }}/problems/{{ problem.urlname }}/">
             {% problem_link problem %}</a>
         {% ideal_solution problem %}
         </p>
     {% endfor %}
 </p>
 <p>
-<a href="{% url courses %}{{ course.urlname }}/lessons/{{ lesson.urlname }}/standings/"><h3>Таблица результатов</h3></a>
+<a href="{% url 'courses' %}{{ course.urlname }}/lessons/{{ lesson.urlname }}/standings/"><h3>Таблица результатов</h3></a>
 </p>
 {% endif %}
 

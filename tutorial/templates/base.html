@@ -152,7 +152,7 @@ Syntax highlighter from http://google-code-prettify.googlecode.com/svn/trunk/REA
       {% if navigation.course %}
       <li><a href="#" class="muted">{{ navigation.course.title }}</a></li>
       {% if navigation.lesson %}
-      <li class="active"><a href="{% url courses %}{{ navigation.course.urlname }}/lessons/{{ navigation.lesson.urlname }}/">{{ navigation.lesson.title }}</a></li>
+      <li class="active"><a href="{% url 'courses' %}{{ navigation.course.urlname }}/lessons/{{ navigation.lesson.urlname }}/">{{ navigation.lesson.title }}</a></li>
       {% endif %}
       {% endif %}
     </ul>
