@@ -27,8 +27,8 @@ def _insert_code_into_url(code):
 
 def _render_code_to_html(code, input_data='', context={}, executable=True, blockquote=True):
     if context.get("navigation", None):
-        visualizer_link = template.Template(r"{% url 'visualizer_for_lesson' " + "'{0}' '{1}'".\
-            format(context.get('navigation')['course'].urlname, context.get('navigation')['lesson'].urlname) + " %}").render(context)
+        visualizer_link = template.Template(r"{% url 'visualizer_for_lesson' " + "'{0}'".\
+            format(context.get('navigation')['lesson'].urlname) + " %}").render(context)
     else:
         visualizer_link = template.Template("r{% url 'visualizer' %}").render(context)
     return (('''<blockquote>''' if blockquote else '') 

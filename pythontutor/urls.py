@@ -26,21 +26,19 @@ urlpatterns = patterns('',
 
     url(r'^$', home, name="home"),
     
-    url(r'^visualizer/for_course/([^/]+)/for_lesson/([^/]+)/', visualizer_for_lesson, name='visualizer_for_lesson'),
+    url(r'^visualizer/for_lesson/([^/]+)/', visualizer_for_lesson, name='visualizer_for_lesson'),
 
     url(r'^visualizer/', visualizer, name='visualizer'),
 
     url(r'^execute/', execute),
 
-    url(r'^courses/$', dummy, name='courses'),
+    url(r'^lessons/([^/]+)/$', lesson_in_course, name="lesson_in_course"),
 
-    url(r'^courses/([^/]+)/lessons/([^/]+)/$', lesson_in_course, name="lesson_in_course"),
+    url(r'^lessons/([^/]+)/problems/([^/]+)/$', problem_in_lesson, name="problem_in_lesson"),
 
-    url(r'^courses/([^/]+)/lessons/([^/]+)/problems/([^/]+)/$', problem_in_lesson, name="problem_in_lesson"),
+    url(r'^lessons/([^/]+)/standings/$', standings_for_lesson),    
 
-    url(r'^courses/([^/]+)/lessons/([^/]+)/standings/$', standings_for_lesson),    
-
-    url(r'^courses/([^/]+)/standings/$', standings_for_course),    
+    url(r'^standings/$', standings_for_course),
 
     url(r'^load_problem/$', send_problem_to_frontend),
 

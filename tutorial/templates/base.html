@@ -121,15 +121,12 @@ Syntax highlighter from http://google-code-prettify.googlecode.com/svn/trunk/REA
 
 
 <div class="navigationLine">
-<a href="{% url 'home' %}">Главная страница</a>
-
-{% if navigation.course %}
-    &nbsp;&nbsp;&gt;&nbsp;&nbsp;
-    <!-- <a href="/courses/{{ course.urlname }}/"> -->{{ navigation.course.title }}<!-- </a> --> 
-    {% if navigation.lesson %}
-        &nbsp;&nbsp;&gt;&nbsp;&nbsp;
-        <a href="{% url 'courses' %}{{ navigation.course.urlname }}/lessons/{{ navigation.lesson.urlname }}/">{{ navigation.lesson.title }}</a>
-    {% endif %}
+{% if not navigation.course %}
+    <a href="{% url 'home' %}">Главная страница</a>
+{% else %}
+    <a href="{% url 'home' %}">&lt; Вернуться на главную страницу</a><br>
+    <br>
+    Уроки: <a href="/lessons/{{ navigation.lesson.urlname }}/">{{ navigation.lesson.title }}</a><br>
 
     {% if navigation.problem %}
     {% endif %}
@@ -144,16 +141,10 @@ Syntax highlighter from http://google-code-prettify.googlecode.com/svn/trunk/REA
   <div class="navbar-inner">
     <div class="container">
     <ul class="nav">
-      {% if not navigation.course and not navigation.lesson %}
+      {% if not navigation.lesson %}
       <li class="active"><a href="{% url 'home' %}">Главная страница</a></li>
       {% else %}
-      <li><a href="{% url 'home' %}">Главная страница</a></li>
-      {% endif %}
-      {% if navigation.course %}
-      <li><a href="#" class="muted">{{ navigation.course.title }}</a></li>
-      {% if navigation.lesson %}
-      <li class="active"><a href="{% url 'courses' %}{{ navigation.course.urlname }}/lessons/{{ navigation.lesson.urlname }}/">{{ navigation.lesson.title }}</a></li>
-      {% endif %}
+      <li class="active">Уроки: <a href="/lessons/{{ navigation.lesson.urlname }}/">{{ navigation.lesson.title }}</a></li>
       {% endif %}
     </ul>
     </div>
@@ -191,4 +182,3 @@ Syntax highlighter from http://google-code-prettify.googlecode.com/svn/trunk/REA
 
 </body>
 </html>
-

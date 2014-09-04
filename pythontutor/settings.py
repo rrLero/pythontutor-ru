@@ -215,3 +215,6 @@ ABSOLUTE_PREFIX = os.path.abspath(SCRIPT_ROOT + '/..') + '/'
 USE_TZ = True
 
 SESSION_COOKIE_AGE = 86400 * 6  # 24 hours, in seconds
+
+
+DEFAULT_COURSE = '1534'
