@@ -1,13 +1,18 @@
 # -*- coding: utf-8 -*-
 
 import os
+
+
 SCRIPT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
 # Django settings for pythontutor project.
 
-DEBUG = True
+DEBUG = ('PYTHONTUTOR_PRODUCTION' not in os.environ)
 TEMPLATE_DEBUG = DEBUG
 NEED_LOGIN = True
+
+if not DEBUG:
+	ALLOWED_HOSTS = ['*']
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
