@@ -124,7 +124,7 @@ Syntax highlighter from http://google-code-prettify.googlecode.com/svn/trunk/REA
 {% if not navigation.course %}
     <a href="{% url 'home' %}">Главная страница</a>
 {% else %}
-    <a href="{% url 'home' %}">&lt; Вернуться на главную страницу</a><br>
+    <a href="{% url 'home' %}">&lt; На главную страницу</a><br>
     <br>
     Уроки: <a href="/lessons/{{ navigation.lesson.urlname }}/">{{ navigation.lesson.title }}</a><br>
 
