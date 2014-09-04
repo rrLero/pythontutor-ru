@@ -146,7 +146,7 @@ def execute(request):
 
         json_data = exec_script_on_input(user_script, input_data)
 
-        return HttpResponse(json_data, mimetype='text/plain')
+        return HttpResponse(json_data, content_type='text/plain')
     else:
         return HttpResponseBadRequest()
 
@@ -165,7 +165,7 @@ def run_test(request):
 
         json = run_script_on_test_input(user_script, test_input, test_answer)
 
-        return HttpResponse(json, mimetype='text/plain')
+        return HttpResponse(json, content_type='text/plain')
     else:
         return HttpResponseBadRequest()    
 
@@ -214,7 +214,7 @@ def send_problem_to_frontend(request):
 
         output_json = json.dumps(problem)
         
-        return HttpResponse(output_json, mimetype='text/plain')                
+        return HttpResponse(output_json, content_type='text/plain')                
     else:
         return HttpResponseBadRequest()
 
@@ -271,7 +271,7 @@ def post_grading_result(request):
 
         submission.save()
 
-        return HttpResponse(json, mimetype='text/plain')                
+        return HttpResponse(json, content_type='text/plain')                
     else:
         return HttpResponseBadRequest()
 
@@ -407,7 +407,7 @@ def init_lessons_info(request):
         lessons = [Lesson.objects.get(urlname=s) for s in get["lessons_comma_separated_list"].split('%2C')]
         dict_lessons = [dict(urlname=lesson.urlname, title=lesson.title) for lesson in lessons]
         output_json = json.dumps(dict_lessons)
-        return HttpResponse(output_json, mimetype='text/plain') 
+        return HttpResponse(output_json, content_type='text/plain') 
     else:
         return HttpResponseBadRequest()
 
