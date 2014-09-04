@@ -28,11 +28,12 @@
 
 
 from django import template
+from django.conf import settings
 
 import os, sys
 
 
-ABSOLUTE_PATH_TO_PROBLEMS = '/var/www/pylernu/problems/'
+ABSOLUTE_PATH_TO_PROBLEMS = settings.ABSOLUTE_PREFIX + 'problems/'
 
 
 delimiters = set(['Name:', 'Statement:', 'Test:', 'Answer:'])
