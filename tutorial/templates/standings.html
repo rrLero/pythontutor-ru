@@ -30,7 +30,7 @@
             -->
             <td title="{{ user.first_name }} {{ user.last_name }}, {{ problem.name }}{% if submission %}, {{ submission.time }}{% endif %}" style="background-color: {{ rgb_color }};" align="center">
             {% if request.user.is_staff %} 
-            <a href="{% url admin:index %}tutorial/submission/{{ submission.id }}/">{{ text|safe }}</a>
+            <a href="{% url 'admin:index' %}tutorial/submission/{{ submission.id }}/">{{ text|safe }}</a>
             {% else %}
             {{ text|safe }}
             {% endif %}
