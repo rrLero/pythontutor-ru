@@ -203,7 +203,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 
-LOGIN_REDIRECT_URL = '/pylernu/'
+LOGIN_REDIRECT_URL = '/'
 
 ABSOLUTE_PREFIX = os.path.abspath(SCRIPT_ROOT + '/..') + '/'
 
