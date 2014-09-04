@@ -175,7 +175,7 @@ def lesson_in_course(request, lesson_name):
     lesson = Lesson.objects.get(urlname=lesson_name)
     navigation = dict(course=course, lesson=lesson)
     lesson_in_course = lesson.lessonincourse_set.get(course=course)
-    raw_lesson_content = open(ABSOLUTE_PATH_TO_LESSONS + lesson.filename, 'r').read()
+    raw_lesson_content = open(ABSOLUTE_PATH_TO_LESSONS + lesson.filename, 'r', encoding='utf-8').read()
     lesson_content = process_lesson_content(raw_lesson_content, course, lesson)
     problems = get_sorted_problems(lesson=lesson)
     return render(request, 'lesson.html', locals())

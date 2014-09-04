@@ -58,7 +58,7 @@ def parseProblemFile(filename):
       ret['answers'].append('\n'.join(curParts).strip())
 
 
-  for line in open(filename):
+  for line in open(filename, 'r', encoding='utf-8'):
     # only strip TRAILING spaces and not leading spaces
     line = line.rstrip()
 
