@@ -1,33 +1,32 @@
 # -*- coding: utf-8 -*-
 
+import operator
+import json
+import functools
+import collections
+
 from django.shortcuts import render, redirect
 
 from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseBadRequest
 from django.core.urlresolvers import reverse
 from django import template
-
 from django.contrib.auth.models import User
-from models import Problem, Lesson, Course, UserProfile, Submission
-from forms import UserCreationForm, UserProfileForm
+from django.conf import settings
 
-from pylernu import settings
-from pylernu.visualizer.web_exec import exec_script_on_input
-from pylernu.visualizer.web_run_test import run_script_on_test_input
-from load_problems import load_problem, load_raw_problem
-from utils import get_submission_color, sign_by_status, color_by_status
+from tutorial.models import Problem, Lesson, Course, UserProfile, Submission
+from tutorial.forms import UserCreationForm, UserProfileForm
 
-
-import operator
-import json
-import functools
-import collections
+from visualizer.web_exec import exec_script_on_input
+from visualizer.web_run_test import run_script_on_test_input
+from tutorial.load_problems import load_problem, load_raw_problem
+from tutorial.utils import get_submission_color, sign_by_status, color_by_status
 
 
 # MAX_INSTRUCTIONS_LIMIT = 200
 ABSOLUTE_PATH_TO_LESSONS = settings.ABSOLUTE_PREFIX + 'lessons/'
 
 
-def dummy(request): 
+def dummy(request):
     return HttpResponse('dummy requested')
 
 
@@ -56,7 +55,7 @@ def get_best_saved_code(user, problem_urlname):
     if submission:
         return submission.code
     else:
-        return u""
+        return ""
 
 
 def need_login(function):
@@ -74,7 +73,7 @@ def need_admin(function):
     def need_admin_wrapper(*args, **kwargs):
         request = args[0]
         if not request.user.is_staff:
-            return HttpResponseBadRequest(u'Необходимо быть администратором'.encode('utf-8'))
+            return HttpResponseBadRequest('Необходимо быть администратором'.encode('utf-8'))
         return function(*args, **kwargs)
     return need_admin_wrapper
 
@@ -106,17 +105,19 @@ def profile(request):
 
 def home(request):
     raw_courses = list(Course.objects.all())
-    if request.user.is_authenticated():
-        user_course = request.user.get_profile().course
-    else:
-        user_course = None
+    user_course = None
+    try:
+        if request.user.is_authenticated():
+            user_course = request.user.get_profile().course
+    except UserProfile.DoesNotExist:
+        pass
     lessons = {course: [lic for lic in sorted(course.lessonincourse_set.all(), 
                         key=operator.attrgetter('order'))]
                         for course in raw_courses}
     # lessons = {course: [lic.lesson for lic in sorted(course.lessonincourse_set.all(), 
     #                     key=operator.attrgetter('order'))]
     #                     for course in raw_courses}                        
-    courses = sorted(lessons.items(), key=lambda x: x[0] != user_course)
+    courses = sorted(list(lessons.items()), key=lambda x: x[0] != user_course)
     return render(request, 'index.html', locals())
 
 
@@ -137,13 +138,13 @@ def execute(request):
     # method: POST
     # params: user_script, input_data
     post = request.POST
-    if post.has_key('user_script') and post.has_key('input_data'):
+    if 'user_script' in post and 'input_data' in post:
         user_script = post['user_script']
         input_data = post['input_data']
 
-        json = exec_script_on_input(user_script, input_data)
+        json_data = exec_script_on_input(user_script, input_data)
 
-        return HttpResponse(json, mimetype='text/plain')                
+        return HttpResponse(json_data, mimetype='text/plain')
     else:
         return HttpResponseBadRequest()
 
@@ -153,9 +154,9 @@ def run_test(request):
     # method: POST
     # params: user_script, test_input, test_answer
     post = request.POST
-    if (post.has_key('user_script') 
-            and post.has_key('test_input') 
-            and post.has_key('test_answer')):
+    if ('user_script' in post 
+            and 'test_input' in post 
+            and 'test_answer' in post):
         user_script = post['user_script']
         test_input = post['test_input']
         test_answer = post['test_answer']
@@ -179,7 +180,7 @@ def lesson_in_course(request, course_name, lesson_name):
 
 
 def process_lesson_content(raw, course=None, lesson=None):
-    lesson_content = u'{% load tags %}\n{% lesson %}\n' + raw + '{% endlesson %}'
+    lesson_content = '{% load tags %}\n{% lesson %}\n' + raw + '{% endlesson %}'
     t = template.Template(lesson_content)
     return t.render(template.Context(dict(navigation=dict(course=course, lesson=lesson))))
 
@@ -201,7 +202,7 @@ def send_problem_to_frontend(request):
     # method: GET            
     # params: problem_urlname
     get = request.GET
-    if get.has_key('problem_urlname'):
+    if 'problem_urlname' in get:
         problem_urlname = get['problem_urlname']
 
         problem = load_raw_problem(Problem.objects.get(urlname=problem_urlname))
@@ -226,7 +227,7 @@ def register_user(request):
             password = form.cleaned_data['password']
 
             if User.objects.filter(username=username):
-                error = u'Пользователь с таким логином уже существует'
+                error = 'Пользователь с таким логином уже существует'
                 return direct_to_template(request, 'register.html', locals())
 
             first_name = form.cleaned_data['first_name']
@@ -251,7 +252,7 @@ def post_grading_result(request):
     # method: POST
     # params: problem, code, result
     post = request.POST
-    if (post.has_key('problem') and post.has_key('code') and post.has_key('result')
+    if ('problem' in post and 'code' in post and 'result' in post
             and request.user.is_authenticated()):
         problem_urlname = post['problem']
         problem = Problem.objects.get(urlname=problem_urlname)
@@ -259,12 +260,12 @@ def post_grading_result(request):
         status = post['result']
         user = request.user
 
-	if user.get_profile().course and user.get_profile().course.get_ok_ac_policy_display() == 'use_accepted_instead_of_ok':
-            if status == 'ok':
-                status = 'accepted'
+    if user.get_profile().course and user.get_profile().course.get_ok_ac_policy_display() == 'use_accepted_instead_of_ok':
+        if status == 'ok':
+            status = 'accepted'
 
         submission = Submission(problem=problem, code=code, user=user, 
-                status={v: k for k, v in Submission.STATUS_CHOICES}[status])
+                                status={v: k for k, v in Submission.STATUS_CHOICES}[status])
 
         submission.save()
 
@@ -336,11 +337,11 @@ def standings_for_lessons(request, course, lessons, navigation):
     user_scores = {user: [0, 0, 0] for user in users}  # [num_solved, rating, num_attempted]
 
     problems_num_solved = collections.defaultdict(int)
-    for (user, problem_db_object), submission in submissions.items():
+    for (user, problem_db_object), submission in list(submissions.items()):
         if submission.get_status_display() == 'ok':
             problems_num_solved[problem_db_object] += 1
 
-    for (user, problem_db_object), submission in submissions.items():
+    for (user, problem_db_object), submission in list(submissions.items()):
         if submission.get_status_display() == 'ok':
             user_scores[user][0] += 1
             user_scores[user][1] += len(users) - problems_num_solved[problem_db_object] + 1
@@ -399,7 +400,7 @@ def init_lessons_info(request):
     # method: GET
     # params: lessons_comma_separated_list
     get = request.GET
-    if get.has_key("lessons_comma_separated_list"):
+    if "lessons_comma_separated_list" in get:
         lessons = [Lesson.objects.get(urlname=s) for s in get["lessons_comma_separated_list"].split('%2C')]
         dict_lessons = [dict(urlname=lesson.urlname, title=lesson.title) for lesson in lessons]
         output_json = json.dumps(dict_lessons)
@@ -414,7 +415,7 @@ def get_new_submissions(request):
     # method: GET
     # params: lesson_urlname, last_retrieved_submission
     get = request.GET
-    if get.has_key("lesson") and get.has_key("last_retrieved_submission"):
+    if "lesson" in get and "last_retrieved_submission" in get:
         pass
     else:
         return HttpResponseBadRequest()

@@ -34,3 +34,22 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
+# virtualenv
+venv
+
+# Logs
+logs/*.log
+
+# Database
+*.db
+
+# Backups
+*.bak
+
+# Vagrant locals
+.vagrant
+logs
+
+# Static files
+collected_static

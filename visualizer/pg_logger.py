@@ -35,7 +35,7 @@
 # fail on Python 3.X).
 
 
-from code_conversion import (three_to_two, print__workaround, input__workaround, 
+from visualizer.code_conversion import (three_to_two, print__workaround, input__workaround, 
     config_workarounds, by_bytes, ceil__workaround, floor__workaround)
 
 
@@ -54,11 +54,12 @@ import re
 import traceback
 import copy
 
-import StringIO
-import cStringIO
-import pg_encoder
+import io
+StringIO = io.StringIO
+cStringIO = io.BytesIO
+import visualizer.pg_encoder
 
-from pylernu.errors.explain import get_error_explanation
+from errors.explain import get_error_explanation
 
 
 IGNORE_VARS = set(('__stdin__', '__stdout__', '__builtins__', '__name__', '__exception__', '__package__', 'input__workaround'))
@@ -87,7 +88,7 @@ def get_user_locals(frame):
 
 def filter_var_dict(d):
   ret = {}
-  for (k,v) in d.iteritems():
+  for (k,v) in d.items():
     if k not in IGNORE_VARS:
       ret[k] = v
   return ret
@@ -191,7 +192,7 @@ class PGLogger(bdb.Bdb):
           # encode in a JSON-friendly format now, in order to prevent ill
           # effects of aliasing later down the line ...
           encoded_locals = {}
-          for (k, v) in get_user_locals(cur_frame).iteritems():
+          for (k, v) in get_user_locals(cur_frame).items():
             # don't display some built-in locals ...
             if k != '__module__':
               encoded_locals[k] = pg_encoder.encode(v, self.ignore_id)
@@ -202,7 +203,7 @@ class PGLogger(bdb.Bdb):
         # encode in a JSON-friendly format now, in order to prevent ill
         # effects of aliasing later down the line ...
         encoded_globals = {}
-        for (k, v) in get_user_globals(tos[0]).iteritems():
+        for (k, v) in get_user_globals(tos[0]).items():
           encoded_globals[k] = pg_encoder.encode(v, self.ignore_id)
 
         trace_entry = dict(line=lineno,
@@ -229,10 +230,6 @@ class PGLogger(bdb.Bdb):
 
 
     def _runscript(self, script_str, input_data):
-        reload(sys) 
-        sys.setdefaultencoding("utf-8")
-
-
         # When bdb sets tracing, a number of call and line events happens
         # BEFORE debugger even reaches user's code (and the exact sequence of
         # events depends on python version). So we take special measures to
@@ -243,7 +240,7 @@ class PGLogger(bdb.Bdb):
         # ok, let's try to sorta 'sandbox' the user script by not
         # allowing certain potentially dangerous operations:
         user_builtins = {}
-        for (k,v) in __builtins__.iteritems():
+        for (k,v) in __builtins__.items():
           if k in ('reload', 'apply', 'open', 'compile', 'input', #'__import__',
                    'file', 'eval', 'execfile', 'exec',
                    'exit', 'quit', 
@@ -262,21 +259,19 @@ class PGLogger(bdb.Bdb):
 
         # disgusting cocktail of python 2 and 3
 
-        user_builtins['old_raw_input'] = __builtins__['raw_input']
+        user_builtins['old_raw_input'] = __builtins__['input']
         user_builtins['input'] = user_builtins['raw_input'] = input__workaround
         user_builtins['print__workaround'] = print__workaround
         user_builtins['ceil__workaround'] = ceil__workaround
         user_builtins['floor__workaround'] = floor__workaround
 
-        print 'creating user_stdin'
-        user_stdin = StringIO.StringIO(input_data)
-        print 'user_stdin created'
+        user_stdin = StringIO(input_data)
 
         global user_stdout
 
-        user_stdout = StringIO.StringIO()
+        user_stdout = StringIO()
 
-        config_workarounds(__builtins__['raw_input'], user_stdout, sys.stdout)
+        config_workarounds(__builtins__['input'], user_stdout, sys.stdout)
 
         sys.stdin = user_stdin
 
@@ -294,15 +289,14 @@ class PGLogger(bdb.Bdb):
                        }
 
         try:
-          print >> true_stdout, 'run begins'
           self.run(script_str, user_globals, user_globals)
           sys.stdout = standard_stdout
-          print >> true_stdout, 'run is done'
+
           self.finalize(script_str)
         # sys.exit ...
         except InstructionLimitReached:
           sys.stdout = standard_stdout
-          print 'instruction limit reached'
+
           self.finalize(script_str)
         except:
           #traceback.print_exc() # uncomment this to see the REAL exception msg
@@ -311,9 +305,6 @@ class PGLogger(bdb.Bdb):
 
           sys.stdout = standard_stdout
 
-          print 'Program caught an exception'
-          print repr(sys.exc_info()[1])
-
           exc = sys.exc_info()[1]
           if hasattr(exc, 'lineno'):
             trace_entry['line'] = exc.lineno
@@ -321,14 +312,12 @@ class PGLogger(bdb.Bdb):
             trace_entry['offset'] = exc.offset
 
           if hasattr(exc, 'msg'):
-            print('exc has message:\n\t{0}'.format(exc.msg))
+            print(('exc has message:\n\t{0}'.format(exc.msg)))
             trace_entry['exception_msg'] = "Error: " + exc.msg
           else:
             trace_entry['exception_msg'] = "Unknown error"
 
           self.trace.append(trace_entry)
-
-          print 'going to finalize()'
 
           self.finalize(script_str)
           # sys.exit(0) 
@@ -339,14 +328,6 @@ class PGLogger(bdb.Bdb):
 
 
     def finalize(self, script_str):
-      print 'enter finalize()'
-
-      print "stdout hadn't been renormalized"
-
-      #assert len(self.trace) <= (MAX_EXECUTED_LINES + 1)
-
-      print 'assertion about MAX_EXECUTED_LINES passed'
-
       # filter all entries after 'return' from '<module>', since they
       # seem extraneous:
       res = []
@@ -355,7 +336,6 @@ class PGLogger(bdb.Bdb):
         if e['event'] == 'return' and e['func_name'] == '<module>':
           break
 
-      print 'filter returns finished'
 
       # another hack: if the SECOND to last entry is an 'exception'
       # and the last entry is return from <module>, then axe the last
@@ -371,19 +351,13 @@ class PGLogger(bdb.Bdb):
 
       # somewhere here we should attach an information about errors
 
-      print 'about to attach_error_explanation()'
       self.attach_error_explanation(script_str)
-      print 'error explanation attached'
 
-      print 'about to obscure our python2 guts'
       self.obscure_python2_guts()
-      print 'python2 guts obscure'
 
-      print self.finalizer_func.__name__
 
       self.finalizer_func(self.trace)
 
-      print 'out of the finalizer function'
 
 
     def attach_error_explanation(self, script_str):
@@ -391,13 +365,11 @@ class PGLogger(bdb.Bdb):
       for d in self.trace:
         exception_msg = d.get('exception_msg', None)
         lineno = d.get('line', None)
-        print u'finding explanation to ' + unicode(script)
-        print u'exception_msg ' + unicode(exception_msg)
         if exception_msg:
           try:
             d['exception_msg'] = get_error_explanation(exception_msg, script[lineno - 1] if lineno else None)
           except Exception as e:
-            d['exception_msg'] = unicode(exception_msg) + '<br>Another exception occured while explanation<br>' + unicode(e)
+            d['exception_msg'] = str(exception_msg) + '<br>Another exception occured while explanation<br>' + str(e)
 
 
     def obscure_python2_guts(self):
@@ -411,33 +383,29 @@ class PGLogger(bdb.Bdb):
       for d in self.trace:
         g = d.get('globals', None)
         if g:
-          for k, v in g.items():
+          for k, v in list(g.items()):
             g[k] = obscure(v)
         g = d.get('stack_locals', None)
         if g:
           for func_name, variables_dict in g:
-            for k, v in variables_dict.items():
+            for k, v in list(variables_dict.items()):
               variables_dict[k] = obscure(v)
 
 
 # the MAIN meaty function!!!
 def exec_script_str(script_str, input_data, finalizer_func, ignore_id=False):
-  print 'about to translate code into python2'
   script_str = three_to_two(script_str)
-  print 'mangled code:\n{0}\n'.format(script_str.encode('ascii', 'replace'))
   print('version: 13:40')
   # print 'input by bytes:\n{0}\n'.format(by_bytes(input_data))
   logger = PGLogger(finalizer_func, ignore_id)
-  input_data = unicode(input_data)
+  input_data = str(input_data)
   logger._runscript(script_str, input_data)
 
-  print 'end of exec_script_str'
 
 def exec_file_and_pretty_print(mainpyfile, input_data_file):
   import pprint
 
   if not os.path.exists(mainpyfile):
-    print 'Error:', mainpyfile, 'does not exist'
     sys.exit(1)
 
   def pretty_print(output_lst):
@@ -449,6 +417,6 @@ def exec_file_and_pretty_print(mainpyfile, input_data_file):
 
 if __name__ == '__main__':
   # need this round-about import to get __builtins__ to work :0
-  import pg_logger
+  from . import pg_logger
   pg_logger.exec_file_and_pretty_print(sys.argv[1], sys.argv[2])
 
