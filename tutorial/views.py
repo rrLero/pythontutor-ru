@@ -25,6 +25,8 @@ from tutorial.utils import get_submission_color, sign_by_status, color_by_status
 # MAX_INSTRUCTIONS_LIMIT = 200
 ABSOLUTE_PATH_TO_LESSONS = settings.ABSOLUTE_PREFIX + 'lessons/'
 
+DEFAULT_COURSE = settings.DEFAULT_COURSE
+
 
 def dummy(request):
     return HttpResponse('dummy requested')
@@ -104,7 +106,7 @@ def profile(request):
 
 
 def home(request):
-    raw_courses = list(Course.objects.all())
+    raw_courses = [Course.objects.get(urlname=DEFAULT_COURSE)] #list(Course.objects.all())
     user_course = None
     try:
         if request.user.is_authenticated():
@@ -126,8 +128,8 @@ def visualizer(request):
     return render(request, 'visualizer.html', locals())
 
 
-def visualizer_for_lesson(request, course_name, lesson_name):
-    course = Course.objects.get(urlname=course_name)
+def visualizer_for_lesson(request, lesson_name):
+    course = Course.objects.get(urlname=DEFAULT_COURSE)
     lesson = Lesson.objects.get(urlname=lesson_name)
     navigation = dict(course=course, lesson=lesson)
     return render(request, 'visualizer.html', locals())
@@ -168,8 +170,8 @@ def run_test(request):
         return HttpResponseBadRequest()    
 
 
-def lesson_in_course(request, course_name, lesson_name):
-    course = Course.objects.get(urlname=course_name)
+def lesson_in_course(request, lesson_name):
+    course = Course.objects.get(urlname=DEFAULT_COURSE)
     lesson = Lesson.objects.get(urlname=lesson_name)
     navigation = dict(course=course, lesson=lesson)
     lesson_in_course = lesson.lessonincourse_set.get(course=course)
@@ -186,8 +188,8 @@ def process_lesson_content(raw, course=None, lesson=None):
 
 
 @need_login
-def problem_in_lesson(request, course_name, lesson_name, problem_name):
-    course = Course.objects.get(urlname=course_name)
+def problem_in_lesson(request, lesson_name, problem_name):
+    course = Course.objects.get(urlname=DEFAULT_COURSE)
     lesson = Lesson.objects.get(urlname=lesson_name)
     navigation = dict(course=course, lesson=lesson)
     
@@ -274,21 +276,22 @@ def post_grading_result(request):
         return HttpResponseBadRequest()
 
 
-def standings_for_lesson(request, course_urlname, lesson_urlname):
-    course = Course.objects.get(urlname=course_urlname)
+def standings_for_lesson(request, lesson_urlname):
+    course = Course.objects.get(urlname=DEFAULT_COURSE)
     lesson = Lesson.objects.get(urlname=lesson_urlname)
     navigation = dict(course=course, lesson=lesson)
-    return standings_for_lessons(request, course, [lesson], navigation)
+    return standings_for_lessons(request, [lesson], navigation)
 
 
-def standings_for_course(request, course_urlname):
-    course = Course.objects.get(urlname=course_urlname)
+def standings_for_course(request):
+    course = Course.objects.get(urlname=DEFAULT_COURSE)
     lessons = get_sorted_lessons(course)
     navigation = dict(course=course)
-    return standings_for_lessons(request, course, lessons, navigation)
+    return standings_for_lessons(request, lessons, navigation)
 
 
-def get_users_and_best_submissions_for_problems(course, problems_loaded):
+def get_users_and_best_submissions_for_problems(problems_loaded):
+    course = Course.objects.get(urlname=DEFAULT_COURSE)
     users = {user_profile.user for user_profile in course.userprofile_set.select_related().all()}
     submissions = {} # key: (user, problem)
     problems_db_objects = {problem['db_object'] for problem in problems_loaded}
@@ -326,13 +329,13 @@ def get_users_and_best_submissions_for_problems(course, problems_loaded):
     return users, submissions
 
 
-def standings_for_lessons(request, course, lessons, navigation):
+def standings_for_lessons(request, lessons, navigation):
     problems = []
 
     for lesson in lessons:
         problems.extend(get_sorted_problems(lesson))
 
-    users, submissions = get_users_and_best_submissions_for_problems(course, problems)
+    users, submissions = get_users_and_best_submissions_for_problems(problems)
 
     user_scores = {user: [0, 0, 0] for user in users}  # [num_solved, rating, num_attempted]
 
@@ -373,16 +376,16 @@ def standings_for_lessons(request, course, lessons, navigation):
 # Unfortunately, I abandoned all these ideas.
 
 
-def course_success(request, course_urlname):
+def course_success(request):
     # step #1. retrieve list of all lessons and number of problems in them
     # step #2. retrieve all submissions and for every pair 
-    course = Course.objects.all(urlname=course_urlname)
+    course = Course.objects.all(urlname=DEFAULT_COURSE)
     lessons = get_sorted_lessons(course)
     pass
 
 
 @need_admin
-def submissions_for_course(request, course_urlname):
+def submissions_for_course(request):
     course = Course.objects.get(urlname=course_urlname)
     lessons = get_sorted_lessons(course)
     return redirect(settings.SERVER_PREFIX + 'teacher_statistics/submissions/for_lessons/' 
