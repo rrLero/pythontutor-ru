@@ -43,10 +43,10 @@ $(document).ready(function() {
         <p class="courseDescription">{{ lic.lesson.description|safe }}</p>
         {% endif %}
     {% endcomment %}
-    <p>Занятие {{ lic.order }}. <a href="{% url 'courses' %}{{ course.urlname }}/lessons/{{ lic.lesson.urlname }}/">{{ lic.lesson.title }}</a>
+    <p>Занятие {{ lic.order }}. <a href="/lessons/{{ lic.lesson.urlname }}/">{{ lic.lesson.title }}</a>
     </p>
 {% endfor %}
-<a href="{% url 'courses' %}{{ course.urlname}}/standings/">Результаты курса</a>
+<a href="/standings/">Результаты курса</a>
 </div>
 
 {% endfor %}

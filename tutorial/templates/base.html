@@ -128,7 +128,7 @@ Syntax highlighter from http://google-code-prettify.googlecode.com/svn/trunk/REA
     <!-- <a href="/courses/{{ course.urlname }}/"> -->{{ navigation.course.title }}<!-- </a> --> 
     {% if navigation.lesson %}
         &nbsp;&nbsp;&gt;&nbsp;&nbsp;
-        <a href="{% url 'courses' %}{{ navigation.course.urlname }}/lessons/{{ navigation.lesson.urlname }}/">{{ navigation.lesson.title }}</a>
+        <a href="/lessons/{{ navigation.lesson.urlname }}/">{{ navigation.lesson.title }}</a>
     {% endif %}
 
     {% if navigation.problem %}
@@ -152,7 +152,7 @@ Syntax highlighter from http://google-code-prettify.googlecode.com/svn/trunk/REA
       {% if navigation.course %}
       <li><a href="#" class="muted">{{ navigation.course.title }}</a></li>
       {% if navigation.lesson %}
-      <li class="active"><a href="{% url 'courses' %}{{ navigation.course.urlname }}/lessons/{{ navigation.lesson.urlname }}/">{{ navigation.lesson.title }}</a></li>
+      <li class="active"><a href="/lessons/{{ navigation.lesson.urlname }}/">{{ navigation.lesson.title }}</a></li>
       {% endif %}
       {% endif %}
     </ul>
@@ -191,4 +191,3 @@ Syntax highlighter from http://google-code-prettify.googlecode.com/svn/trunk/REA
 
 </body>
 </html>
-
