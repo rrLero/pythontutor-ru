@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from tutorial.models import Course, Lesson
 from tutorial.views import DEFAULT_COURSE
 
-from visualizer.web_exec import exec_script_on_input
+from evaldontevil import execute_python
 
 
 def visualizer(request):
@@ -27,8 +27,11 @@ def execute(request):
         user_script = post['user_script']
         input_data = post['input_data']
 
-        json_data = exec_script_on_input(user_script, input_data)
+        res = execute_python(user_script, stdin=input_data)
+        json_data = res.stdout
+        print(res.stderr)
 
         return HttpResponse(json_data, content_type='text/plain')
+
     else:
         return HttpResponseBadRequest()
