@@ -27,91 +27,13 @@
 # into a dict, which can easily be converted into JSON
 
 
-from django import template
-from django.conf import settings
+import pprint
+from sys import argv
 
-import os, sys
-
-
-ABSOLUTE_PATH_TO_PROBLEMS = settings.ABSOLUTE_PREFIX + 'problems/'
-
-
-delimiters = set(['Name:', 'Statement:', 'Test:', 'Answer:'])
-
-
-def parseProblemFile(filename):
-  ret = {}
-  ret['tests'] = []
-  ret['answers'] = []
-
-  curParts = []
-  curDelimiter = None
-
-  def processRecord():
-    if curDelimiter == 'Name:':
-      ret['name'] = '\n'.join(curParts).strip()
-    elif curDelimiter == 'Statement:':
-      ret['statement'] = ' '.join(curParts).strip()
-    elif curDelimiter == 'Test:':
-      ret['tests'].append('\n'.join(curParts).strip())
-    elif curDelimiter == 'Answer:':
-      ret['answers'].append('\n'.join(curParts).strip())
-
-
-  for line in open(filename, 'r', encoding='utf-8'):
-    # only strip TRAILING spaces and not leading spaces
-    line = line.rstrip()
-
-    # comments are denoted by a leading '//', so ignore those lines.
-    # Note that I don't use '#' as the comment token since sometimes I
-    # want to include Python comments in the skeleton code.
-    if line.startswith('//'):
-      continue
-
-    # special-case one-liners:
-    if line.startswith('MaxInstructions:'):
-      ret['max_instructions'] = int(line.split(':')[1])
-      continue # move to next line
-
-
-    if line in delimiters:
-      processRecord()
-      curDelimiter = line
-      curParts = []
-    else:
-      curParts.append(line)
-
-  # don't forget to process the FINAL record
-  processRecord()
-
-  assert len(ret['tests']) == len(ret['answers'])
-
-  return ret
-
-
-def load_problem(problem):
-  ret = parseProblemFile(ABSOLUTE_PATH_TO_PROBLEMS + problem.filename)
-
-  ret['urlname'] = problem.urlname
-  ret['filename'] = problem.filename
-  ret['db_object'] = problem
-
-  raw_statement = ('{% load tags %}\n' + ret['statement'] + 
-                   '{% input %}' + ret['tests'][0] + '{% endinput %}' +
-                   '{% output %}' + ret['answers'][0] + '{% endoutput %}')
-  t = template.Template(raw_statement)
-  ret['statement'] = t.render(template.Context(ret))
-
-  return ret
-
-
-def load_raw_problem(problem):
-  ret = load_problem(problem)
-  del ret['db_object']
-  return ret
+from .problems import parse_file
 
 
 if __name__ == '__main__':
   import pprint
   pp = pprint.PrettyPrinter(indent=2)
-  pp.pprint(parseProblemFile(sys.argv[1]))
+  pp.pprint(parse_file(argv[1]))

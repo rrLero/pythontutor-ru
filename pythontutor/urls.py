@@ -1,20 +1,21 @@
+from django.conf import settings
 from django.conf.urls import patterns, include, url
-
-# Uncomment the next two lines to enable the admin:
 from django.contrib import admin, auth
-admin.autodiscover()
-
 from django.contrib.auth.views import login, logout
 
-from tutorial.views import (dummy, home, visualizer, execute, lesson_in_course,
-        problem_in_lesson, send_problem_to_frontend, run_test, register_user, post_grading_result,
-        standings_for_lesson, visualizer_for_lesson, profile, course_success, submissions_for_lessons,
-        submissions_for_course, standings_for_course,)
+from tutorial.views import dummy
+from tutorial.views.course import course_success
+from tutorial.views.home import home
+from tutorial.views.lesson import lesson_in_course
+from tutorial.views.problem import problem_in_lesson, send_problem_to_frontend
+from tutorial.views.profile import profile, register_user
+from tutorial.views.standings import (standings_for_course, standings_for_lesson,
+                                      submissions_for_course, submissions_for_lessons)
+from tutorial.views.tests import run_test, post_grading_result
+from tutorial.views.visualizer import execute, visualizer, visualizer_for_lesson
 
-#from tutorial.misc.views import resistors
 
-
-from django.conf import settings
+admin.autodiscover()
 
 
 urlpatterns = patterns('',

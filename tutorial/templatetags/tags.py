@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from django import template
-from tutorial.models import Problem, Submission
 from django.contrib.auth.models import User
-from tutorial.load_problems import load_problem
 from django.conf import settings
+
+from tutorial.models import Problem, Submission
+from tutorial.problems import load_problem
 
 
 import urllib.request, urllib.parse, urllib.error
