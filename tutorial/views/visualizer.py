@@ -1,10 +1,12 @@
-from django.shortcuts import render
+from json import dumps
+
 from django.http import HttpResponse, HttpResponseBadRequest
+from django.shortcuts import render
 
 from tutorial.models import Course, Lesson
 from tutorial.views import DEFAULT_COURSE
 
-from evaldontevil import execute_python
+from evaldontevil import execute_python_explain
 
 
 def visualizer(request):
@@ -28,8 +30,8 @@ def execute(request):
         user_script = post['user_script']
         input_data = post['input_data']
 
-        res = execute_python(user_script, stdin=input_data)
-        json_data = res.stdout
+        res = execute_python_explain(user_script, stdin=input_data)
+        json_data = dumps(res.__dict__)
 
         return HttpResponse(json_data, content_type='application/json')
 

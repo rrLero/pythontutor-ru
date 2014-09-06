@@ -145,8 +145,12 @@ function processTrace(traceData, jumpToEnd) {
     instrLimitReached = (lastEntry.event == 'instruction_limit_reached');
 
     if (instrLimitReached) {
-      curTrace.pop() // kill last entry
+      curTrace.pop(); // kill last entry
       var warningMsg = lastEntry.exception_msg;
+      if(warningMsg == null)
+        warningMsg = 'Неизвестная ошибка';
+      else
+        warningMsg = 'Ошибка: ' + warningMsg;
       $("#errorOutput").html(warningMsg);
       $("#errorOutput").show();
     }
@@ -263,7 +267,13 @@ function updateOutput() {
     //   $("#errorOutput").html('Неизвестная ошибка: пожалуйста, сообщите о ней адиминистратору на cxielamiko@gmail.com');
     // }
     // else {
-    $("#errorOutput").html(curEntry.exception_msg);
+      var warningMsg = curEntry.exception_msg;
+      if(warningMsg == null)
+        warningMsg = 'Неизвестная ошибка';
+      else
+        warningMsg = 'Ошибка: ' + warningMsg;
+
+	  $("#errorOutput").html(warningMsg);
     // }
 
     $("#errorOutput").show();

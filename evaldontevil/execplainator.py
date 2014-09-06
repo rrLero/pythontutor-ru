@@ -45,6 +45,7 @@
 
 
 from bdb import Bdb
+from copy import copy
 from io import StringIO
 from traceback import print_exc
 import sys
@@ -57,40 +58,29 @@ from execplainator_encoder import encode
 MAX_EXECUTED_LINES = 1000
 
 
-IGNORE_VARS = set(('__stdin__', '__stdout__', '__builtins__', '__name__', '__package__'))
-
-
 class StopExecution(Exception):
     pass
 
 
-def get_user_stdout(frame):
-    return user_stdout.getvalue()
+class TraceEntry:
+    def __init__(self, **kwargs):
+        for name, value in kwargs.items():
+            setattr(self, name, value)
 
-def get_user_globals(frame):
-    d = filter_var_dict(frame.f_globals)
-    # also filter out __return__ for globals only, but NOT for locals
+    def __setattr__(self, name, value):
+        if type(value) is dict:
+            value = copy(value)
+            for k, v in value.items():
+                value[k] = encode(v)
 
-    if '__return__' in d:
-        del d['__return__']
+        super.__setattr__(self, name, value)
 
-    return d
-
-def get_user_locals(frame):
-    return filter_var_dict(frame.f_locals)
-
-def filter_var_dict(d):
-    ret = {}
-
-    for k, v in d.items():
-        if k not in IGNORE_VARS and k not in __builtins__ and not (k.startswith('__') and k.endswith('__')):
-            ret[k] = v
-
-    return ret
+    def dict(self):
+        return self.__dict__
 
 
 class Execplainator(Bdb):
-    def __init__(self, ignore_id=False):
+    def __init__(self):
         Bdb.__init__(self)
 
         self.mainpyfile = ''
@@ -99,10 +89,6 @@ class Execplainator(Bdb):
         # each entry contains a dict with the information for a single
         # executed line
         self.trace = []
-
-        # don't print out a custom ID for each object
-        # (for regression testing)
-        self.ignore_id = ignore_id
 
 
     def reset(self):
@@ -119,6 +105,16 @@ class Execplainator(Bdb):
         self.forget()
         self.stack, self.curindex = self.get_stack(f, t)
         self.curframe = self.stack[self.curindex][0]
+
+
+    def _filter_variables(self, d):
+        ret = {}
+
+        for k, v in d.items():
+            if not (k.startswith('__') and k.endswith('__')):
+                ret[k] = v
+
+        return ret
 
 
     # Override Bdb methods
@@ -162,73 +158,62 @@ class Execplainator(Bdb):
 
 
     # General interaction function
-
     def interaction(self, frame, traceback, event_type):
         self.setup(frame, traceback)
         tos = self.stack[self.curindex]
         func_name = tos[0].f_code.co_name
         lineno = tos[1]
 
-        if func_name != '<module>':
-            return
-
-        # each element is a pair of (function name, ENCODED locals dict)
-        encoded_stack_locals = []
+        # each element is a pair of (function name, locals dict)
+        stack_locals = []
 
         # climb up until you find '<module>', which is (hopefully) the global scope
         i = self.curindex
         while True:
             cur_frame = self.stack[i][0]
-            cur_name = cur_frame.f_code.co_name
-            if cur_name == '<module>':
+            where = cur_frame.f_code.co_name
+            if where == '<module>':
                 break
 
             # special case for lambdas - grab their line numbers too
-            if cur_name == '<lambda>':
-                cur_name = 'lambda on line ' + str(cur_frame.f_code.co_firstlineno)
-            elif cur_name == '':
-                cur_name = 'unnamed function'
+            if where == '<lambda>':
+                where = 'lambda on line ' + str(cur_frame.f_code.co_firstlineno)
+            elif where == '':
+                where = 'unnamed function'
 
-            # encode in a JSON-friendly format now, in order to prevent ill
-            # effects of aliasing later down the line ...
-            encoded_locals = {}
-            for (k, v) in get_user_locals(cur_frame).items():
-                # don't display some built-in locals ...
-                if k != '__module__':
-                    encoded_locals[k] = encode(v, self.ignore_id)
+            stack_locals.append((where, self._filter_variables(cur_frame.f_locals)))
 
-            encoded_stack_locals.append((cur_name, encoded_locals))
             i -= 1
 
-        # encode in a JSON-friendly format now, in order to prevent ill
-        # effects of aliasing later down the line ...
-        encoded_globals = {}
-        for (k, v) in get_user_globals(tos[0]).items():
-            encoded_globals[k] = encode(v, self.ignore_id)
+        trace_entry = TraceEntry(
+            event = event_type,
 
-        trace_entry = dict(line=lineno,
-                           event=event_type,
-                           func_name=func_name,
-                           globals=encoded_globals,
-                           stack_locals=encoded_stack_locals,
-                           stdout=get_user_stdout(tos[0]))
+            line = lineno,
+            func_name = func_name,
+
+            globals = self._filter_variables(tos[0].f_globals),
+            stack_locals = stack_locals,
+
+            stdout = self.stdout.getvalue(),
+            stderr = self.stderr.getvalue(),
+        )
 
         # if there's an exception, then record its info:
         if event_type == 'exception':
             # always check in f_locals
             exc = frame.f_locals['__exception__']
-            trace_entry['exception_msg'] = exc[0].__name__ + ': ' + str(exc[1])
+            trace_entry.exception_msg = exc[0].__name__ + ': ' + str(exc[1])
 
         self.trace.append(trace_entry)
 
         if len(self.trace) >= MAX_EXECUTED_LINES:
-            self.trace.append(dict(event='instruction_limit_reached', exception_msg='Stopped after ' + str(MAX_EXECUTED_LINES) + ' steps to prevent possible infinite loop'))
+            self.trace.append(TraceEntry(event='instruction_limit_reached', exception_msg='Stopped after ' + str(MAX_EXECUTED_LINES) + ' steps to prevent possible infinite loop'))
             self.force_terminate()
 
         self.forget()
 
 
-    def _runscript(self, script_str, input_data):
+    def run_code(self, code, input_data):
         # When bdb sets tracing, a number of call and line events happens
         # BEFORE debugger even reaches user's code (and the exact sequence of
         # events depends on python version). So we take special measures to
@@ -236,87 +221,74 @@ class Execplainator(Bdb):
         # user_call for details).
         self._wait_for_mainpyfile = 1
 
-        # ok, let's try to sorta 'sandbox' the user script by not
-        # allowing certain potentially dangerous operations:
-        user_builtins = {}
-        for (name, orig_builtin) in __builtins__.items():
-            if name in ('reload', 'apply', 'compile', #'__import__',
-                        'file', 'eval', 'execfile', 'exec'):
-                continue
 
-            if name == '__import__':
-                true_import = orig_builtin
+        self.sys_stdin = sys.stdin
+        self.stdin = StringIO(input_data)
+        sys.stdin = self.stdin
 
-                def import__workaround(*args, **kwargs):
-                    return true_import(*args, **kwargs)
+        self.sys_stdout = sys.stdout
+        self.stdout = StringIO()
+        sys.stdout = self.stdout
 
-                user_builtins[name] = import__workaround
-
-            else:
-                user_builtins[name] = orig_builtin
+        self.sys_stderr = sys.stderr
+        self.stderr = StringIO()
+        sys.stderr = self.stderr
 
 
-        global true_stdin
-        global user_stdin
-        true_stdin = sys.stdin
-        user_stdin = StringIO(input_data)
-        sys.stdin = user_stdin
-
-        global true_stdout
-        global user_stdout
-        true_stdout = sys.stdout
-        user_stdout = StringIO()
-        sys.stdout = user_stdout
-
-
-        user_globals = {'__name__': '__main__',
-                        '__builtins__': user_builtins,
-                        '__stdin__': user_stdin,
-                        '__stdout__': user_stdout,
-                       }
+        user_globals = {
+            '__name__': '__main__',
+            '__builtins__': __builtins__,
+            '__stdin__': self.stdin,
+            '__stdout__': self.stdout,
+            '__stderr__': self.stderr,
+        }
 
         try:
-            self.run(script_str, user_globals, user_globals)
+            self.run(code, user_globals, user_globals)
 
         except StopExecution:
             pass
 
         except:
-            #print_exc() # uncomment this to see the REAL exception msg
+            print_exc()
 
-            trace_entry = dict(event='uncaught_exception')
+            trace_entry = TraceEntry(event='uncaught_exception')
 
             exc = sys.exc_info()[1]
             if hasattr(exc, 'lineno'):
-              trace_entry['line'] = exc.lineno
+                trace_entry.line = exc.lineno
             if hasattr(exc, 'offset'):
-              trace_entry['offset'] = exc.offset
+                trace_entry.offset = exc.offset
 
             if hasattr(exc, 'msg'):
-                print(('exc has message:\n\t{0}'.format(exc.msg)))
-                trace_entry['exception_msg'] = 'Error: ' + exc.msg
+                trace_entry.exception_msg = exc.msg
             else:
-                trace_entry['exception_msg'] = 'Unknown error'
+                trace_entry.exception_msg = None
 
             self.trace.append(trace_entry)
 
-        sys.stdin = true_stdin
-        sys.stdout = true_stdout
+        sys.stdin = self.sys_stdin
+        sys.stdout = self.sys_stdout
+        sys.stderr = self.sys_stderr
 
-        return self.finalize()
+        return {
+            'trace': self._filter_trace(self.trace),
+            'stdout': self.stdout.getvalue(),
+            'stderr': self.stderr.getvalue(),
+        }
 
 
     def force_terminate(self):
         raise StopExecution()
 
 
-    def finalize(self):
+    def _filter_trace(self, trace):
         # filter all entries after 'return' from '<module>', since they
         # seem extraneous:
         res = []
-        for e in self.trace:
-            res.append(e)
-            if e['event'] == 'return' and e['func_name'] == '<module>':
+        for e in trace:
+            res.append(e.dict())
+            if e.event == 'return' and e.func_name == '<module>':
                 break
 
         # another hack: if the SECOND to last entry is an 'exception'
@@ -327,11 +299,9 @@ class Execplainator(Bdb):
            res[-1]['event'] == 'return' and res[-1]['func_name'] == '<module>':
             res.pop()
 
-        self.trace = res
-
-        return self.trace
+        return res
 
 
-def exec(script_str, input_data, ignore_id=False):
-    execplainator = Execplainator(ignore_id)
-    return execplainator._runscript(script_str, str(input_data))
+def exec(code, input_data=''):
+    execplainator = Execplainator()
+    return execplainator.run_code(code, str(input_data))

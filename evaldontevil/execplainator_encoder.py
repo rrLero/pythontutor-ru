@@ -69,7 +69,7 @@ cur_small_id = 1
 
 classRE = compile("<class '(.*)'>")
 
-def encode(dat, ignore_id=False):
+def encode(dat):
     def encode_helper(dat, compound_obj_ids):
         # primitive type
         if dat is None or type(dat) in (int, int, float, str, bool):
@@ -81,10 +81,7 @@ def encode(dat, ignore_id=False):
 
             global cur_small_id
             if my_id not in real_to_small_IDs:
-                if ignore_id:
-                    real_to_small_IDs[my_id] = 99999
-                else:
-                    real_to_small_IDs[my_id] = cur_small_id
+                real_to_small_IDs[my_id] = cur_small_id
                 cur_small_id += 1
 
             if my_id in compound_obj_ids:

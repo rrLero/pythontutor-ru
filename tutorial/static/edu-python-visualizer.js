@@ -40,6 +40,11 @@ function enterVisualizeMode(traceData) {
 	$('#inputDataOnVisualizing').val($('#inputData').val());
 }
 
+function executingState(state) {
+	$('#executeBtn').attr('disabled', state);
+	$('#executeBtn').html(state ? 'Ваша программа выполняется...' : 'Запустить программу');
+}
+
 
 $(document).ready(function() {
 	eduPythonCommonInit(); // must call this first!
@@ -72,8 +77,7 @@ $(document).ready(function() {
 			$('#pyOutputPane').show();
 			window.scrollTo(0, 0);
 
-			$('#executeBtn').html('Запустить программу');
-			$('#executeBtn').attr('disabled', false);
+			executingState(false);
 
 			// do this AFTER making #pyOutputPane visible, or else
 			// jsPlumb connectors won't render properly
@@ -93,8 +97,7 @@ $(document).ready(function() {
 
 	$('#executeBtn').attr('disabled', false);
 	$('#executeBtn').click(function() {
-		$('#executeBtn').html('Ваша программа выполняется...');
-		$('#executeBtn').attr('disabled', true);
+		executingState(true);
 		$('#pyOutputPane').hide();
 
 		var req = $.post('/visualizer/execute/', {
@@ -102,16 +105,24 @@ $(document).ready(function() {
 			input_data : $('#inputData').val()
 		});
 
-		req.done(function(traceData) {
+		req.done(function(result) {
+			if(result.result == 'internal_error') {
+				alert('Упс... На сервере случилась какая-то внутренняя ошибка :(');
+				executingState(false);
+				return;
+			} else if(result.result == 'realtime_limited') {
+				alert('Ваш код слишком долго выполнялся и был остановлен досрочно. Возможно, в программе содержится бесконечный цикл.');
+				executingState(false);
+				return;
+			}
+
 			renderPyCodeOutput($('#pyInput').val());
-			enterVisualizeMode(traceData);
+			enterVisualizeMode(result.trace);
 		});
 
 		req.fail(function() {
-			alert('Ой, на сервере случилась какая-то ошибка :(\nСкорее всего, дело в том, что ваша программа совершает слишком много действий. Проверьте, не заходит ли ваша программа в вечный цикл?');
-
-			$('#executeBtn').html('Запустить программу');
-			$('#executeBtn').attr('disabled', false);
+			alert('Ой! Не удалось выполнить запрос к серверу :(');
+			executingState(false);
 		});
 	});
 
