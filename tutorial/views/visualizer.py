@@ -8,13 +8,14 @@ from evaldontevil import execute_python
 
 
 def visualizer(request):
-    return render(request, 'visualizer.html', locals())
+    if 'lesson' in request.GET:
+        lesson = Lesson.objects.get(urlname=request.GET['lesson'])
+        if lesson is not None:
+            navigation = {'lesson': lesson}
 
+    code = request.POST.get('code', '')
+    input_data = request.POST.get('input', '')
 
-def visualizer_for_lesson(request, lesson_name):
-    course = Course.objects.get(urlname=DEFAULT_COURSE)
-    lesson = Lesson.objects.get(urlname=lesson_name)
-    navigation = dict(course=course, lesson=lesson)
     return render(request, 'visualizer.html', locals())
 
 
@@ -29,7 +30,6 @@ def execute(request):
 
         res = execute_python(user_script, stdin=input_data)
         json_data = res.stdout
-        print(res.stderr)
 
         return HttpResponse(json_data, content_type='text/plain')
 
