@@ -31,7 +31,7 @@ def execute(request):
         res = execute_python(user_script, stdin=input_data)
         json_data = res.stdout
 
-        return HttpResponse(json_data, content_type='text/plain')
+        return HttpResponse(json_data, content_type='application/json')
 
     else:
         return HttpResponseBadRequest()
