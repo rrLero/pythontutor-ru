@@ -8,8 +8,8 @@ function visualize(link) {
 	input.text(code_block.find('pre')[0].textContent);
 	form.append(input);
 
-	var input = $('<input type="text" name="input">');
-	input.val(code_block.data('input'));
+	var input = $('<textarea name="input">');
+	input.text(code_block.find('pre')[1].textContent);
 	form.append(input);
 
 	form.hide();

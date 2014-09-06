@@ -1,4 +1,5 @@
 <{{ enclosure_tag }} class="code">
 	<pre class="prettyprint lang-python">{{ code }}</pre>
-	{% if executable %}<a href="javascript:visualize(this);" x-input="{{ input }}" onclick="visualize(this); return false;">Показать код в визуализаторе</a>{% endif %}
+	<pre class="input_data" style="display: none;">{{ input_data }}</pre>
+	{% if executable %}<a href="javascript:visualize(this);" onclick="visualize(this); return false;">Показать код в визуализаторе</a>{% endif %}
 </{{ enclosure_tag }}>

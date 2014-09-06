@@ -34,7 +34,7 @@ def _render_code_to_html(code, input_data='', context={}, executable=True, block
 		'enclosure_tag': 'blockquote' if blockquote else 'div',
 		'code': code,
 		'executable': executable,
-		'input': input_data,
+		'input_data': input_data,
 	}))
 
 
