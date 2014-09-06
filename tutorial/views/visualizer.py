@@ -36,7 +36,7 @@ def execute(request):
         del res['stdout']
         del res['stderr']
 
-        json_data = dumps(res.__dict__)
+        json_data = dumps(res)
 
         return HttpResponse(json_data, content_type='application/json')
 
