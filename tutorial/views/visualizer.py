@@ -31,6 +31,11 @@ def execute(request):
         input_data = post['input_data']
 
         res = execute_python_explain(user_script, stdin=input_data)
+        res = res.__dict__
+
+        del res['stdout']
+        del res['stderr']
+
         json_data = dumps(res.__dict__)
 
         return HttpResponse(json_data, content_type='application/json')
