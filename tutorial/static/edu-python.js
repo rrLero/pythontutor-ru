@@ -1253,12 +1253,6 @@ function eduPythonCommonInit() {
     }
   });
 
-
-  // log a generic AJAX error handler
-  $(document).ajaxError(function() {
-    alert("Ой, на сервере случилась какая-то ошибка. Скорее всего, дело в том, что ваша программа совершает слишком много действий. Проверьте, не заходит ли ваша программа в вечный цикл?");
-  });
-
 }
 
 function getURLParameter(name) {

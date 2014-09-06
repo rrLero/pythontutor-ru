@@ -1,6 +1,14 @@
 {% extends 'base.html' %}
 {% load tags %}
 
+{% block headers %}
+	<script type="text/javascript" src="{{ STATIC_URL }}js/lesson.js"></script>
+
+	<script type="text/javascript">
+		var lesson_name = '{{ lesson.urlname }}';
+	</script>
+{% endblock %}
+
 {% block body %}
 
 <h2>Занятие {{ lesson_in_course.order }}. {{ lesson.title }}</h2>

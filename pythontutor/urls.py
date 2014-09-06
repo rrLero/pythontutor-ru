@@ -12,7 +12,7 @@ from tutorial.views.profile import profile, register_user
 from tutorial.views.standings import (standings_for_course, standings_for_lesson,
                                       submissions_for_course, submissions_for_lessons)
 from tutorial.views.tests import run_test, post_grading_result
-from tutorial.views.visualizer import execute, visualizer, visualizer_for_lesson
+from tutorial.views.visualizer import execute, visualizer
 
 
 admin.autodiscover()
@@ -26,12 +26,10 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     url(r'^$', home, name="home"),
-    
-    url(r'^visualizer/for_lesson/([^/]+)/', visualizer_for_lesson, name='visualizer_for_lesson'),
+
+    url(r'^visualizer/execute/', execute, name='visualizer_execute'),
 
     url(r'^visualizer/', visualizer, name='visualizer'),
-
-    url(r'^execute/', execute),
 
     url(r'^lessons/([^/]+)/$', lesson_in_course, name="lesson_in_course"),
 

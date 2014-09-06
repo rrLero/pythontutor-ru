@@ -26,241 +26,122 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
 
-// The Online Python Tutor front-end, which calls the cgi-bin/web_exec.py
-// back-end with a string representing the user's script POST['user_script']
-// and receives a complete execution trace, which it parses and displays to HTML.
-
 // Pre-req: edu-python.js and jquery.ba-bbq.min.js should be imported BEFORE this file
 
 
-var SERVER_PREFIX = '/'
-
-
 function enterEditMode() {
-  $.bbq.pushState({ mode: 'edit' });
+	$.bbq.pushState({mode: 'edit'});
 }
 
 function enterVisualizeMode(traceData) {
-  curTrace = traceData; // first assign it to the global curTrace, then
-                        // let jQuery BBQ take care of the rest
-  $.bbq.pushState({ mode: 'visualize' });
-  $('#inputDataOnVisualizing').val($('#inputData').val());
+	curTrace = traceData; // first assign it to the global curTrace, then
+	                      // let jQuery BBQ take care of the rest
+	$.bbq.pushState({mode: 'visualize'});
+	$('#inputDataOnVisualizing').val($('#inputData').val());
 }
 
 
 $(document).ready(function() {
-  eduPythonCommonInit(); // must call this first!
+	eduPythonCommonInit(); // must call this first!
 
-  registerInputTextarea('pyInput');
+	registerInputTextarea('pyInput');
 
-  // this doesn't work since we need jquery.textarea.js ...
-  //$("#pyInput").tabby(); // recognize TAB and SHIFT-TAB
+	// be friendly to the browser's forward and back buttons
+	// thanks to http://benalman.com/projects/jquery-bbq-plugin/
+	$(window).bind('hashchange', function(e) {
+		appMode = $.bbq.getState('mode'); // assign this to the GLOBAL appMode
 
+		// default mode is 'edit'
+		if(appMode == undefined) {
+			appMode = 'edit';
+		}
 
-  // be friendly to the browser's forward and back buttons
-  // thanks to http://benalman.com/projects/jquery-bbq-plugin/
-  $(window).bind("hashchange", function(e) {
-    appMode = $.bbq.getState("mode"); // assign this to the GLOBAL appMode
+		// if there's no curTrace, then default to edit mode since there's
+		// nothing to visualize:
+		if(!curTrace) {
+			appMode = 'edit';
+			$.bbq.pushState({mode: 'edit'});
+		}
 
-    // default mode is 'edit'
-    if (appMode == undefined) {
-      appMode = 'edit';
-    }
+		if(appMode == 'edit') {
+			$('#pyInputPane').show();
+			$('#pyOutputPane').hide();
 
-    // if there's no curTrace, then default to edit mode since there's
-    // nothing to visualize:
-    if (!curTrace) {
-      appMode = 'edit';
-      $.bbq.pushState({ mode: 'edit' });
-    }
+		} else if(appMode == 'visualize') {
+			$('#pyInputPane').hide();
+			$('#pyOutputPane').show();
+			window.scrollTo(0, 0);
 
+			$('#executeBtn').html('Запустить программу');
+			$('#executeBtn').attr('disabled', false);
 
-    if (appMode == 'edit') {
-      $("#pyInputPane").show();
-      $("#pyOutputPane").hide();
-    }
-    else if (appMode == 'visualize') {
-      $("#pyInputPane").hide();
-      $("#pyOutputPane").show();
-      window.scrollTo(0, 0);
+			// do this AFTER making #pyOutputPane visible, or else
+			// jsPlumb connectors won't render properly
+			processTrace(curTrace, false);
 
-      $('#executeBtn').html("Запустить программу");
-      $('#executeBtn').attr('disabled', false);
+		} else {
+			assert(false);
+		}
+	});
 
-
-      // do this AFTER making #pyOutputPane visible, or else
-      // jsPlumb connectors won't render properly
-      processTrace(curTrace /* kinda dumb and redundant */, false);
-    }
-    else {
-      assert(false);
-    }
-  });
-
-  // From: http://benalman.com/projects/jquery-bbq-plugin/
-  //   Since the event is only triggered when the hash changes, we need
-  //   to trigger the event now, to handle the hash the page may have
-  //   loaded with.
-  $(window).trigger( "hashchange" );
+	// From: http://benalman.com/projects/jquery-bbq-plugin/
+	//   Since the event is only triggered when the hash changes, we need
+	//   to trigger the event now, to handle the hash the page may have
+	//   loaded with.
+	$(window).trigger('hashchange');
 
 
-  $("#executeBtn").attr('disabled', false);
-  $("#executeBtn").click(function() {
-    $('#executeBtn').html("Ваша программа выполняется...");
-    $('#executeBtn').attr('disabled', true);
-    $("#pyOutputPane").hide();
+	$('#executeBtn').attr('disabled', false);
+	$('#executeBtn').click(function() {
+		$('#executeBtn').html('Ваша программа выполняется...');
+		$('#executeBtn').attr('disabled', true);
+		$('#pyOutputPane').hide();
 
-    $.post(SERVER_PREFIX + "execute/",
-           {user_script : $("#pyInput").val(),
-            input_data  : $("#inputData").val()},
-           function(traceData) {
-             renderPyCodeOutput($("#pyInput").val());
-             enterVisualizeMode(traceData);
-           },
-           "json");
-  });
+		var req = $.post('/visualizer/execute/', {
+			user_script: $('#pyInput').val(),
+			input_data : $('#inputData').val()
+		});
+
+		req.done(function(traceData) {
+			renderPyCodeOutput($('#pyInput').val());
+			enterVisualizeMode(traceData);
+		});
+
+		req.fail(function() {
+			alert('Ой, на сервере случилась какая-то ошибка :(\nСкорее всего, дело в том, что ваша программа совершает слишком много действий. Проверьте, не заходит ли ваша программа в вечный цикл?');
+
+			$('#executeBtn').html('Запустить программу');
+			$('#executeBtn').attr('disabled', false);
+		});
+	});
 
 
-  $("#editBtn").click(function() {
-    enterEditMode();
-  });
+	$('#editBtn').click(function() {
+		enterEditMode();
+	});
 
 
-  // canned examples
+	$('#exampleLinks a').click(function(e) {
+		var code_file = $(e.target).data('code');
+		var input_file = $(e.target).data('input');
 
-  $("#tutorialExampleLink").click(function() {
-    $.get(SERVER_PREFIX + "static/example-code/py_tutorial.txt", function(dat) {$("#pyInput").val(dat);});
-    $.get(SERVER_PREFIX + "static/example-code/py_tutorial.in", function(dat) {$("#inputData").val(dat);});
-    return false;
-  });
+		$.get('/static/example-code/' + code_file, function(code) {
+			$('#pyInput').val(code);
+		});
 
-  $("#strtokExampleLink").click(function() {
-    $.get(SERVER_PREFIX + "static/example-code/strtok.txt", function(dat) {$("#pyInput").val(dat);});
-    $.get(SERVER_PREFIX + "static/example-code/empty.in", function(dat) {$("#inputData").val(dat);});    
-    return false;
-  });
+		if(typeof(input_file) !== 'undefined') {
+			$.get('/static/example-code/' + input_file, function(code) {
+				$('#inputData').val(code);
+			});
+		} else {
+			$('#inputData').val();
+		}
 
-  $("#fibonacciExampleLink").click(function() {
-    $.get(SERVER_PREFIX + "static/example-code/fib.txt", function(dat) {$("#pyInput").val(dat);});
-    $.get(SERVER_PREFIX + "static/example-code/empty.in", function(dat) {$("#inputData").val(dat);});        
-    return false;
-  });
+		return false;
+	});
 
-  $("#memoFibExampleLink").click(function() {
-    $.get(SERVER_PREFIX + "static/example-code/memo_fib.txt", function(dat) {$("#pyInput").val(dat);});
-    $.get(SERVER_PREFIX + "static/example-code/empty.in", function(dat) {$("#inputData").val(dat);});        
-    return false;
-  });
-
-  $("#factExampleLink").click(function() {
-    $.get(SERVER_PREFIX + "static/example-code/fact.txt", function(dat) {$("#pyInput").val(dat);});
-    $.get(SERVER_PREFIX + "static/example-code/empty.in", function(dat) {$("#inputData").val(dat);});    
-    $("#inputData").val("");
-    return false;
-  });
-
-  $("#filterExampleLink").click(function() {
-    $.get(SERVER_PREFIX + "static/example-code/filter.txt", function(dat) {$("#pyInput").val(dat);});
-    $.get(SERVER_PREFIX + "static/example-code/empty.in", function(dat) {$("#inputData").val(dat);});        
-    return false;
-  });
-
-  $("#insSortExampleLink").click(function() {
-    $.get(SERVER_PREFIX + "static/example-code/ins_sort.txt", function(dat) {$("#pyInput").val(dat);});
-    $.get(SERVER_PREFIX + "static/example-code/empty.in", function(dat) {$("#inputData").val(dat);});        
-    return false;
-  });
-
-  $("#aliasExampleLink").click(function() {
-    $.get(SERVER_PREFIX + "static/example-code/aliasing.txt", function(dat) {$("#pyInput").val(dat);});
-    $.get(SERVER_PREFIX + "static/example-code/empty.in", function(dat) {$("#inputData").val(dat);});        
-    return false;
-  });
-
-  $("#newtonExampleLink").click(function() {
-    $.get(SERVER_PREFIX + "static/example-code/sqrt.txt", function(dat) {$("#pyInput").val(dat);});
-    $.get(SERVER_PREFIX + "static/example-code/empty.in", function(dat) {$("#inputData").val(dat);});        
-    return false;
-  });
-
-  $("#oopSmallExampleLink").click(function() {
-    $.get(SERVER_PREFIX + "static/example-code/oop_small.txt", function(dat) {$("#pyInput").val(dat);});
-    $.get(SERVER_PREFIX + "static/example-code/empty.in", function(dat) {$("#inputData").val(dat);});        
-    return false;
-  });
-
-  $("#mapExampleLink").click(function() {
-    $.get(SERVER_PREFIX + "static/example-code/map.txt", function(dat) {$("#pyInput").val(dat);});
-    $.get(SERVER_PREFIX + "static/example-code/empty.in", function(dat) {$("#inputData").val(dat);});        
-    return false;
-  });
-
-  $("#oop1ExampleLink").click(function() {
-    $.get(SERVER_PREFIX + "static/example-code/oop_1.txt", function(dat) {$("#pyInput").val(dat);});
-    $.get(SERVER_PREFIX + "static/example-code/empty.in", function(dat) {$("#inputData").val(dat);});        
-    return false;
-  });
-
-  $("#oop2ExampleLink").click(function() {
-    $.get(SERVER_PREFIX + "static/example-code/oop_2.txt", function(dat) {$("#pyInput").val(dat);});
-    $.get(SERVER_PREFIX + "static/example-code/empty.in", function(dat) {$("#inputData").val(dat);});        
-    return false;
-  });
-
-  $("#inheritanceExampleLink").click(function() {
-    $.get(SERVER_PREFIX + "static/example-code/oop_inherit.txt", function(dat) {$("#pyInput").val(dat);});
-    $.get(SERVER_PREFIX + "static/example-code/empty.in", function(dat) {$("#inputData").val(dat);});        
-    return false;
-  });
-
-  $("#sumExampleLink").click(function() {
-    $.get(SERVER_PREFIX + "static/example-code/sum.txt", function(dat) {$("#pyInput").val(dat);});
-    $.get(SERVER_PREFIX + "static/example-code/empty.in", function(dat) {$("#inputData").val(dat);});        
-    return false;
-  });
-
-  $("#pwGcdLink").click(function() {
-    $.get(SERVER_PREFIX + "static/example-code/wentworth_gcd.txt", function(dat) {$("#pyInput").val(dat);});
-    $.get(SERVER_PREFIX + "static/example-code/empty.in", function(dat) {$("#inputData").val(dat);});        
-    return false;
-  });
-
-  $("#pwSumListLink").click(function() {
-    $.get(SERVER_PREFIX + "static/example-code/wentworth_sumList.txt", function(dat) {$("#pyInput").val(dat);});
-    $.get(SERVER_PREFIX + "static/example-code/empty.in", function(dat) {$("#inputData").val(dat);});        
-    return false;
-  });
-
-  $("#towersOfHanoiLink").click(function() {
-    $.get(SERVER_PREFIX + "static/example-code/towers_of_hanoi.txt", function(dat) {$("#pyInput").val(dat);});
-    $.get(SERVER_PREFIX + "static/example-code/empty.in", function(dat) {$("#inputData").val(dat);});        
-    return false;
-  });
-
-  $("#pwTryFinallyLink").click(function() {
-    $.get(SERVER_PREFIX + "static/example-code/wentworth_try_finally.txt", function(dat) {$("#pyInput").val(dat);});
-    $.get(SERVER_PREFIX + "static/example-code/empty.in", function(dat) {$("#inputData").val(dat);});        
-    return false;
-  });
-  
-
-  // select an example on start-up:
-  // $("#aliasExampleLink").trigger('click');
-
-  passedCode = getURLParameter('code');
-
-  if (passedCode != "null") {
-    $("#pyInput").val(passedCode);
-  } else {
-    $.get(SERVER_PREFIX + "static/example-code/py_tutorial.txt", function(dat) {$("#pyInput").val(dat);});
-  }
-
-  passedInput = getURLParameter('input');
-
-  if (passedInput != "null") {
-    $("#inputData").val(passedInput);
-  } else {
-    $.get(SERVER_PREFIX + "static/example-code/py_tutorial.in", function(dat) {$("#inputData").val(dat);});
-  }
+	if($('#pyInput').val() == '') {
+		$('#exampleLinks .default').click();
+	}
 });
 

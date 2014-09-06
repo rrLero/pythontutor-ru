@@ -3,6 +3,8 @@
 from django import template
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.template import Context
+from django.template.loader import get_template
 
 from tutorial.models import Problem, Submission
 from tutorial.problems import load_problem
@@ -27,15 +29,13 @@ def _insert_code_into_url(code):
 
 
 def _render_code_to_html(code, input_data='', context={}, executable=True, blockquote=True):
-    if context.get("navigation", None):
-        visualizer_link = template.Template(r"{% url 'visualizer_for_lesson' " + "'{0}'".\
-            format(context.get('navigation')['lesson'].urlname) + " %}").render(context)
-    else:
-        visualizer_link = template.Template("r{% url 'visualizer' %}").render(context)
-    return (('''<blockquote>''' if blockquote else '') 
-        + '''{program_code_start}{0}{program_code_end}''' 
-        + ('''<a href="{1}?code={2}&input={3}">Показать код в визуализаторе</a>''' if executable else '')
-        + ('''</blockquote>''' if blockquote else '')).format(cgi.escape(code), visualizer_link, _insert_code_into_url(code), _insert_code_into_url(input_data), **globals())
+    t = get_template('code.html')
+    return t.render(Context({
+		'enclosure_tag': 'blockquote' if blockquote else 'div',
+		'code': code,
+		'executable': executable,
+		'input': input_data,
+	}))
 
 
 
