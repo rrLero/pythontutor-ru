@@ -91,6 +91,7 @@ div.activityPane {
   width: 550px;
   margin: 20px;
   text-align: left;
+  border-radius: 15px;
 }
 
 pre {
