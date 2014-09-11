@@ -4,7 +4,7 @@
 #  https://github.com/vpavlenko/pythontutor-ru
 
 
-from json import loads
+from json import dumps, loads
 from os.path import dirname
 
 from codejail.jail_code import configure, jail_code, set_limit
@@ -25,22 +25,6 @@ class ExecuteResult:
 		self.retcode = jailres.status
 		self.result = 'ok' if self.retcode == 0 else 'retcode'
 
-		self.stdout = str(jailres.stdout, 'utf-8')
-		self.stderr = str(jailres.stderr, 'utf-8')
-
-		if self.retcode & 128 != 0:
-			self.result = 'time_limited'
-			return
-
-		if self.stderr != '':
-			self.result = 'stderr'
-			return
-
-
-class ExecuteExplainedResult(ExecuteResult):
-	def __init__(self, jailres):
-		super().__init__(jailres)
-
 		try:
 			execplainator_res = loads(str(jailres.stdout, 'utf-8'))
 		except:
@@ -55,25 +39,27 @@ class ExecuteExplainedResult(ExecuteResult):
 		if self.stderr != '':
 			self.result = 'stderr'
 
-		self.trace = execplainator_res['trace']
-		if len(self.trace) < 1:
-			self.result = 'empty'
-			return
-
-		if self.trace[-1]['event'] == 'instruction_limit_reached':
-			self.result = 'instructions_limited'
+		if self.retcode & 128 != 0:
+			self.result = 'time_limited'
 			return
 
 
-def execute_python(code, stdin=''):
-	code = bytes(code, 'utf-8')
-	stdin = bytes(stdin, 'utf-8')
+		if 'trace' in execplainator_res:
+			self.trace = execplainator_res['trace']
+			if len(self.trace) < 1:
+				self.result = 'empty'
+				return
 
-	jail_res = jail_code('python', code, stdin=stdin)
-	return ExecuteResult(jail_res)
+			if self.trace[-1]['event'] == 'instruction_limit_reached':
+				self.result = 'instructions_limited'
+				return
+
+		if 'exception' in execplainator_res:
+			self.exception = execplainator_res['exception']
+			self.result = 'unhandled_exception'
 
 
-def execute_python_explain(code, stdin=''):
+def execute_python(code, stdin='', explain=False):
 	code = bytes(code, 'utf-8')
 	stdin = bytes(stdin, 'utf-8')
 
@@ -87,7 +73,11 @@ def execute_python_explain(code, stdin=''):
 		extra_files = [
 			('code.py', code),
 			('stdin.txt', stdin),
-		]
+		],
+
+		stdin = bytes(dumps({ # options
+			'trace': explain,
+		}), 'utf-8'),
 	)
 
-	return ExecuteExplainedResult(jail_res)
+	return ExecuteResult(jail_res)

@@ -6,7 +6,7 @@ from django.shortcuts import render
 from tutorial.models import Course, Lesson
 from tutorial.views import DEFAULT_COURSE
 
-from evaldontevil import execute_python_explain
+from evaldontevil import execute_python
 
 
 def visualizer(request):
@@ -29,12 +29,13 @@ def execute(request):
     if 'user_script' in post and 'input_data' in post:
         user_script = post['user_script']
         input_data = post['input_data']
+        explain = False if post.get('explain', True) == 'false' else True
 
-        res = execute_python_explain(user_script, stdin=input_data)
-        res = res.__dict__
+        res = execute_python(user_script, stdin=input_data, explain=explain).__dict__
 
-        del res['stdout']
-        del res['stderr']
+        if explain:
+            del res['stdout'] # exact the same information is present on the last frame - why should it be duplicated?
+            del res['stderr'] # see ^
 
         json_data = dumps(res)
 

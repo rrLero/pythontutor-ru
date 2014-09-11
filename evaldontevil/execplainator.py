@@ -58,6 +58,42 @@ from execplainator_encoder import encode
 MAX_EXECUTED_LINES = 1000
 
 
+def type_name(obj):
+    t = type(obj)
+
+    module = t.__module__
+    if module == 'builtins':
+        return t.__qualname__
+
+    return t.__module__ + '.' + t.__qualname__
+
+def parse_exception(exc):
+    exception = {}
+
+    if isinstance(exc[1], SyntaxError):
+        exception['line'] = exc[1].args[1][1]
+        exception['offset'] = exc[1].args[1][2]
+    else:
+        traceback = exc[2]
+        while traceback.tb_next is not None:
+            traceback = traceback.tb_next
+
+        if hasattr(traceback, 'tb_lineno'):
+            exception['line'] = traceback.tb_lineno
+
+        if hasattr(traceback, 'tb_offset'):
+            exception['offset'] = traceback.tb_offset
+
+    exception['exception_type'] = type_name(exc[1])
+
+    if hasattr(exc[1], 'msg'):
+        exception['exception_msg'] = exc[1].msg
+    elif hasattr(exc[1], 'args'):
+        exception['exception_msg'] = exc[1].args[0]
+
+    return exception
+
+
 class StopExecution(Exception):
     pass
 
@@ -251,20 +287,9 @@ class Execplainator(Bdb):
 
         except:
             print_exc()
+            exception = parse_exception(sys.exc_info())
 
-            trace_entry = TraceEntry(event='uncaught_exception')
-
-            exc = sys.exc_info()[1]
-            if hasattr(exc, 'lineno'):
-                trace_entry.line = exc.lineno
-            if hasattr(exc, 'offset'):
-                trace_entry.offset = exc.offset
-
-            if hasattr(exc, 'msg'):
-                trace_entry.exception_msg = exc.msg
-            else:
-                trace_entry.exception_msg = None
-
+            trace_entry = TraceEntry(event='uncaught_exception', **exception)
             self.trace.append(trace_entry)
 
         sys.stdin = self.sys_stdin
@@ -302,6 +327,59 @@ class Execplainator(Bdb):
         return res
 
 
+class SimpleExecplainator(Bdb):
+    def run_code(self, code, input_data):
+        exception = None # pah-pah-pah :)
+
+        self.sys_stdin = sys.stdin
+        self.stdin = StringIO(input_data)
+        sys.stdin = self.stdin
+
+        self.sys_stdout = sys.stdout
+        self.stdout = StringIO()
+        sys.stdout = self.stdout
+
+        self.sys_stderr = sys.stderr
+        self.stderr = StringIO()
+        sys.stderr = self.stderr
+
+
+        user_globals = {
+            '__name__': '__main__',
+            '__builtins__': __builtins__,
+            '__stdin__': self.stdin,
+            '__stdout__': self.stdout,
+            '__stderr__': self.stderr,
+        }
+
+        try:
+            self.run(code, user_globals, user_globals)
+
+        except StopExecution:
+            pass
+
+        except:
+            print_exc()
+            exception = parse_exception(sys.exc_info())
+
+
+        sys.stdin = self.sys_stdin
+        sys.stdout = self.sys_stdout
+        sys.stderr = self.sys_stderr
+
+        return {
+            'exception': exception,
+            'stdout': self.stdout.getvalue(),
+            'stderr': self.stderr.getvalue(),
+        }
+
+
+# exec code with full explanation (trace)
 def exec(code, input_data=''):
     execplainator = Execplainator()
+    return execplainator.run_code(code, str(input_data))
+
+# just execute the code, without explanation, but watch for unhandled exceptions
+def simple_exec(code, input_data=''):
+    execplainator = SimpleExecplainator()
     return execplainator.run_code(code, str(input_data))

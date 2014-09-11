@@ -4,4 +4,4 @@
 #  https://github.com/vpavlenko/pythontutor-ru
 
 
-from .executor import execute_python, execute_python_explain
+from .executor import execute_python
