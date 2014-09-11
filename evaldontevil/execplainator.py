@@ -237,8 +237,8 @@ class Execplainator(Bdb):
         # if there's an exception, then record its info:
         if event_type == 'exception':
             # always check in f_locals
-            exc = frame.f_locals['__exception__']
-            trace_entry.exception_msg = exc[0].__name__ + ': ' + str(exc[1])
+            exc_type, exc_value = frame.f_locals['__exception__']
+            trace_entry.__dict__.update(parse_exception((exc_type, exc_value, traceback)))
 
         self.trace.append(trace_entry)
 
