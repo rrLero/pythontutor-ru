@@ -1325,6 +1325,7 @@ function Visualizer(block, code, stdin, options) {
 			set: function(value) {
 				editor.setValue(value);
 				editor.selection.clearSelection();
+				editor.moveCursorTo(0, 0);
 			}
 		}
 	}
