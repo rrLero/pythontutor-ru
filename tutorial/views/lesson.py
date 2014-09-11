@@ -11,6 +11,8 @@ def lesson_in_course(request, lesson_name):
     course = Course.objects.get(urlname=DEFAULT_COURSE)
     lesson = Lesson.objects.get(urlname=lesson_name)
 
+    lessons = course.lessonincourse_set.all()
+
     lesson_in_course = lesson.lessonincourse_set.get(course=course)
     navigation = dict(course=course, lesson=lesson)
 

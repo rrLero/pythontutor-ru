@@ -1,168 +1,56 @@
-{% extends 'base.html' %}
+{% extends '_base_basic.html' %}
 
 {% block headers %}
+	{{ block.super }}
 
+	<script type="text/javascript" src="{{ STATIC_URL }}js/ace-editor/ace.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.jsPlumb-1.6.4-min.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/visualizer.js"></script>
 
-<!-- load these local files only when localTesting == true 
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/visualizer.css">
 
-<script type="text/javascript" src="mock-data.js"></script> 
+	<script type="text/javascript">
+		var visualizer;
 
--->
-
-<script type="text/javascript" src="{{ STATIC_URL }}jquery.ba-bbq.min.js"></script>
-
-<!-- disable autogrow for simplicity
-  <script type="text/javascript" src="jquery.autogrow.js"></script>
- -->
-
-<!-- jsPlumb library for rendering connectors -->
-<script type="text/javascript" src="{{ STATIC_URL }}jquery.jsPlumb-1.3.3-all-min.js"></script>
-
-<!-- my own code -->
-<script type="text/javascript" src="{{ STATIC_URL }}edu-python.js" charset="utf-8"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}edu-python-visualizer.js" charset="utf-8"></script>
-
-<link rel="stylesheet" href="{{ STATIC_URL }}edu-python.css"/>
-
+		$(function() {
+			visualizer = new Visualizer('#visualizer', '', '', {'show_stdin_initially': true});
+			visualizer.focusCodeEditor();
+		});
+	</script>
 {% endblock %}
 
 {% block body %}
+	<div id="visualizer"></div>
 
-<div id="pyInputPane">
+	<p style="margin-top: 25px;">Поиграйтесь с примерами различных программ:<br>
+		<div id="exampleLinks">
+			<a href="#" data-code="py_tutorial.txt" data-input="py_tutorial.in" class="default">презентация языка</a> |
+			<a href="#" data-code="aliasing.txt">разные имена одного объекта</a> |
+			<a href="#" data-code="fact.txt">факториал</a>
+			<br>
+			<a href="#" data-code="fib.txt">fibonacci</a> |
+			<a href="#" data-code="memo_fib.txt">memoized fib</a> |
+			<a href="#" data-code="sqrt.txt">square root</a> |
+			<a href="#" data-code="ins_sort.txt">insertion sort</a>
+			<br>
+			<a href="#" data-code="filter.txt">filter</a> |
+			<a href="#" data-code="strtok.txt">tokenize</a> |
+			<a href="#" data-code="oop_small.txt">OOP</a> |
+			<a href="#" data-code="wentworth_gcd.txt">gcd</a> |
+			<a href="#" data-code="wentworth_sumList.txt">sumList</a> |
+			<a href="#" data-code="towers_of_hanoi.txt">towers of hanoi</a> |
+			<a href="#" data-code="wentworth_try_finally.txt">exceptions</a>
+		</div>
+	</p>
 
-Введите здесь программу на языке Python:
-<br/>
+	<div>
+		<p>Этот визуализатор основан на <a href="https://github.com/pgbovine/OnlinePythonTutor/tree/master/v1-v2">Online Pyth</a></p>
+		<p style="margin-top: 8px;">Check out the <a href="https://github.com/pgbovine/OnlinePythonTutor/">original repository</a> and send bug reports, feedback, and suggestions to philip@pgbovine.net</p>
+		<p style="margin-top: 8px;">Copyright &copy; 2010-2012 Philip Guo</a>.  All rights reserved.</p>
 
-<textarea class="codeInputPane" id="pyInput" cols="55" rows="15" wrap="off" spellcheck="false">{{ code }}</textarea>
-<br/>
-<br/>
-
-Введите входные данные для программы:
-<br/>
-
-<textarea class="codeInputPane" id="inputData" cols="55" rows="8" wrap="off" spellcheck="false">{{ input_data }}</textarea>
-
-<p>
-
-<button id="executeBtn" class="bigBtn" type="button">Запустить программу</button>
-
-</p>
-
-<p style="margin-top: 25px;">Поиграйтесь с примерами различных программ:<br/>
-
-<div id="exampleLinks">
-	<a href="#" data-code="py_tutorial.txt" data-input="py_tutorial.in" class="default">презентация языка</a> |
-	<a href="#" data-code="aliasing.txt">разные имена одного объекта</a> |
-	<a href="#" data-code="fact.txt">факториал</a>
-	<br>
-	<a href="#" data-code="fib.txt">fibonacci</a> |
-	<a href="#" data-code="memo_fib.txt">memoized fib</a> |
-	<a href="#" data-code="sqrt.txt">square root</a> |
-	<a href="#" data-code="ins_sort.txt">insertion sort</a>
-	<br>
-	<a href="#" data-code="filter.txt">filter</a> |
-	<a href="#" data-code="strtok.txt">tokenize</a> |
-	<a href="#" data-code="oop_small.txt">OOP</a> |
-	<a href="#" data-code="wentworth_gcd.txt">gcd</a> |
-	<a href="#" data-code="wentworth_sumList.txt">sumList</a> |
-	<a href="#" data-code="towers_of_hanoi.txt">towers of hanoi</a> |
-	<a href="#" data-code="wentworth_try_finally.txt">exceptions</a>
-</div>
-
-</p>
-
-<!--
-<p style="margin-top: 25px;">Examples from the MIT 
-<a href="http://mit.edu/6.01/">6.01</a> course:<br/>
-
-<a id="mapExampleLink" href="#" data-code="map.txt">list map</a> |
-<a id="sumExampleLink" href="#" data-code="sum.txt">summation</a> |
-<a id="oop1ExampleLink" href="#" data-code="oop_1.txt">OOP 1</a> |
-<a id="oop2ExampleLink" href="#" data-code="oop_2.txt">OOP 2</a> |
-<a id="inheritanceExampleLink" href="#" data-code="oop_inherit.txt">inheritance</a>
-
-</p>
-
-<p style="margin-top: 25px;">
-Then try some sample programming questions:<br/>
-Solve:
-<a href="question.html?two-sum">Two-sum</a> |
-<a href="question.html?reverse">Reverse list</a> |
-<a href="question.html?remove-dups">Remove duplicate chars</a>
-
-<br/>Debug:
-<a href="question.html?debug-ireverse">In-place reverse</a> |
-<a href="question.html?debug-bsearch">Binary search</a> |
-<a href="question.html?debug-mergesort">Mergesort</a>
-
-<br/>Optimize:
-
-<a href="question.html?optimize-sum">Greatest sum</a> |
-<a href="question.html?optimize-find-dups">Find duplicates</a> |
-<a href="question.html?optimize-search">List search</a>
-
-</p>
--->
-
-
-
-
-</div>
-
-
-<table border="0" id="pyOutputPane">
-<tr>
-<td valign="top">
-
-<center>
-
-<div id="pyCodeOutputDiv">
-
-Чтобы выполнять программу по шагам, используйте клавиши со стрелками <b>влево</b> и <b>вправо</b>:
-<table id="pyCodeOutput"></table>
-
-</div>
-
-<div id="editCodeLinkDiv">
-
-<button id="editBtn" class="medBtn" type="button">Изменить программу</button>
-
-</div>
-
-<div id="vcrControls">
-  <button id="jmpFirstInstr", type="button">&lt;&lt; В начало</button>
-  <button id="jmpStepBack", type="button">&lt; Шаг назад</button>
-  <span id="curInstr">Шаг ? из ?</span>
-  <button id="jmpStepFwd", type="button">Шаг вперёд &gt;</button>
-  <button id="jmpLastInstr", type="button">В конец &gt;&gt;</button>
-</div>
-
-<div id="errorOutput"></div>
-
-
-</center>
-
-<br>
-Вывод программы:
-<br/>
-<textarea id="pyStdout" cols="50" rows="8" wrap="off" readonly></textarea>
-
-<br/>
-<br/>
-Используемые входные данные:
-<br/>
-<textarea id="inputDataOnVisualizing" cols="50" rows="8" wrap="off" readonly></textarea>
-
-
-</td>
-<td valign="top">
-
-<div id="dataViz"></div>
-
-</td>
-</tr>
-</table>
-
+		<p>Visualizer was modified by the <a href="https://github.com/vpavlenko/pythontutor-ru/">Pythontutor-ru</a> team.</p>
+	</div>
 {% include 'vis_footer.html' %}
 
 {% endblock %}

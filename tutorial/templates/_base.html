@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+
+Online Python Tutor
+https://github.com/pgbovine/OnlinePythonTutor/
+
+Copyright (C) 2010-2012 Philip J. Guo (philip@pgbovine.net)
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+-->
+
+<!--
+
+Онлайн учебник Python
+
+Copyright (C) 2012 Vitaly Pavlenko (cxielamiko@gmail.com)
+
+-->
+
+<head>
+	<title>Интерактивный учебник языка Python</title>
+
+{% block headers %}
+	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}bootstrap/js/bootstrap.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/pythontutor.css">
+{% endblock %}
+</head>
+<body>
+	<div class="navbar navbar-default navbar-{% block navbar_type %}static{% endblock %}-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="{% url 'home' %}">Pythontutor</a>
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="{% url 'home' %}">Уроки</a></li>
+					<li><a href="{% url 'visualizer' %}">Визуализатор</a></li>
+				</ul>
+				<div class="navbar-text navbar-right">
+					{% if request.user.is_authenticated %}
+						Вы вошли как <span class="glyphicon glyphicon-user"></span> <a href="{% url 'profile' %}">{{ request.user.first_name }} {{ request.user.last_name }}</a>.
+						<a href="{% url 'logout' %}">Выйти</a>
+					{% else %}
+						<a href="{% url 'login' %}">Войти</a> или <a href="{% url 'register' %}">зарегистрироваться</a>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid">
+		{% block container %}
+		{% endblock %}
+
+		{% block footer %}
+			<footer>
+				<p>Автор первоначального текста большинства уроков, задач и тестов: <a href="http://vk.com/dkirienko">Д. П. Кириенко</a> (см. <a href="http://informatics.mccme.ru/moodle/course/view.php?id=156">оригинальный курс</a>)
+				<br>
+				Идея учебника и техническая помощь: <a href="http://vk.com/gurovic">В. М. Гуровиц</a>
+				<br>
+				Разработчик визуализатора: <a href="http://www.pgbovine.net/">Philip Guo</a> (см. <a href="http://www.pythontutor.com">сайт визуализатора</a>)
+				<br>
+				Разработка и поддержка учебника: <a href="https://github.com/vpavlenko">Виталий Павленко</a>, <a href="https://github.com/leenr">Владимир Соломатин</a>
+				<br>
+				<a href="https://github.com/vpavlenko/pythontutor-ru">Репозиторий проекта на Гитхабе</a>
+				<br>
+				&copy; 2012&ndash;2014
+				</p>
+			</footer>
+		{% endblock %}
+	</div>
+</body>
+</html>

@@ -1,18 +1,32 @@
-function visualize(link) {
-	var code_block = $(link).parent();
+var visualizers = [];
 
-	var form = $('<form method="POST" target="_blank">');
-	form.attr('action', '/visualizer/?lesson=' + lesson_name);
+$(function() {
+	$('.lesson_code').each(function(i, code_block) {
+		code_block = $(code_block);
 
-	var input = $('<textarea name="code">');
-	input.text(code_block.find('pre')[0].textContent);
-	form.append(input);
+		var executable = code_block.data('executable');
 
-	var input = $('<textarea name="input">');
-	input.text(code_block.find('pre')[1].textContent);
-	form.append(input);
+		var code = code_block.find('.code')[0].textContent.trim();
+		code_block.find('.code').remove();
 
-	form.hide();
-	$(document.body).append(form);
-	form.submit();
-}
+		var stdin = '';
+		if(executable) {
+			stdin = code_block.find('.stdin')[0].textContent.trim();
+			code_block.find('.stdin').remove();
+		}
+
+		visualizers.push(new Visualizer(code_block, code, stdin, {
+			executable: executable,
+
+			auto_height: true,
+			show_stdin: (stdin != ''),
+			show_stdin_initially: false,
+
+			code_read_only: code_block.data('readonly'),
+			stdin_read_only: code_block.data('readonly'),
+
+			explain_mode: (code_block.data('explain') === undefined || code_block.data('explain')),
+			dataviz_enabled: code_block.data('dataviz')
+		}));
+	});
+});
