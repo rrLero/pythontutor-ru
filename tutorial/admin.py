@@ -40,14 +40,15 @@ def submission_sort_key(user, last_name, count):
 
 
 class NameSurnameListFilter(admin.SimpleListFilter):
-    title = 'name surname'
+    title = 'Имя, фамилия'
 
     parameter_name = 'name_surname'
 
     def lookups(self, request, model_admin):
-        users_with_submission_count = [(user, user.last_name, user.submission_set.count()) for user in User.objects.prefetch_related().all()]
-        users_with_submission_count.sort(key=submission_sort_key)
-        users = zip(*users_with_submission_count)[0]
+        users = [(user.submission_set.count(), user.last_name, user) for user in User.objects.prefetch_related().all()]
+        users = sorted(users, key=lambda x: x[1].lower())
+        users = sorted(users, key=lambda x: x[0], reverse=True)
+        users = [user[2] for user in users]
         return [(user.username, '{1} {0} ({2}) [{3}]'.format(user.first_name, user.last_name, user.username, user.submission_set.count())) for user in users]
 
     def queryset(self, request, queryset):
@@ -58,7 +59,7 @@ class NameSurnameListFilter(admin.SimpleListFilter):
 
 
 class CourseListFilter(admin.SimpleListFilter):
-    title = 'course'
+    title = 'Курс'
 
     parameter_name = 'course'
 
@@ -94,7 +95,7 @@ class SubmissionAdmin(admin.ModelAdmin):
     def name_surname(self, submission):
         return '{0} {1}'.format(submission.user.first_name, submission.user.last_name)
 
-    name_surname.short_description = 'Name Surname'
+    name_surname.short_description = 'Имя, фамилия'
 
 
 class UserProfileAdmin(admin.ModelAdmin):
