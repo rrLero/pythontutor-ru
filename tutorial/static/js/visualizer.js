@@ -52,14 +52,14 @@ function Visualizer(block, code, stdin, passed_options) {
 		stack_grows_down_switch: true, // stack grows down... or up... user-configurable?
 
 		code_read_only: false, // should user have ability to change code?
-		stdin_read_only: false; // should user have ability to change stdin?
+		stdin_read_only: false, // should user have ability to change stdin?
 
 		show_stdin: true, // should I show stdin input?
 		show_stdin_initially: true, // should I show stdin input initially?
 
 		executable: true, // may the code be executed?
 
-		auto_height: false, // automatically set the code editor height (one-shot - only when created!)
+		auto_height: false // automatically set the code editor height (one-shot - only when created!)
 	};
 
 	$.extend(options, passed_options);
