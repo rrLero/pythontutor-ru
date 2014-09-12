@@ -31,7 +31,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * https://github.com/vpavlenko/pythontutor-ru, 2014
  */
 
-function Visualizer(block, code, stdin, options) {
+function Visualizer(block, code, stdin, passed_options) {
 	if(this == window) // if the call were not in a new context (eg. visualizer = Visualizer(...))
 		return new Visualizer(block, code, stdin, options); // <- this is the right variant
 
@@ -41,57 +41,35 @@ function Visualizer(block, code, stdin, options) {
 	if(options === undefined) { options = {}; }
 
 
-	// Options. Configurable by the "options" argument
+	// Options. Configurable by the "passed_options" argument
+	var options = {
+		explain_mode: true, // should the explain mode be enabled by default?
+		explain_mode_switch: true, // should user have ability to enable/disable the explain mode?
 
-	var explain_mode = true; // should the explain mode be enabled by default?
-	var explain_mode_switch = true; // should user have ability to enable/disable the explain mode?
+		dataviz_enabled: true, // should dataviz be visible?
 
-	var dataviz_enabled = true; // should dataviz be visible?
+		stack_grows_down: true, // stack grows down?
+		stack_grows_down_switch: true, // stack grows down... or up... user-configurable?
 
-	var stack_grows_down = true; // stack grows down?
-	var stack_grows_down_switch = true; // stack grows down... or up... user-configurable?
+		code_read_only: false, // should user have ability to change code?
+		stdin_read_only: false; // should user have ability to change stdin?
 
-	var code_read_only = false; // should user have ability to change code? "never", "always" (other options, like "when_not_collapsed", may be added in the future)
-	var stdin_read_only = false; // should user have ability to change stdin? "never", "always"
+		show_stdin: true, // should I show stdin input?
+		show_stdin_initially: true, // should I show stdin input initially?
 
-	var show_stdin = true; // should I show stdin input?
-	var show_stdin_initially = true; // should I show stdin input initially?
+		executable: true, // may the code be executed?
 
-	var executable = true; // may the code be executed?
+		auto_height: false, // automatically set the code editor height (one-shot - only when created!)
+	};
 
-	var auto_height = false; // automatically set the code editor height (one-shot - only when created!)
+	$.extend(options, passed_options);
 
-
-	$.each(options, function(name, value) { // ugly... :( but I don't know how to do this better...
-		if(typeof(value) == 'boolean') {
-
-			     if(name == 'explain_mode') { explain_mode = value; }
-			else if(name == 'explain_mode_switch') { explain_mode_switch = value; }
-
-			else if(name == 'dataviz_enabled') { dataviz_enabled = value; }
-
-			else if(name == 'stack_grows_down') { stack_grows_down = value; }
-			else if(name == 'stack_grows_down_switch') { stack_grows_down_switch = value; }
-
-			else if(name == 'code_read_only') { code_read_only = value; }
-			else if(name == 'stdin_read_only') { stdin_read_only = value; }
-
-			else if(name == 'show_stdin') { show_stdin = value; }
-			else if(name == 'show_stdin_initially') { show_stdin_initially = value; }
-
-			else if(name == 'executable') { executable = value; }
-
-			else if(name == 'auto_height') { auto_height = value; }
-
-		}
-	});
-
-	if(!executable) {
-		explain_mode = false;
-		explain_mode_switch = false;
-		code_read_only = true;
-		stdin_read_only = true;
-		show_stdin = false;
+	if(!options.executable) {
+		options.explain_mode = false;
+		options.explain_mode_switch = false;
+		options.code_read_only = true;
+		options.stdin_read_only = true;
+		options.show_stdin = false;
 	}
 
 
@@ -280,19 +258,20 @@ function Visualizer(block, code, stdin, options) {
 	function _setupButtons() {
 		buttons.run.click(function() { run(); });
 		buttons.explain_mode.click(function() {
-			explain_mode = this.checked;
+			options.explain_mode = this.checked;
 
 			if(has_ever_runned) {
-				if(!explain_mode && trace !== undefined) {
+				if(!options.explain_mode && trace !== undefined) {
 					// trace present, but explain mode should be disabled. jump to the end to simulate non-expain mode.
 					jumpToEnd();
-				} else if(explain_mode && trace === undefined) {
+				} else if(options.explain_mode && trace === undefined) {
 					// trace undefined, but explain mode should be enabled. rerun code to get the trace.
 					run();
 				}
 			}
 		});
-		buttons.explain_mode.attr('checked', explain_mode);
+		buttons.explain_mode.attr('checked', options.explain_mode);
+		buttons.explain_mode.toggle(options.stack_grows_down_switch);
 	}
 
 	function _setupVCR() {
@@ -304,13 +283,13 @@ function Visualizer(block, code, stdin, options) {
 	}
 
 	function _setupUImisc() {
-		mblock.find('.visualizer_code_toppanel').toggle(executable);
+		mblock.find('.visualizer_code_toppanel').toggle(options.executable);
 
-		buttons.explain_mode.parent().toggle(explain_mode_switch);
+		buttons.explain_mode.parent().toggle(options.explain_mode_switch);
 
 
 		blocks.dataviz.find('.visualizer_dataviz_stack_growth_selector').change(function() {
-			stack_grows_down = ($(this).val() == 'down');
+			options.stack_grows_down = ($(this).val() == 'down');
 			updateUI();
 		});
 
@@ -436,7 +415,7 @@ function Visualizer(block, code, stdin, options) {
 
 		updateStatus();
 
-		if(explain_mode && trace !== undefined) {
+		if(options.explain_mode && trace !== undefined) {
 			_updateVCR();
 			_updateDataViz();
 		}
@@ -540,7 +519,7 @@ function Visualizer(block, code, stdin, options) {
 		if(is_executing) {
 			blocks.status.status_text.text('Пожалуйста, подождите...');
 		} else {
-			if(explain_mode && trace !== undefined) {
+			if(options.explain_mode && trace !== undefined) {
 				if(current.is_last) {
 					blocks.status.status_text.text('Завершено');
 				} else {
@@ -553,7 +532,7 @@ function Visualizer(block, code, stdin, options) {
 				if(current.is_error) {
 					blocks.status.status_text.append(' (ошибка)');
 				}
-			} else if(!explain_mode) {
+			} else if(!options.explain_mode) {
 				if(current.is_error) {
 					blocks.status.status_text.text('Ошибка выполнения на строке ' + (current.line + 1));
 				}
@@ -570,15 +549,15 @@ function Visualizer(block, code, stdin, options) {
 		blocks.stdout.parent().toggle(has_ever_runned);
 
 		// "smart" stdin visibility
-		if(!show_stdin || (!show_stdin_initially && !has_ever_runned)) {
+		if(!options.show_stdin || (!options.show_stdin_initially && !has_ever_runned)) {
 			blocks.stdin.parent().hide();
 		} else {
-			blocks.stdin.parent().toggle(!(stdin_read_only || code_read_only) || stdin != '' || !show_stdin);
+			blocks.stdin.parent().toggle(!(options.stdin_read_only || options.code_read_only) || stdin != '' || !options.show_stdin);
 		}
 
 		// code should be full-row if it is not executable
-		blocks.code.parent().parent().removeClass(executable ? 'col-xs-12' : 'col-xs-6');
-		blocks.code.parent().parent().addClass(executable ? 'col-xs-6' : 'col-xs-12');
+		blocks.code.parent().parent().removeClass(options.executable ? 'col-xs-12' : 'col-xs-6');
+		blocks.code.parent().parent().addClass(options.executable ? 'col-xs-6' : 'col-xs-12');
 
 		// stdin should be full-row if stdout is not visible, and half-row otherwise
 		blocks.stdin.parent().removeClass(blocks.stdout.is(':visible') ? 'col-xs-12' : 'col-xs-6');
@@ -589,11 +568,11 @@ function Visualizer(block, code, stdin, options) {
 		blocks.stdout.parent().addClass(blocks.stdin.is(':visible') ? 'col-xs-6' : 'col-xs-12');
 
 		// why do we need dataviz if explain_mode is not enabled? or code was never launched? or no variables defined?
-		blocks.dataviz.toggle(dataviz_enabled && explain_mode && has_ever_runned);
+		blocks.dataviz.toggle(options.dataviz_enabled && options.explain_mode && has_ever_runned);
 		blocks.dataviz.find('.visualizer_dataviz_header').toggle(!$.isEmptyObject(current.stack_locals));
 
 		// similarly
-		blocks.vcr.toggle(explain_mode && has_ever_runned);
+		blocks.vcr.toggle(options.explain_mode && has_ever_runned);
 
 		// editors sometimes not rendered if created invisible
 		// (it is possible that it is a bug in the Ace editor)
@@ -602,8 +581,8 @@ function Visualizer(block, code, stdin, options) {
 		editors.stdout.renderer.updateText();
 
 
-		editors.stdin.setReadOnly(stdin_read_only);
-		editors.code.setReadOnly(code_read_only);
+		editors.stdin.setReadOnly(options.stdin_read_only);
+		editors.code.setReadOnly(options.code_read_only);
 	}
 
 	// The "2.0" version of renderDataStructures, which renders variables in
@@ -612,7 +591,7 @@ function Visualizer(block, code, stdin, options) {
 	//
 	// This version was originally created in September 2011
 	function _updateDataViz() {
-		if(!dataviz_enabled)
+		if(!options.dataviz_enabled)
 			return;
 
 
@@ -798,7 +777,7 @@ function Visualizer(block, code, stdin, options) {
 
 		// first render the stack (and global vars)
 
-		if(stack_grows_down) {
+		if(options.stack_grows_down) {
 			renderGlobals();
 			if(current.stack_locals) {
 				for(var i = current.stack_locals.length - 1; i >= 0; i--) {
@@ -848,7 +827,7 @@ function Visualizer(block, code, stdin, options) {
 		// e.g., if a list L appears as a global variable and as a local in a
 		// function, we want to render L when rendering the global frame.
 
-		if(stack_grows_down) {
+		if(options.stack_grows_down) {
 			// this is straightforward: just go through globals first and then
 			// each stack frame in order :)
 
@@ -1250,7 +1229,7 @@ function Visualizer(block, code, stdin, options) {
 		var req = $.post('/visualizer/execute/', {
 			user_script: viss.code,
 			input_data : viss.stdin,
-			explain    : explain_mode
+			explain    : options.explain_mode
 		});
 
 		current_code = viss.code;
@@ -1275,7 +1254,7 @@ function Visualizer(block, code, stdin, options) {
 				return;
 			}
 
-			if(explain_mode) {
+			if(options.explain_mode) {
 				_explain(server_res);
 			} else {
 				_show(server_res);
@@ -1348,7 +1327,7 @@ function Visualizer(block, code, stdin, options) {
 
 	editors.code.moveCursorTo(0, 0);
 	editors.stdin.moveCursorTo(0, 0);
-	if(auto_height) {
+	if(options.auto_height) {
 		blocks.code.height(editors.code.renderer.layerConfig.lineHeight * (editors.code.session.getLength() - 1));
 	}
 
