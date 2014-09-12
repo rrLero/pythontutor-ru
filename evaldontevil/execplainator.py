@@ -88,7 +88,7 @@ def parse_exception(exc):
 
     if hasattr(exc[1], 'msg'):
         exception['exception_msg'] = exc[1].msg
-    elif hasattr(exc[1], 'args'):
+    elif hasattr(exc[1], 'args') and len(exc[1].args) > 0:
         exception['exception_msg'] = exc[1].args[0]
 
     return exception
