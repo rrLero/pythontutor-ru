@@ -46,17 +46,16 @@ class ExecuteResult:
 
 		if 'trace' in execplainator_res:
 			self.trace = execplainator_res['trace']
-			if len(self.trace) < 1:
-				self.result = 'empty'
-				return
-
 			if self.trace[-1]['event'] == 'instruction_limit_reached':
 				self.result = 'instructions_limited'
 				return
 
+		self.exception = None
+
 		if 'exception' in execplainator_res:
 			self.exception = execplainator_res['exception']
-			self.result = 'unhandled_exception'
+			if self.exception is not None:
+				self.result = 'unhandled_exception'
 
 
 def execute_python(code, stdin='', explain=False):

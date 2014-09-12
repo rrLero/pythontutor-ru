@@ -126,6 +126,8 @@ class Execplainator(Bdb):
         # executed line
         self.trace = []
 
+        self._exception = None
+
 
     def reset(self):
         Bdb.reset(self)
@@ -238,7 +240,8 @@ class Execplainator(Bdb):
         if event_type == 'exception':
             # always check in f_locals
             exc_type, exc_value = frame.f_locals['__exception__']
-            trace_entry.__dict__.update(parse_exception((exc_type, exc_value, traceback)))
+            self._exception = parse_exception((exc_type, exc_value, traceback))
+            trace_entry.__dict__.update(self._exception)
 
         self.trace.append(trace_entry)
 
@@ -298,6 +301,7 @@ class Execplainator(Bdb):
 
         return {
             'trace': self._filter_trace(self.trace),
+            'exception': self._exception,
             'stdout': self.stdout.getvalue(),
             'stderr': self.stderr.getvalue(),
         }
