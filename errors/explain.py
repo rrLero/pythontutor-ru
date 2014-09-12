@@ -1,36 +1,33 @@
-#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 
-import os
+import re
+import os.path
+
 
 SCRIPT_ROOT = os.path.abspath(os.path.dirname(__file__))
-
 ABSOLUTE_PATH_TO_FILE_WITH_ERRORS = os.path.join(SCRIPT_ROOT, 'errors.txt')
 
 
-import re
-
-
 class Error:
-        def __init__(self, regexp, translation, linedetector = None):
-            self.regexp = re.sub(r'\\{\d+\\}', '(.+)', re.escape(regexp))
-            self.translation = translation
-            self.locals_dict = {}
-            if linedetector:
-                # should create a function 'detect_error(error_msg, code_line)'
-                exec(linedetector, self.locals_dict)
+    def __init__(self, regexp, translation, linedetector = None):
+        self.regexp = re.sub(r'\\{\d+\\}', '(.+)', re.escape(regexp))
+        self.translation = translation
+        self.locals_dict = {}
+        if linedetector:
+            # should create a function 'detect_error(error_msg, code_line)'
+            exec(linedetector, self.locals_dict)
 
-        def is_matched(self, error_msg, code_line):
-            if 'detect_error' in self.locals_dict:
-                return bool(re.match(self.regexp, error_msg)) and self.locals_dict['detect_error'](error_msg, code_line)
-            else:
-                return bool(re.match(self.regexp, error_msg))
+    def is_matched(self, error_msg, code_line):
+        if 'detect_error' in self.locals_dict:
+            return bool(re.match(self.regexp, error_msg)) and self.locals_dict['detect_error'](error_msg, code_line)
+        else:
+            return bool(re.match(self.regexp, error_msg))
 
-        def get_translation(self, error_msg):
-            return self.translation.format(*re.match(self.regexp, error_msg).groups())
+    def get_translation(self, error_msg):
+        return self.translation.format(*re.match(self.regexp, error_msg).groups())
 
-        def __unicode__(self):
-            return 'Error({0}, {1})'.format(self.regexp, self.translation)
+    def __unicode__(self):
+        return 'Error({0}, {1})'.format(self.regexp, self.translation)
 
 
 errors = []
@@ -55,7 +52,7 @@ def load_error_information():
             curError[0]['translation'] = '<br>'.join([i for i in curParts if i]).strip()
         elif curDelimiter == 'LineDetector:':
             curError[0]['linedetector'] = '\n'.join(curParts)
-        
+
         if 'translation' in curError[0]:
             errors.append(Error(**curError[0]))
             curError[0] = {}
@@ -82,19 +79,12 @@ def load_error_information():
 
 
 def get_error_explanation(error_msg, code_line):
-    print('trying to explain error {0}'.format(error_msg))
     for error in errors:
-        #print 'matching (waiting for failed utf-8 stuff)'
-        #print repr(u'matching with {0}'.format(error))
         if error.is_matched(error_msg, code_line):
-            explanation = str(error_msg) + '<br>' + error.get_translation(error_msg)
-            print(repr('explanation found:\n{0}'.format(explanation)))
+            explanation = error.get_translation(error_msg)
             return explanation
-    print('no explanation found')
-    return error_msg
+
+    return None
 
 
 load_error_information()
-
-if __name__ == '__main__':
-    print(get_error_explanation("TypeError: unsupported operand type(s) for +: 'builtin_function_or_method' and 'builtin_function_or_method'", ''))

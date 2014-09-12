@@ -6,6 +6,7 @@ from django.shortcuts import render
 from tutorial.models import Course, Lesson
 from tutorial.views import DEFAULT_COURSE
 
+from errors import get_error_explanation
 from evaldontevil import execute_python
 
 
@@ -20,6 +21,12 @@ def visualizer(request):
 
     return render(request, 'visualizer.html', locals())
 
+
+def explain_error(exc, code):
+    msg = exc.get('exception_type', '') + ': ' + exc.get('exception_msg', '')
+    line = code.split('\n')[exc['line'] - 1]
+    exc['exception_translation'] = get_error_explanation(msg, line)
+    return exc['exception_translation']
 
 def execute(request):
     # AJAX request
@@ -37,9 +44,15 @@ def execute(request):
             del res['stdout'] # exact the same information is present on the last frame - why should it be duplicated?
             del res['stderr'] # see ^
 
-        json_data = dumps(res)
+        if 'trace' in res:
+            event = res['trace'][-1]
+            if event['event'] == 'exception':
+                explain_error(event, user_script)
 
-        return HttpResponse(json_data, content_type='application/json')
+        if 'exception' in res and res['exception'] is not None:
+            explain_error(res['exception'], user_script)
+
+        return HttpResponse(dumps(res), content_type='application/json')
 
     else:
         return HttpResponseBadRequest()

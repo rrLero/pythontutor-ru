@@ -175,7 +175,10 @@ function Visualizer(block, code, stdin, passed_options) {
 				'</div>\n' +
 
 				'<div class="col-xs-6">\n' +
-					'<div class="visualizer_error"></div>\n' +
+					'<div class="visualizer_error">\n' +
+						'<div class="visualizer_error_raw"></div>\n' +
+						'<div class="visualizer_error_translation"></div>\n' +
+					'</div>\n' +
 
 					'<div class="col-xs-6">\n' +
 						'<div class="visualizer_dataviz">\n' +
@@ -397,6 +400,7 @@ function Visualizer(block, code, stdin, passed_options) {
 		current.is_error = (trace_entry.event == 'exception' || trace_entry.event == 'uncaught_exception');
 		if(current.is_error) {
 			current.error_msg = trace_entry.exception_msg;
+			current.error_translation = trace_entry.exception_translation;
 			current.error_type = trace_entry.exception_type;
 		}
 
@@ -498,7 +502,8 @@ function Visualizer(block, code, stdin, passed_options) {
 				error_msg = 'Неизвестная ошибка';
 			}
 
-			blocks.error.text(error_msg);
+			blocks.error.find('.visualizer_error_raw').text(error_msg);
+			blocks.error.find('.visualizer_error_translation').toggle(current.error_translation != null).html(current.error_translation || '');
 			blocks.error.show();
 
 		} else {
@@ -542,14 +547,10 @@ function Visualizer(block, code, stdin, passed_options) {
 						(current.func_name != '<module>' ? ', функция ' + current.func_name : '')
 					);
 				}
+			}
 
-				if(current.is_error) {
-					blocks.status.status_text.append(' (ошибка)');
-				}
-			} else if(!options.explain_mode) {
-				if(current.is_error) {
-					blocks.status.status_text.text('Ошибка выполнения на строке ' + (current.line + 1));
-				}
+			if(current.is_error) {
+				blocks.status.status_text.text('Ошибка на строке ' + (current.line + 1));
 			}
 		}
 
@@ -1330,6 +1331,7 @@ function Visualizer(block, code, stdin, passed_options) {
 		if(current.is_error) {
 			current.line = server_res.exception.line - 1;
 			current.error_msg = server_res.exception.exception_msg;
+			current.error_translation = server_res.exception.exception_translation;
 			current.error_type = server_res.exception.exception_type;
 		}
 

@@ -81,6 +81,15 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	font-size: 123%;
 }
 
+.visualizer_error_translation {
+	font-size: 80%;
+	color: #866;
+	border-top: solid 1px #866;
+	margin-top: 5px;
+	padding: 5px;
+	padding-bottom: 2px;
+}
+
 
 .visualizer_code_toppanel,
 .visualizer_code_bottompanel {
