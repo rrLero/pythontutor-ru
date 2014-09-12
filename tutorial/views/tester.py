@@ -39,15 +39,15 @@ def tester_submit(request):
         test_id += 1
 
     if request.user.get_profile().course and request.user.get_profile().course.get_ok_ac_policy_display() == 'use_accepted_instead_of_ok':
-        if result['status']:
+        if result['status'] == 'ok':
             status = 'accepted'
 
-        submission = Submission(
-            problem = problem_db,
-            code = code,
-            user = user, 
-            status = {v: k for k, v in Submission.STATUS_CHOICES}[result['status']]
-        )
-        submission.save()
+    submission = Submission(
+        problem = problem_db,
+        code = post['user_code'],
+        user = request.user, 
+        status = {v: k for k, v in Submission.STATUS_CHOICES}[result['status']]
+    )
+    submission.save()
 
     return HttpResponse(dumps(result), content_type='application/json')
