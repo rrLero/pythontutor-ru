@@ -7,11 +7,11 @@ from tutorial.views import dummy
 from tutorial.views.course import course_success
 from tutorial.views.home import home
 from tutorial.views.lesson import lesson_in_course
-from tutorial.views.problem import problem_in_lesson, send_problem_to_frontend
+from tutorial.views.problem import problem_in_lesson
 from tutorial.views.profile import profile, register_user
 from tutorial.views.standings import (standings_for_course, standings_for_lesson,
                                       submissions_for_course, submissions_for_lessons)
-from tutorial.views.tests import run_test, post_grading_result
+from tutorial.views.tester import tester_submit
 from tutorial.views.visualizer import execute, visualizer
 
 
@@ -39,9 +39,7 @@ urlpatterns = patterns('',
 
     url(r'^standings/$', standings_for_course),
 
-    url(r'^load_problem/$', send_problem_to_frontend),
-
-    url(r'^run_test/$', run_test),
+    url(r'^tester/submit/$', tester_submit, name='tester_submit'),
 
     url(r'^accounts/login/$', login, {'template_name': 'login.html'}, name='login'),
 
@@ -50,8 +48,6 @@ urlpatterns = patterns('',
     url(r'^accounts/register/$', register_user, name='register'),
 
     url(r'^accounts/profile/$', profile, name='profile'),
-
-    url(r'^tutorial/post_grading_result/$', post_grading_result),
 
     url(r'^teacher_statistics/course_success/([^/]+)/$', course_success, name='course_success'),
 
