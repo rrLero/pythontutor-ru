@@ -158,11 +158,8 @@ LOGGING = {
         }
     },
     'formatters': {
-        'verbose': {
-            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
-        },
-        'simple': {
-            'format': '%(levelname)s %(message)s'
+        'default': {
+            'format': '%(levelname)s %(asctime)s %(message)s'
         },
     },
     'handlers': {
@@ -171,26 +168,18 @@ LOGGING = {
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
         },
-        'log_file': {
+        'console':{
             'level': 'DEBUG',
-            'filters': ['require_debug_false'],
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': 'logs/debug.log',
-            'maxBytes': 67108864,  # 64 megabytes
-            'formatter': 'verbose'
+            'class': 'logging.StreamHandler',
+            'formatter': 'default'
         },
     },
     'loggers': {
         'django.request': {
-            'handlers': ['log_file'],
+            'handlers': ['console'],
             'level': 'ERROR',
             'propagate': True,
         },
-        # '': {
-        #     'handlers': ['log_file'],
-        #     'level': 'DEBUG',
-        #     'propagate': True,
-        # },
     }
 }
 
