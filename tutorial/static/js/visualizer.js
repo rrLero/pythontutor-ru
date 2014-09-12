@@ -36,7 +36,7 @@ function Visualizer(block, code, stdin, passed_options) {
 		return new Visualizer(block, code, stdin, options); // <- this is the right variant
 
 
-	if(code === undefined) { code = $(block).text().trim() + '\n'; }
+	if(code === undefined) { code = $(block).text().trim(); if(code != '') code += '\n'; }
 	if(stdin === undefined) { stdin = ''; }
 	if(options === undefined) { options = {}; }
 
@@ -101,6 +101,15 @@ function Visualizer(block, code, stdin, passed_options) {
 	var has_ever_runned = false; // whether the code has ever lauched?
 
 	var custom_status = ''; // override status bar text
+
+
+	var event_subscribers = { // "this" in the callbacks is a visualizer object
+		'change_code': [], // arguments: -
+		'change_stdin': [], // arguments: -
+
+		'before_run': [], // arguments: run_mode ('expain' or 'simple'); return false to cancel
+		'after_run': [] // arguments: status (from server - 'ok', 'time_limited', 'empty', 'unhandled_exception', 'stderr', ... or false if request error ocurred), stdout
+	};
 
 
 	var viss = this; // this is needed for the access from some functions
@@ -252,6 +261,11 @@ function Visualizer(block, code, stdin, passed_options) {
 		editors.code.on('change', function(e) {
 			code_changed = (current_code !== undefined && editors.code.getValue().trim() != current_code.trim());
 			updateStatus();
+			fireEvent('change_code');
+		});
+
+		editors.stdin.on('change', function(e) {
+			fireEvent('change_stdin');
 		});
 	}
 
@@ -1225,7 +1239,35 @@ function Visualizer(block, code, stdin, passed_options) {
 	}
 
 
+	function fireEvent(event) {
+		var args = $.merge([], arguments); // arguments is not a list, it's an object, so transform it
+		var result = true;
+
+		args.shift(); // delete first, "event" argument
+
+		$.each(event_subscribers[event], function(i, callback) {
+			var res = callback.apply(viss, args);
+			result = result && (res !== false);
+		});
+
+		return result;
+	}
+
+	function on(event, callback) {
+		if(!(event in event_subscribers) || typeof(callback) !== 'function') {
+			return false;
+		}
+
+		event_subscribers[event].push(callback);
+		return true;
+	}
+
+
 	function run() {
+		if(!fireEvent('before_run', options.explain_mode ? 'explain' : 'simple')) {
+			return;
+		}
+
 		var req = $.post('/visualizer/execute/', {
 			user_script: viss.code,
 			input_data : viss.stdin,
@@ -1259,9 +1301,16 @@ function Visualizer(block, code, stdin, passed_options) {
 			} else {
 				_show(server_res);
 			}
+
+			var stdout = server_res.stdout;
+			if(stdout === undefined && trace !== undefined)
+				stdout = trace[trace.length - 1].stdout;
+
+			fireEvent('after_run', server_res.result, stdout);
 		});
 
 		req.fail(function() {
+			fireEvent('after_run', false);
 			alert('Ой! Не удалось выполнить запрос к серверу :(');
 		});
 	}
@@ -1318,8 +1367,11 @@ function Visualizer(block, code, stdin, passed_options) {
 
 	this.run = run;
 
+	this.on = on;
+
 	Object.defineProperty(this, 'code', _editorValueProperty(editors.code));
 	Object.defineProperty(this, 'stdin', _editorValueProperty(editors.stdin));
+
 
 	this.code = code;
 	this.stdin = stdin;
@@ -1333,6 +1385,7 @@ function Visualizer(block, code, stdin, passed_options) {
 
 
 	_clearCurrent();
+
 
 	return this;
 }
