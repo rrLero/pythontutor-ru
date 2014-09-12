@@ -1,0 +1,41 @@
+#example_tests {
+	margin-top: 15px;
+}
+
+#example_tests th {
+	text-align: center;
+}
+
+#example_tests pre {
+	height: 100%;
+	margin: 0;
+	margin-top: 10px;
+}
+
+#example_tests .arrow,
+#example_tests .debug_me {
+	width: 24px;
+	vertical-align: middle;
+	text-align: center;
+}
+#example_tests .debug_me {
+	width: 55px;
+}
+
+#example_tests .debug_me button {
+	padding: 2px;
+	font-size: 20px;
+}
+
+#example_tests .test_result {
+	width: 135px;
+	padding-right: 10px;
+	text-align: center;
+	vertical-align: middle;
+	display: none;
+}
+
+#submit_solution {
+	text-align: center;
+	margin-bottom: 35px;
+}
