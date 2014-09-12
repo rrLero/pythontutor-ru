@@ -207,3 +207,8 @@ SESSION_COOKIE_AGE = 86400 * 6  # 24 hours, in seconds
 
 
 DEFAULT_COURSE = '1534'
+
+
+INTERNAL_IPS = (
+    '127.0.0.1',
+)
