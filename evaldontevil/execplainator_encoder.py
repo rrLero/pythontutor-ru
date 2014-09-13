@@ -108,14 +108,17 @@ def encode(dat):
 
             elif typ is type or classRE.match(str(typ)):
                 superclass_names = [e.__name__ for e in dat.__class__.__bases__]
+                superclass_names.remove('object')
+
                 ret = ['CLASS', dat.__class__.__name__, my_small_id, superclass_names]
 
-                # traverse inside of its __dict__ to grab attributes
-                # (filter out useless-seeming ones):
-                user_attrs = sorted([e for e in list(dir(dat)) if not e.startswith('__')])
+                if dat.__class__.__name__ not in ('generator'):
+                    # traverse inside of its __dict__ to grab attributes
+                    # (filter out useless-seeming ones):
+                    user_attrs = sorted([e for e in list(dir(dat)) if not e.startswith('__')])
 
-                for attr in user_attrs:
-                    ret.append([encode_helper(attr, new_compound_obj_ids), encode_helper(getattr(dat, attr), new_compound_obj_ids)])
+                    for attr in user_attrs:
+                        ret.append([encode_helper(attr, new_compound_obj_ids), encode_helper(getattr(dat, attr), new_compound_obj_ids)])
 
             else:
                 typeStr = str(typ)
