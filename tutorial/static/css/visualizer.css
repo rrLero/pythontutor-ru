@@ -78,7 +78,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	background: rgba(128, 0, 0, 0.1);
 	padding: 5px 7px;
 	color: #900;
-	font-size: 123%;
+	font-size: 17px;
 }
 
 .visualizer_error_translation {
@@ -86,8 +86,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	color: #866;
 	border-top: solid 1px #866;
 	margin-top: 5px;
-	padding: 5px;
-	padding-bottom: 2px;
+	padding-top: 5px;
+	padding-bottom: 1px;
 }
 
 

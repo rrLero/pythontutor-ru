@@ -31,14 +31,26 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * https://github.com/vpavlenko/pythontutor-ru, 2014
  */
 
-function Visualizer(block, code, stdin, passed_options) {
-	if(this == window) // if the call were not in a new context (eg. visualizer = Visualizer(...))
-		return new Visualizer(block, code, stdin, options); // <- this is the right variant
+function Visualizer(block, init_code, init_stdin, passed_options) {
+	if(this == window) { // if the call were not in a new context (eg. visualizer = Visualizer(...))
+		return new Visualizer(block, init_code, init_stdin, options); // <- this is the right variant
+	}
 
 
-	if(code === undefined) { code = $(block).text().trim(); if(code != '') code += '\n'; }
-	if(stdin === undefined) { stdin = ''; }
-	if(options === undefined) { options = {}; }
+	if(init_code === undefined) {
+		init_code = $(block).text().trim();
+		if(code != '') {
+			code += '\n';
+		}
+	}
+
+	if(init_stdin === undefined) {
+		init_stdin = '';
+	}
+
+	if(options === undefined) {
+		options = {};
+	}
 
 
 	// Options. Configurable by the "passed_options" argument
@@ -59,7 +71,11 @@ function Visualizer(block, code, stdin, passed_options) {
 
 		executable: true, // may the code be executed?
 
-		auto_height: false // automatically set the code editor height (one-shot - only when created!)
+		auto_height: false, // automatically set the code editor height (one-shot - only when created!)
+
+		code_font_size: 14,
+		stdin_font_size: 14,
+		stdout_font_size: 14
 	};
 
 	$.extend(options, passed_options);
@@ -84,6 +100,9 @@ function Visualizer(block, code, stdin, passed_options) {
 	var darkRed = "#9D1E18";
 
 
+	var MAX_AUTO_HEIGHT = 350;
+
+
 	var editors = {}; // code, stdin, stdout
 	var vcr = {}; // step-by-step execution control buttons
 	var blocks = {}; // code, stdin, stdout, vcr, data_viz, error
@@ -93,7 +112,6 @@ function Visualizer(block, code, stdin, passed_options) {
 
 	var trace = undefined;
 	var current = {}; // line, instruction, is_error, ...
-	var last = {}; // ^ the same, just last
 	var current_code = undefined; // currently debugging code (needed for the code changed indicator)
 
 	var code_changed = false; // code, which is debugging right now
@@ -128,6 +146,16 @@ function Visualizer(block, code, stdin, passed_options) {
 		}
 	}
 
+	function replaceClass(elem, class1, class2) {
+		elem.removeClass(class1).addClass(class2);
+	}
+
+	function toggleFullRow(elem, full_row, w1, w2) {
+		var width1 = (full_row ? w1 : w2);
+		var width2 = (full_row ? w2 : w1);
+		replaceClass(elem, 'col-xs-' + width1, 'col-xs-' + width2);
+	}
+
 
 	///// UI setup /////
 
@@ -136,7 +164,7 @@ function Visualizer(block, code, stdin, passed_options) {
 		mblock.html(
 			// code and data visualizer
 			'<div class="row">\n' +
-				'<div class="col-xs-6">\n' +
+				'<div class="col-xs-9">\n' +
 					'<div class="visualizer_code">\n' +
 						'<div class="visualizer_code_toppanel">\n' +
 							'<span class="visualizer_status">\n' +
@@ -174,7 +202,7 @@ function Visualizer(block, code, stdin, passed_options) {
 					'</div>\n' +
 				'</div>\n' +
 
-				'<div class="col-xs-6">\n' +
+				'<div class="col-xs-3">\n' +
 					'<div class="visualizer_error">\n' +
 						'<div class="visualizer_error_raw"></div>\n' +
 						'<div class="visualizer_error_translation"></div>\n' +
@@ -233,12 +261,17 @@ function Visualizer(block, code, stdin, passed_options) {
 	}
 
 	function _setupEditors() {
+		blocks.code.text(init_code);
+		blocks.stdin.text(init_stdin);
+
+
 		editors.code = ace.edit(blocks.code[0]);
 		editors.stdin = ace.edit(blocks.stdin[0]);
 		editors.stdout = ace.edit(blocks.stdout[0]);
 
 
 		editors.code.setOptions({
+			fontSize: options.code_font_size,
 			mode: 'ace/mode/python',
 			vScrollBarAlwaysVisible: true
 		});
@@ -259,11 +292,19 @@ function Visualizer(block, code, stdin, passed_options) {
 		editors.stdout.setOptions(progData_editor_options);
 
 		editors.stdout.setReadOnly(true);
+		editors.stdin.setFontSize(options.stdin_font_size);
+		editors.stdout.setFontSize(options.stdout_font_size);
 
 
 		editors.code.on('change', function(e) {
 			code_changed = (current_code !== undefined && editors.code.getValue().trim() != current_code.trim());
 			updateStatus();
+
+			if(options.auto_height && e.data.action == 'insertText' &&
+			                          e.data.text.indexOf('\n') > 0) {
+				autoHeight();
+			}
+
 			fireEvent('change_code');
 		});
 
@@ -281,6 +322,10 @@ function Visualizer(block, code, stdin, passed_options) {
 				if(!options.explain_mode && trace !== undefined) {
 					// trace present, but explain mode should be disabled. jump to the end to simulate non-expain mode.
 					jumpToEnd();
+
+					current.line = undefined;
+					_updateHighlight();
+
 				} else if(options.explain_mode && trace === undefined) {
 					// trace undefined, but explain mode should be enabled. rerun code to get the trace.
 					run();
@@ -323,6 +368,39 @@ function Visualizer(block, code, stdin, passed_options) {
 
 	function focusCodeEditor() {
 		editors.code.focus();
+	}
+
+	function clear() { // clears all - but don't clear code, stdin and saves status
+		editors.stdout.setValue('');
+
+		trace = undefined;
+		_clearCurrent();
+
+		current_code = undefined;
+		code_changed = false;
+
+		custom_status = '';
+
+		updateUI();
+	}
+
+	function reset() { // restores everything (exclude code and stdin) to it's initially state
+		has_ever_runned = false;
+		clear();
+	}
+
+	function autoHeight(editor) {
+		if(editor !== undefined) {
+			var lines = editor.getSession().getScreenLength();
+			var line_height = editor.renderer.layerConfig.lineHeight;
+			var height = Math.min(MAX_AUTO_HEIGHT, line_height * lines);
+
+			$(editor.renderer.getContainerElement()).height(height);
+			editor.resize();
+
+		} else {
+			autoHeight(editors.code);
+		}
 	}
 
 
@@ -369,7 +447,6 @@ function Visualizer(block, code, stdin, passed_options) {
 	}
 
 	function _clearCurrent() {
-		last = current;
 		current = {};
 	}
 
@@ -517,12 +594,15 @@ function Visualizer(block, code, stdin, passed_options) {
 	}
 
 	function _updateScroll() {
-		if(current.line <= editors.code.getFirstVisibleRow() || current.line >= editors.code.getLastVisibleRow() - 1) {
-			var size = editors.code.getLastVisibleRow() - editors.code.getFirstVisibleRow();
+		if(current.line <= editors.code.renderer.getFirstFullyVisibleRow() ||
+		   current.line >= editors.code.renderer.getLastFullyVisibleRow() - 1) {
+
+			var size = editors.code.renderer.getLastFullyVisibleRow()
+			         - editors.code.renderer.getFirstFullyVisibleRow();
 
 			var scroll_to_line = current.line;
 			if(current.line >= editors.code.getLastVisibleRow() - 1) {
-				scroll_to_line = current.line - size + 2;
+				scroll_to_line = current.line - size + 1;
 			}
 
 			editors.code.scrollToLine(scroll_to_line);
@@ -570,21 +650,16 @@ function Visualizer(block, code, stdin, passed_options) {
 			blocks.stdin.parent().toggle(!(options.stdin_read_only || options.code_read_only) || stdin != '' || !options.show_stdin);
 		}
 
-		// code should be full-row if it is not executable
-		blocks.code.parent().parent().removeClass(options.executable ? 'col-xs-12' : 'col-xs-6');
-		blocks.code.parent().parent().addClass(options.executable ? 'col-xs-6' : 'col-xs-12');
+		// why do we need dataviz if explain_mode is not enabled? or code was never launched? or data is unavailable?
+		blocks.dataviz.toggle(options.dataviz_enabled && options.explain_mode && has_ever_runned && trace !== undefined);
+		blocks.dataviz.find('.visualizer_dataviz_header').toggle(!$.isEmptyObject(current.stack_locals));
 
 		// stdin should be full-row if stdout is not visible, and half-row otherwise
-		blocks.stdin.parent().removeClass(blocks.stdout.is(':visible') ? 'col-xs-12' : 'col-xs-6');
-		blocks.stdin.parent().addClass(blocks.stdout.is(':visible') ? 'col-xs-6' : 'col-xs-12');
-
-		// stdout should be full-row if stdin is not visible, and half-row otherwise
-		blocks.stdout.parent().removeClass(blocks.stdin.is(':visible') ? 'col-xs-12' : 'col-xs-6');
-		blocks.stdout.parent().addClass(blocks.stdin.is(':visible') ? 'col-xs-6' : 'col-xs-12');
-
-		// why do we need dataviz if explain_mode is not enabled? or code was never launched? or no variables defined?
-		blocks.dataviz.toggle(options.dataviz_enabled && options.explain_mode && has_ever_runned);
-		blocks.dataviz.find('.visualizer_dataviz_header').toggle(!$.isEmptyObject(current.stack_locals));
+		toggleFullRow(blocks.stdin.parent(), !blocks.stdout.parent().is(':visible'), 6, 12);
+		// stdout - if stdin is not visible
+		toggleFullRow(blocks.stdout.parent(), !blocks.stdin.parent().is(':visible'), 6, 12);
+		// code - if dataviz and error is not visible
+		toggleFullRow(blocks.code.parent().parent(), !(blocks.dataviz.is(':visible') || blocks.error.is(':visible') || has_ever_runned), 9, 12);
 
 		// similarly
 		blocks.vcr.toggle(options.explain_mode && has_ever_runned);
@@ -1280,7 +1355,7 @@ function Visualizer(block, code, stdin, passed_options) {
 		has_ever_runned = true;
 		is_executing = true;
 
-		updateStatus();
+		clear();
 
 		req.done(function(server_res) {
 			is_executing = false;
@@ -1361,6 +1436,8 @@ function Visualizer(block, code, stdin, passed_options) {
 	}
 
 	this.focusCodeEditor = focusCodeEditor;
+	this.clear = clear;
+	this.reset = reset;
 
 	this.jumpToBegin = jumpToBegin;
 	this.jumpToEnd = jumpToEnd;
@@ -1375,14 +1452,11 @@ function Visualizer(block, code, stdin, passed_options) {
 	Object.defineProperty(this, 'stdin', _editorValueProperty(editors.stdin));
 
 
-	this.code = code;
-	this.stdin = stdin;
-
-
 	editors.code.moveCursorTo(0, 0);
 	editors.stdin.moveCursorTo(0, 0);
+
 	if(options.auto_height) {
-		blocks.code.height(editors.code.renderer.layerConfig.lineHeight * (editors.code.session.getLength() - 1));
+		autoHeight(editors.code);
 	}
 
 
