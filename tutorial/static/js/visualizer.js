@@ -39,8 +39,8 @@ function Visualizer(block, init_code, init_stdin, passed_options) {
 
 	if(init_code === undefined) {
 		init_code = $(block).text().trim();
-		if(code != '') {
-			code += '\n';
+		if(init_code != '') {
+			init_code += '\n';
 		}
 	}
 
