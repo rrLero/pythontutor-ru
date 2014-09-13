@@ -21,7 +21,7 @@ ideal_user = User.objects.get(username='admin')
 program_code_start = '<pre class="prettyprint lang-python">'
 program_code_end = '</pre>'
 
-LESSON_IMG_ROOT = '/pylernu/static/lesson_images/'
+LESSON_IMG_ROOT = '/static/images/lesson_images/'
 
 
 def _insert_code_into_url(code):
