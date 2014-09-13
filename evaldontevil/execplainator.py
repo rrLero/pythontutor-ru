@@ -202,6 +202,9 @@ class Execplainator(Bdb):
         func_name = tos[0].f_code.co_name
         lineno = tos[1]
 
+        if func_name in ('<listcomp>', '<genexpr>') and event_type != 'step_line':
+            return # skip step line in generator and list comprehensions - they're useless
+
         # each element is a pair of (function name, locals dict)
         stack_locals = []
 
@@ -219,7 +222,18 @@ class Execplainator(Bdb):
             elif where == '':
                 where = 'unnamed function'
 
-            stack_locals.append((where, self._filter_variables(cur_frame.f_locals)))
+            this_locals = self._filter_variables(cur_frame.f_locals)
+
+            # filter some internal variables
+            # in the list comprehensions and generators
+            # (they useless and JSON-danger)
+            if where in ('<listcomp>', '<genexpr>'):
+                varnames = list(this_locals.keys())
+                for name in varnames:
+                    if name.startswith('.'):
+                        del this_locals[name]
+
+            stack_locals.append((where, this_locals))
 
             i -= 1
 
