@@ -28,8 +28,8 @@
 {% endblock %}
 
 {% block lesson_body %}
-	<h1 class=""><small><a href="{% url 'lesson_in_course' lesson.name %}" class="glyphicon glyphicon-chevron-left"></a> Занятие {{ lesson_in_course.order }}.</small> {{ lesson.title }}</h1>
-	<h2><small>Задача</small> &laquo;{{ problem.name }}&raquo;</h2>
+	<h1 class="lesson_name"><small><a href="{% url 'lesson_in_course' lesson.name %}"><span class="glyphicon glyphicon-chevron-left"></span></a> <a href="{% url 'lesson_in_course' lesson.name %}">Занятие {{ lesson_in_course.order }}</a>.</small> {{ lesson.title }}</h1>
+	<h2 class="problem_name"><small>Задача</small> &laquo;{{ problem.name }}&raquo;</h2>
 	<hr>
 
 	{{ problem.statement | safe }}

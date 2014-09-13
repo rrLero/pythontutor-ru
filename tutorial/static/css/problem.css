@@ -13,6 +13,14 @@
 .lesson_sections .problems_link li.unsolved { background: rgba(252, 168, 132, 0.3); }
 
 
+.lesson_name {
+	margin-bottom: 10px;
+}
+.problem_name {
+	margin-top: 10px;
+}
+
+
 #example_tests {
 	margin-top: 15px;
 }
