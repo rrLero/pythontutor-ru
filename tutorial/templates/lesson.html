@@ -34,7 +34,7 @@
 			<ol class="lesson_problems">
 				{% for problem in problems %}
 					<li>
-						<a href="/lessons/{{ lesson.urlname }}/problems/{{ problem.urlname }}/">{% problem_link problem %}</a>
+						<a href="/lessons/{{ lesson.name }}/problems/{{ problem.urlname }}/">{% problem_link problem %}</a>
 						{% ideal_solution problem %}
 					</li>
 				{% endfor %}
