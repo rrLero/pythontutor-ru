@@ -1,8 +1,10 @@
 {% extends '_lesson_page.html' %}
+{% load lesson %}
 
 {% block headers %}
 	{{ block.super }}
 
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/lesson.css">
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/problem.css">
 
 	<script type="text/javascript" src="{{ STATIC_URL }}js/problem.js"></script>
@@ -12,9 +14,23 @@
 	</script>
 {% endblock %}
 
+{% block navbar_active_lesson %}
+	<ul class="lesson_sections">
+		<li class="problems_link">
+			<a href="#problems">Задачи</a>
+			<ul>
+				{% for menu_problem in problems %}
+					<li class="{{ menu_problem.status }}"><a{% if menu_problem.urlname == problem.urlname %} class="active"{% endif %} href="{% url 'problem_in_lesson' lesson.name menu_problem.urlname %}">{{ menu_problem.name }}</a></li>
+				{% endfor %}
+			</ul>
+		</li>
+	</ul>
+{% endblock %}
+
 {% block lesson_body %}
-	<h1><a href="{% url 'lesson_in_course' lesson.urlname %}" class="glyphicon glyphicon-chevron-left"></a> Занятие {{ lesson_in_course.order }}. {{ lesson.title }}</h1>
-	<h2 class="page-header">Задача &laquo;{{ problem.name }}&raquo;</h2>
+	<h1 class=""><small><a href="{% url 'lesson_in_course' lesson.name %}" class="glyphicon glyphicon-chevron-left"></a> Занятие {{ lesson_in_course.order }}.</small> {{ lesson.title }}</h1>
+	<h2><small>Задача</small> &laquo;{{ problem.name }}&raquo;</h2>
+	<hr>
 
 	{{ problem.statement | safe }}
 

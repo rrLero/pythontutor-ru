@@ -4,8 +4,8 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
 
 from tutorial.models import Course, Lesson, Problem, Submission
-from tutorial.lessons import get_sorted_lessons
-from tutorial.problems import load_problem
+from tutorial.lessons import get_sorted_lessons, load_lesson
+from tutorial.problems import get_sorted_problems, load_problem
 from tutorial.views import DEFAULT_COURSE, need_login
 
 
@@ -28,10 +28,28 @@ def get_best_saved_code(user, problem_urlname):
 @need_login
 def problem_in_lesson(request, lesson_name, problem_name):
     course = Course.objects.get(urlname=DEFAULT_COURSE)
-    lessons = course.lessonincourse_set.all()
+    lesson_db = Lesson.objects.get(urlname=lesson_name)
 
-    lesson = Lesson.objects.get(urlname=lesson_name)
-    lesson_in_course = lesson.lessonincourse_set.get(course=course)
+    lessons = course.lessonincourse_set.all()
+    lesson = load_lesson(lesson_db)
+    lesson_in_course = lesson_db.lessonincourse_set.get(course=course)
+
+    problems = get_sorted_problems(lesson=lesson_db)
+    for problem in problems:
+        if request.user.is_authenticated():
+            statuses = [submission.get_status_display() for submission 
+                    in Submission.objects.filter(user=request.user, problem=problem['db_object'])]
+        else:
+            statuses = []
+
+        if 'ok' in statuses:
+            problem['status'] = 'solved'
+        elif 'accepted' in statuses:
+            problem['status'] = 'accepted'
+        elif 'error' in statuses:
+            problem['status'] = 'unsolved'
+        else:
+            problem['status'] = ''
 
     problem_db = Problem.objects.get(urlname=problem_name)
     problem = load_problem(problem_db)
