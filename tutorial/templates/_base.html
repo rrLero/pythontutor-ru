@@ -64,7 +64,7 @@ Copyright (C) 2012 Vitaly Pavlenko (cxielamiko@gmail.com)
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li{% ifpageis lesson_in_course %} class="active"{% endif %}><a href="{% url 'home' %}">Уроки</a></li>
+					<li{% ifpageis lesson_in_course problem_in_lesson %} class="active"{% endif %}><a href="{% url 'home' %}">Уроки</a></li>
 					<li{% ifpageis visualizer %} class="active"{% endif %}><a href="{% url 'visualizer' %}">Визуализатор</a></li>
 				</ul>
 				<div class="navbar-text navbar-right">
