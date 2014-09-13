@@ -1,0 +1,8 @@
+<li>
+	<a href="#section_{{ id }}">{{ id }}. {{ title|safe }}</a>
+	{% if subsections %}
+		<ul>
+			{{ subsections|safe }}
+		</ul>
+	{% endif %}
+</li>

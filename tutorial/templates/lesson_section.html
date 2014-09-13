@@ -1,0 +1,5 @@
+<div id="section_{{ id }}" class="section">
+	{% comment %}{% if title != '__text__' %}{% endcomment %}
+	<h{{ nesting_level|add:'+2' }}><small>{{ id }}.</small> <a href="#section_{{ id }}">{{ title|safe }}</a></h{{ nesting_level|add:'+2' }}>
+	{{ content|safe }}
+</div>

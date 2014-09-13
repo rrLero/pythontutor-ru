@@ -37,6 +37,8 @@ Copyright (C) 2012 Vitaly Pavlenko (cxielamiko@gmail.com)
 
 -->
 
+{% load menu %}
+
 <head>
 	<title>Интерактивный учебник языка Python</title>
 
@@ -62,8 +64,8 @@ Copyright (C) 2012 Vitaly Pavlenko (cxielamiko@gmail.com)
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li><a href="{% url 'home' %}">Уроки</a></li>
-					<li><a href="{% url 'visualizer' %}">Визуализатор</a></li>
+					<li{% ifpageis lesson_in_course %} class="active"{% endif %}><a href="{% url 'home' %}">Уроки</a></li>
+					<li{% ifpageis visualizer %} class="active"{% endif %}><a href="{% url 'visualizer' %}">Визуализатор</a></li>
 				</ul>
 				<div class="navbar-text navbar-right">
 					{% if request.user.is_authenticated %}

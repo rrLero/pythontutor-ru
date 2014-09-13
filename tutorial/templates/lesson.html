@@ -1,22 +1,47 @@
 {% extends '_lesson_page.html' %}
-{% load tags %}
+{% load lesson %}
+
+{% block headers %}
+	{{ block.super }}
+
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/lesson.css">
+{% endblock %}
+
+{% block navbar_active_lesson %}
+	<ul class="lesson_sections">
+		{% if lesson.sections|length > 2 %}
+			{{ lesson|lesson_navbar }}
+		{% endif %}
+		<li class="problems_link">
+			<a href="#problems">Задачи</a>
+		</li>
+	</ul>
+{% endblock %}
 
 {% block lesson_body %}
-	<h1 class="page-header">Занятие {{ lesson_in_course.order }}. {{ lesson.title }}</h1>
+	<h1 class="page-header"><small>Занятие {{ lesson_in_course.order }}.</small> {{ lesson.title }}</h1>
 
-	{{ lesson_content|safe }}
+<!--	<div class="lesson">
+		<div class="sections">
+			Содержание:<br><a href="#0">Синтаксис условной инструкции</a><br><a href="#1">Вложенные условные инструкции</a><br><a href="#2">Операторы сравнения</a><br><a href="#3">Тип данных bool</a><br><a href="#4">Каскадные условные инструкции</a></div>-->
+
+	{{ lesson|lesson_content }}
 
 	{% if problems %}
-		<h3>Задачи:</h3>
-		{% for problem in problems %}
-			<p style="padding-left: 10pt;">
-				<a href="/lessons/{{ lesson.urlname }}/problems/{{ problem.urlname }}/">{% problem_link problem %}</a>
-				{% ideal_solution problem %}
-			</p>
-		{% endfor %}
-		<h3><a href="/lessons/{{ lesson.urlname }}/standings/">Таблица результатов</a></h3>
+		<hr>
+		<div id="problems">
+			<h2>Задачи:</h2>
+			<ol class="lesson_problems">
+				{% for problem in problems %}
+					<li>
+						<a href="/lessons/{{ lesson.urlname }}/problems/{{ problem.urlname }}/">{% problem_link problem %}</a>
+						{% ideal_solution problem %}
+					</li>
+				{% endfor %}
+			</ol>
+		</div>
 	{% endif %}
 	{% if lesson.external_contest_link %}
-		<h3><a href="{{ lesson.external_contest_link }}">Внешний контест с задачами</a></h3>
+		<h4><a href="{{ lesson.external_contest_link }}">Внешний контест с задачами</a></h4>
 	{% endif %}
 {% endblock %}

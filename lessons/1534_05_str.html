@@ -166,7 +166,7 @@ for i in range(0, 10, 2):
 Например, <code>S.find(&quot;e&quot;)</code>&nbsp;&mdash; это применение к строке <code>S</code> 
 метода <code>find</code> с одним параметром <code>&quot;e&quot;</code>.
 
-{% subsection "Методы find и rfind" %}
+{% section "Методы find и rfind" %}
 <p>Метод <code>find</code> находит в данной строке (к которой применяется  метод)
 данную подстроку (которая передается в качестве параметра).
 Функция возвращает индекс первого вхождения искомой подстроки.
@@ -200,9 +200,9 @@ print(S.rfind('l'))
 в срезе <code>S[a:]</code>, то есть начиная с символа с индексом
 <code>a</code> и до конца строки. Метод <code>S.find(T, a, b)</code> 
 возращает индекс в строке <code>S</code>, а не индекс относительно среза.
-{% endsubsection %}
+{% endsection %}
 
-{% subsection "Метод replace" %}
+{% section "Метод replace" %}
 <p>Метод <code>replace</code> заменяет все вхождения одной строки на другую. Формат:
 <code>S.replace(old, new)</code>&nbsp;&mdash; заменить в строке <code>S</code> 
 все вхождения подстроки <code>old</code> на подстроку <code>new</code>. Пример:
@@ -219,9 +219,9 @@ print('Hello'.replace('l', 'L'))
 print('Abrakadabra'.replace('a', 'A', 2))
 # вернёт 'AbrAkAdabra'
 {% endprogram %}
-{% endsubsection %}
+{% endsection %}
 
-{% subsection "Метод count" %}
+{% section "Метод count" %}
 <p>Подсчитывает количество вхождений одной строки в другую строку. Простейшая
 форма вызова <code>S.count(T)</code>&nbsp; возвращает число вхождений строки
 <code>T</code> внутри строки <code>S</code>. При этом подсчитываются только
@@ -238,6 +238,6 @@ print(('a' * 10).count('aa'))
 <p>При указании трех параметров <code><nobr>S.count(T, a, b)</nobr></code>,
 будет выполнен подсчет числа вхождений строки <code>T</code> 
 в срезе <code>S[a:b]</code>.
-{% endsubsection %}
+{% endsection %}
 
 {% endsection %}

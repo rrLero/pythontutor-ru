@@ -1,54 +1,44 @@
 # -*- coding: utf-8 -*-
 
-from django import template
+import urllib.request, urllib.parse, urllib.error
+
 from django.contrib.auth.models import User
 from django.conf import settings
-from django.template import Context
+from django.template import Context, Library, Node, Template, TemplateSyntaxError
 from django.template.loader import get_template
 
 from tutorial.models import Problem, Submission
 from tutorial.problems import load_problem
 
 
-import urllib.request, urllib.parse, urllib.error
-import cgi
-
-
-register = template.Library()
+register = Library()
 
 ideal_user = User.objects.get(username='admin')
-
-program_code_start = '<pre class="prettyprint lang-python">'
-program_code_end = '</pre>'
 
 LESSON_IMG_ROOT = '/static/images/lesson_images/'
 
 
-def _insert_code_into_url(code):
-    return urllib.parse.quote(code.encode('utf-8'), '')
+def _render_code_to_html(**kwargs):
+    return get_template('code.html').render(Context(kwargs))
 
 
-def _render_code_to_html(code, input_data='', context={}, executable=True, blockquote=True):
-    t = get_template('code.html')
-    return t.render(Context({
-		'enclosure_tag': 'blockquote' if blockquote else 'div',
-		'code': code,
-		'executable': executable,
-		'input_data': input_data,
-	}))
-
-
-
-class ProgramCodeNode(template.Node):
-    def __init__(self, nodelist, executable=True):
+class ProgramCodeNode(Node):
+    def __init__(self, nodelist, executable=True, dataviz=True):
         self.nodelist = nodelist
         self.executable = executable
+        self.dataviz = dataviz
 
     def render(self, context):
-        context['input_data'] = " "
+        context['input_data'] = ''
         code = self.nodelist.render(context).strip()
-        input_data = context.get("input_data", " ")
-        return _render_code_to_html(code, input_data, context, self.executable)
+        input_data = context.get('input_data', '')
+
+        return _render_code_to_html(**{
+			'code': code,
+            'input_data': input_data,
+            'executable': self.executable,
+            'dataviz': self.dataviz,
+		})
 
 
 @register.tag('program')
@@ -65,13 +55,13 @@ def highlight_program_code(parser, token):
     return ProgramCodeNode(nodelist, executable=False)
 
 
-class InputDataNode(template.Node):
+class InputDataNode(Node):
     def __init__(self, nodelist):
         self.nodelist = nodelist
 
     def render(self, context):
         input_data = self.nodelist.render(context).strip()
-        context["input_data"] = input_data
+        context['input_data'] = input_data
         return ''
 
 
@@ -82,98 +72,7 @@ def add_input_data(parser, token):
     return InputDataNode(nodelist)
 
 
-class ProblemLinkNode(template.Node):
-    def __init__(self, problem_ref):
-        self.problem_ref = problem_ref
-
-    def render(self, context):
-        problem_urlname = context[self.problem_ref]['urlname']
-        problem = load_problem(Problem.objects.get(urlname=problem_urlname))
-        user = context['request'].user
-        if user.is_authenticated():
-            statuses = [submission.get_status_display() for submission 
-                    in Submission.objects.filter(user=user, problem=problem['db_object'])]
-        else:
-            statuses = []
-        if 'ok' in statuses:
-            css_class = 'okProblemLink'
-        elif 'error' in statuses:
-            css_class = 'errorProblemLink'
-        else:
-            css_class = 'unsubmittedProblemLink'
-        return '<span class="{0}">{1}</span>'.format(css_class, problem['name'])
-
-
-@register.tag('problem_link')
-def get_problem_link(parser, token):
-    try:
-        tag_name, problem_ref = token.split_contents()
-    except ValueError:
-        msg = '{0} tag requires a single argument'.format(token.split_contents()[0])
-        raise template.TemplateSyntaxError(msg)
-    return ProblemLinkNode(problem_ref)
-
-
-
-class IdealSolutionNode(template.Node):
-    def __init__(self, problem_ref):
-        self.problem_ref = problem_ref
-
-    def render(self, context):
-        problem_urlname = context[self.problem_ref]['urlname']
-        problem = load_problem(Problem.objects.get(urlname=problem_urlname))
-        user = context['request'].user
-        if user.is_authenticated():
-            user_solutions = [submission for submission 
-                in Submission.objects.filter(user=user, problem=problem['db_object']).order_by('time')
-                if submission.get_status_display() == 'ok']
-        else:
-            user_solutions = []
-        ideal_solutions = [submission for submission 
-                in Submission.objects.filter(user=ideal_user, problem=problem['db_object']).order_by('-time')
-                if submission.get_status_display() == 'ok']
-        if user_solutions and ideal_solutions:
-            return '''
-                <table border="1" class="userAndIdealSolutions">
-                    <tr>
-                        <td class="header">Ваше решение</td>
-                        <td class="header">Эталонное решение</td>
-                    </tr>
-                    <tr>
-                        <td class="body">
-                        {user_solution}
-                        </td>
-                        <td class="body">
-                        {ideal_solution}
-                        </td>
-                    </tr>
-                </table>
-                <br>
-            '''.format(**dict(user_solution=_render_code_to_html(user_solutions[0].code, 
-                                                                 input_data=problem['tests'][0], 
-                                                                 context=context,
-                                                                 executable=True,
-                                                                 blockquote=False), 
-                              ideal_solution=_render_code_to_html(ideal_solutions[0].code,
-                                                                 input_data=problem['tests'][0],
-                                                                 context=context,
-                                                                 executable=True,
-                                                                 blockquote=False), **globals()))
-        else:
-            return ''
-
-
-@register.tag('ideal_solution')
-def get_ideal_solution_link(parser, token):
-    try:
-        tag_name, problem_ref = token.split_contents()
-    except ValueError:
-        msg = '{0} tag requires a single argument'.format(token.split_contents()[0])
-        raise template.TemplateSyntaxError(msg)
-    return IdealSolutionNode(problem_ref)
-
-
-class LessonNode(template.Node):
+class LessonNode(Node):
     def __init__(self, nodelist):
         self.nodelist = nodelist
 
@@ -199,16 +98,16 @@ def wrap_lesson(parser, token):
     return LessonNode(nodelist)
 
 
-class WrapperNode(template.Node):
+class WrapperNode(Node):
     def __init__(self, nodelist, html_before, html_after):
         self.nodelist = nodelist
         self.html_before = html_before
         self.html_after = html_after
 
     def render(self, context):
-        return (template.Template(str(self.html_before)).render(context) + 
+        return (Template(str(self.html_before)).render(context) + 
                 self.nodelist.render(context) + 
-                template.Template(str(self.html_after)).render(context))
+                Template(str(self.html_after)).render(context))
 
 
 class SectionNode(WrapperNode):
@@ -226,12 +125,12 @@ class SectionNode(WrapperNode):
         return super(SectionNode, self).render(context)
 
 
-class SingleNode(template.Node):
+class SingleNode(Node):
     def __init__(self, html):
         self.html = html
 
     def render(self, context):
-        return template.Template(str(self.html)).render(context)
+        return Template(str(self.html)).render(context)
 
 
 def create_wrapper_tag(name, html_before, html_after):
