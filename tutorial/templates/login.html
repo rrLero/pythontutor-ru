@@ -1,28 +1,27 @@
-{% extends "base.html" %}
+{% extends '_base_basic.html' %}
+
+{% block headers %}
+	{{ block.super }}
+
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/profile.css">
+{% endblock %}
 
 {% block body %}
+	<h3 class="text-center">Вход для зарегистрированных пользователей</h3>
 
-<h2>Вход для зарегистрированных пользователей</h2>
+	{% if form.errors %}
+		<div class="text-danger invalid_login">Неверное имя пользователя или пароль</div>
+	{% endif %}
 
-{% if form.errors %}
-<div class="errorMessage">Неверное имя пользователя или пароль.</div>
-{% endif %}
+	<form method="post" action="{% url 'django.contrib.auth.views.login' %}" class="login_form" role="form">
+		{% csrf_token %}
+		<input type="hidden" name="next" value="{{ next }}">
 
-<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
-{% csrf_token %}
-<table>
-<tr>
-    <td>{{ form.username.label_tag }}</td>
-    <td>{{ form.username }}</td>
-</tr>
-<tr>
-    <td>{{ form.password.label_tag }}</td>
-    <td>{{ form.password }}</td>
-</tr>
-</table>
+		<div class="form-group">
+			<input type="text" name="username" class="form-control" placeholder="Имя пользователя" required autofocus>
+			<input type="password" name="password" class="form-control" placeholder="Пароль" required>
+		</div>
 
-<input type="submit" value="Войти" />
-<input type="hidden" name="next" value="{{ next }}" />
-</form>
-
+		<button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
+	</form>
 {% endblock %}

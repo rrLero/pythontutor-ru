@@ -1,18 +1,63 @@
-{% extends "base.html" %}
+{% extends '_base_basic.html' %}
+{% load crispy_forms_tags %}
+
+{% block headers %}
+	{{ block.super }}
+
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/profile.css">
+
+	<script type="text/javascript" src="{{ STATIC_URL }}js/register.js"></script>
+{% endblock %}
 
 {% block body %}
+	<h2 class="text-center">Регистрация нового пользователя</h2>
 
-<h2>Регистрация нового пользователя</h2>
+	{% if error %}
+		<div class="text-danger invalid_login">{{ error }}</div>
+	{% endif %}
 
-{% if error %}
-<div class="errorMessage">{{ error }}</div>
-{% endif %}
+	<form action="{% url 'register' %}" method="post" class="form-horizontal register_form" role="form">
+		{% csrf_token %}
 
-<form action="{% url 'register' %}" method="POST">
-{% csrf_token %}
-<table>
-{{ form.as_table }}
-</table>
-<input type="submit">
-</form>
+		<div class="row form-group">
+			<label for="username" class="col-sm-4 control-label">Логин</label>
+			<div class="col-sm-5">
+				<input type="text" class="form-control" id="username" name="username" placeholder="Логин" required autofocus>
+			</div>
+		</div>
+
+		<div class="row form-group">
+			<label for="first_name" class="col-sm-4 control-label">Имя, фамилия</label>
+			<div class="col-sm-5 two_columns">
+				<div class="col-sm-6 left_column">
+					<input type="text" class="form-control" id="first_name" name="first_name" placeholder="Имя" required>
+				</div>
+				<div class="col-sm-6 right_column">
+					<input type="text" class="form-control" id="last_name" name="last_name" placeholder="Фамилия" required>
+				</div>
+			</div>
+		</div>
+
+		<div class="row form-group">
+			<label for="email" class="col-sm-4 control-label">Почта</label>
+			<div class="col-sm-5">
+				<input type="text" class="form-control" id="email" name="email" placeholder="Почта" required>
+			</div>
+		</div>
+		<div class="row form-group">
+			<label for="email" class="col-sm-4 control-label">Пароль</label>
+			<div class="col-sm-5 two_columns">
+				<div class="col-sm-6 left_column">
+					<input type="password" class="form-control" id="password" name="password" placeholder="Пароль" required>
+				</div>
+				<div class="col-sm-6 right_column">
+					<input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Подтверждение пароля" required>
+				</div>
+			</div>
+		</div>
+
+		<div class="row text-center">
+			<button type="submit" class="btn btn-success">Зарегистрироваться</button>
+		</div>
+	</form>
 {% endblock %}
