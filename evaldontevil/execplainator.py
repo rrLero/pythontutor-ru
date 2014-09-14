@@ -75,8 +75,13 @@ def parse_exception(exc):
         exception['offset'] = exc[1].args[1][2]
     else:
         traceback = exc[2]
-        while traceback.tb_next is not None:
+        while traceback is not None: # let's walk up to the user code frame
+            if traceback.tb_frame.f_code.co_filename == '<string>':
+                break
+
             traceback = traceback.tb_next
+
+        assert traceback is not None
 
         if hasattr(traceback, 'tb_lineno'):
             exception['line'] = traceback.tb_lineno
@@ -145,11 +150,11 @@ class Execplainator(Bdb):
         self.curframe = self.stack[self.curindex][0]
 
 
-    def _filter_variables(self, d):
+    def _filter_variables(self, d, dontfilter=()):
         ret = {}
 
         for k, v in d.items():
-            if not (k.startswith('__') and k.endswith('__')):
+            if (not (k.startswith('__') and k.endswith('__')) and k not in __builtins__) or k in dontfilter:
                 ret[k] = v
 
         return ret
@@ -202,6 +207,10 @@ class Execplainator(Bdb):
         func_name = tos[0].f_code.co_name
         lineno = tos[1]
 
+        where = frame.f_code.co_filename
+        if where != '<string>': # this is not a user code frame
+            return # so just skip it
+
         if func_name in ('<listcomp>', '<genexpr>') and event_type != 'step_line':
             return # skip step line in generator and list comprehensions - they're useless
 
@@ -222,7 +231,7 @@ class Execplainator(Bdb):
             elif where == '':
                 where = 'unnamed function'
 
-            this_locals = self._filter_variables(cur_frame.f_locals)
+            this_locals = self._filter_variables(cur_frame.f_locals, ('__return__'))
 
             # filter some internal variables
             # in the list comprehensions and generators
@@ -378,7 +387,11 @@ class SimpleExecplainator(Bdb):
 
         except:
             print_exc()
-            exception = parse_exception(sys.exc_info())
+            try:
+                exception = parse_exception(sys.exc_info())
+            except AssertionError:
+                sys.stderr = self.sys_stderr
+                print_exc()
 
 
         sys.stdin = self.sys_stdin

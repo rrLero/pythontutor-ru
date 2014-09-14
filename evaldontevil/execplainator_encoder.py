@@ -36,7 +36,7 @@
 
 # -----------------------------------------------------------------------------
 
-from re import compile
+from inspect import ismodule, isclass, ismethod, isfunction, getmembers, getmro
 
 
 # Given an arbitrary piece of Python data, encode it in such a manner
@@ -66,8 +66,6 @@ from re import compile
 real_to_small_IDs = {}
 cur_small_id = 1
 
-
-classRE = compile("<class '(.*)'>")
 
 def encode(dat):
     def encode_helper(dat, compound_obj_ids):
@@ -106,25 +104,25 @@ def encode(dat):
                     for e in dat:
                         ret.append(encode_helper(e, new_compound_obj_ids))
 
-            elif typ is type or classRE.match(str(typ)):
-                superclass_names = [e.__name__ for e in dat.__class__.__bases__]
-                superclass_names.remove('object')
+            elif isclass(dat) or (hasattr(dat, '__class__') and isclass(dat.__class__)):
+                if isclass(dat):
+                    superclass_names = [e.__name__ for e in getmro(dat.__class__) if e.__name__ not in ('object')]
+                    ret = ['CLASS', dat.__class__.__name__, my_small_id, superclass_names]
+                else:
+                    ret = ['INSTANCE', dat.__class__.__name__, my_small_id]
 
-                ret = ['CLASS', dat.__class__.__name__, my_small_id, superclass_names]
-
-                if dat.__class__.__name__ not in ('generator'):
+                if not (isfunction(dat) or ismethod(dat) or ismodule(dat)):
                     # traverse inside of its __dict__ to grab attributes
                     # (filter out useless-seeming ones):
-                    user_attrs = sorted([e for e in list(dir(dat)) if not e.startswith('__')])
+                    user_attrs = sorted(e for e in getmembers(dat))
 
-                    for attr in user_attrs:
-                        ret.append([encode_helper(attr, new_compound_obj_ids), encode_helper(getattr(dat, attr), new_compound_obj_ids)])
+                    for name, value in user_attrs:
+                        if name.startswith('__') and name.endswith('__'):
+                            continue
+                        ret.append([name, encode_helper(value, new_compound_obj_ids)])
 
             else:
-                typeStr = str(typ)
-                m = typeRE.match(typeStr)
-                raise Exception(typeStr)
-                ret = [m.group(1), my_small_id, str(dat)]
+                ret = ['UNKNOWN', my_small_id, str(dat)]
 
             return ret
 

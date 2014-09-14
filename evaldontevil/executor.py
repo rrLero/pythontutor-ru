@@ -6,6 +6,7 @@
 
 from json import dumps, loads
 from os.path import dirname
+from sys import stderr
 
 from codejail.jail_code import configure, jail_code, set_limit
 
@@ -22,16 +23,24 @@ set_limit('FSIZE', FSIZE_LIMIT)
 
 class ExecuteResult:
 	def __init__(self, jailres):
-		self.retcode = jailres.status
-		self.result = 'ok' if self.retcode == 0 else 'retcode'
-
 		try:
+			if jailres.stderr != b'':
+				raise Exception(jailres.stderr.decode('utf-8'))
+
 			execplainator_res = loads(str(jailres.stdout, 'utf-8'))
-		except:
+
+		except Exception as e:
 			self.stdout = ''
 			self.stderr = ''
 			self.result = 'internal_error'
+
+			stderr.write('Visualizer backend internal error :(\n')
+			stderr.write(e.args[0])
+			stderr.flush()
+
 			return
+
+		self.result = 'ok'
 
 		self.stdout = execplainator_res['stdout']
 		self.stderr = execplainator_res['stderr']
@@ -39,7 +48,7 @@ class ExecuteResult:
 		if self.stderr != '':
 			self.result = 'stderr'
 
-		if self.retcode & 128 != 0:
+		if jailres.status & 128 != 0:
 			self.result = 'time_limited'
 			return
 
