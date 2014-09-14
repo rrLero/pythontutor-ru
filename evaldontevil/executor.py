@@ -23,6 +23,14 @@ set_limit('FSIZE', FSIZE_LIMIT)
 
 class ExecuteResult:
 	def __init__(self, jailres):
+		self.result = 'ok'
+		self.stdout = ''
+		self.stderr = ''
+
+		if jailres.status & 128 != 0:
+			self.result = 'realtime_limited'
+			return
+
 		try:
 			if jailres.stderr != b'':
 				raise Exception(jailres.stderr.decode('utf-8'))
@@ -30,8 +38,6 @@ class ExecuteResult:
 			execplainator_res = loads(str(jailres.stdout, 'utf-8'))
 
 		except Exception as e:
-			self.stdout = ''
-			self.stderr = ''
 			self.result = 'internal_error'
 
 			stderr.write('Visualizer backend internal error :(\n')
@@ -40,18 +46,11 @@ class ExecuteResult:
 
 			return
 
-		self.result = 'ok'
-
 		self.stdout = execplainator_res['stdout']
 		self.stderr = execplainator_res['stderr']
 
 		if self.stderr != '':
 			self.result = 'stderr'
-
-		if jailres.status & 128 != 0:
-			self.result = 'time_limited'
-			return
-
 
 		if 'trace' in execplainator_res:
 			self.trace = execplainator_res['trace']
