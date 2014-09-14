@@ -43,7 +43,7 @@ def register_user(request):
 
             if User.objects.filter(username=username):
                 error = 'Пользователь с таким логином уже существует'
-                return direct_to_template(request, 'register.html', locals())
+                return render(request, 'register.html', locals())
 
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
