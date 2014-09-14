@@ -402,6 +402,11 @@ function Visualizer(block, init_code, init_stdin, passed_options) {
 		}
 	}
 
+	function setStatus(status) {
+		custom_status = status;
+		updateStatus();
+	}
+
 
 	///// Explain management /////
 
@@ -1361,13 +1366,11 @@ function Visualizer(block, init_code, init_stdin, passed_options) {
 
 			if(server_res.result == 'internal_error') {
 				alert('Упс... На сервере случилась какая-то внутренняя ошибка :(');
-				custom_status = 'Внутренняя ошибка сервера';
-				updateStatus();
+				setStatus('Внутренняя ошибка сервера');
 				return;
 			} else if(server_res.result == 'realtime_limited') {
 				alert('Ваш код слишком долго выполнялся и был остановлен досрочно. Возможно, в программе содержится бесконечный цикл.');
-				custom_status = 'Таймаут выполнения кода';
-				updateStatus();
+				setStatus('Таймаут выполнения кода');
 				return;
 			}
 
@@ -1446,6 +1449,8 @@ function Visualizer(block, init_code, init_stdin, passed_options) {
 	this.run = run;
 
 	this.on = on;
+
+	this.setStatus = setStatus;
 
 	Object.defineProperty(this, 'code', _editorValueProperty(editors.code));
 	Object.defineProperty(this, 'stdin', _editorValueProperty(editors.stdin));
