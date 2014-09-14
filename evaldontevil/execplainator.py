@@ -234,13 +234,16 @@ class Execplainator(Bdb):
             this_locals = self._filter_variables(cur_frame.f_locals, ('__return__'))
 
             # filter some internal variables
+            # (they're useless and JSON-danger)
             # in the list comprehensions and generators
-            # (they useless and JSON-danger)
             if where in ('<listcomp>', '<genexpr>'):
                 varnames = list(this_locals.keys())
                 for name in varnames:
                     if name.startswith('.'):
                         del this_locals[name]
+
+            for name, value in this_locals.items():
+                this_locals[name] = encode(value)
 
             stack_locals.append((where, this_locals))
 
