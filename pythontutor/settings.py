@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import fnmatch
 import os
 
 
@@ -209,6 +210,16 @@ SESSION_COOKIE_AGE = 86400 * 6  # 24 hours, in seconds
 DEFAULT_COURSE = '1534'
 
 
-INTERNAL_IPS = (
+class GlobList(list):
+    def __contains__(self, key):
+        for elt in self:
+            if fnmatch.fnmatch(key, elt):
+                return True
+        return False
+
+INTERNAL_IPS = GlobList([
     '127.0.0.1',
-)
+    # When Django is running on Vagrant dev server, clients from host have an
+    # IP from this range.
+    '10.0.*.*',
+])
