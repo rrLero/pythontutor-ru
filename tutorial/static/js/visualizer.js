@@ -653,6 +653,7 @@ function Visualizer(block, init_code, init_stdin, passed_options) {
 		// why do we need dataviz if explain_mode is not enabled? or code was never launched? or data is unavailable?
 		blocks.dataviz.toggle(options.dataviz_enabled && options.explain_mode && has_ever_runned && trace !== undefined);
 		blocks.dataviz.find('.visualizer_dataviz_header').toggle(!$.isEmptyObject(current.stack_locals));
+		plumb.repaintEverything(); // with all these 123 we could spoil the position of endpoints, so redraw
 
 		// stdin should be full-row if stdout is not visible, and half-row otherwise
 		toggleFullRow(blocks.stdin.parent(), !blocks.stdout.parent().is(':visible'), 6, 12);
@@ -1304,6 +1305,8 @@ function Visualizer(block, init_code, init_stdin, passed_options) {
 				alert('Error: renderData FAIL!');
 			}
 		}
+
+		plumb.repaintEverything(); // redraw, because endpoints position may be changed
 	}
 
 
