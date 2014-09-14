@@ -1081,14 +1081,6 @@ function Visualizer(block, init_code, init_stdin, passed_options) {
 			elem = $(elem);
 
 			// dispatch on types:
-
-			// RUSSIAN CODE START
-			if(obj[0] == 'unicode') {
-				obj = obj[2];
-			}
-			// RUSSIAN CODE END
-
-
 			var typ = typeof(obj);
 
 			if(obj == null) {
