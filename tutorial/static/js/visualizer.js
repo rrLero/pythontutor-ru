@@ -1354,6 +1354,8 @@ function Visualizer(block, init_code, init_stdin, passed_options) {
 		has_ever_runned = true;
 		is_executing = true;
 
+		updateUI();
+
 		req.done(function(server_res) {
 			is_executing = false;
 
