@@ -370,14 +370,11 @@ function Visualizer(block, init_code, init_stdin, passed_options) {
 		editors.code.focus();
 	}
 
-	function clear() { // clears all - but don't clear code, stdin and saves status
+	function clear() { // clears all - but don't clear code, stdin
 		editors.stdout.setValue('');
 
 		trace = undefined;
 		_clearCurrent();
-
-		current_code = undefined;
-		code_changed = false;
 
 		custom_status = '';
 
@@ -386,6 +383,8 @@ function Visualizer(block, init_code, init_stdin, passed_options) {
 
 	function reset() { // restores everything (exclude code and stdin) to it's initially state
 		has_ever_runned = false;
+		current_code = undefined;
+		code_changed = false;
 		clear();
 	}
 
@@ -786,9 +785,12 @@ function Visualizer(block, init_code, init_stdin, passed_options) {
 					// IE needs this div to be NON-EMPTY in order to properly
 					// render jsPlumb endpoints, so that's why we add an "&nbsp;"!
 
-					variable_blocks[varname] = row;
-					assert(heap_connections[varname] === undefined);
-					heap_connections[varname] = getObjectID(val);
+					var i = 0;
+					while(heap_connections[varname + i] !== undefined) {
+						i++;
+					}
+					variable_blocks[varname + i] = row;
+					heap_connections[varname + i] = getObjectID(val);
 				}
 
 				return row;
@@ -1345,12 +1347,12 @@ function Visualizer(block, init_code, init_stdin, passed_options) {
 			explain    : options.explain_mode
 		});
 
+		clear();
+
 		current_code = viss.code;
 		code_changed = false;
 		has_ever_runned = true;
 		is_executing = true;
-
-		clear();
 
 		req.done(function(server_res) {
 			is_executing = false;
