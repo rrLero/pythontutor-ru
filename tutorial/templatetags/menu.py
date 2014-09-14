@@ -15,7 +15,7 @@ class IfPageIsNode(Node):
             resolved = urlresolvers.resolve(context.get('request').path)
             return self.nodelist.render(context) if resolved.url_name in self.if_pages else ''
         except:
-            return []
+            return ''
 
 @register.tag
 def ifpageis(parser, token):
