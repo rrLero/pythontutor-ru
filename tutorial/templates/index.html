@@ -24,8 +24,6 @@
 					{% for lic in lessons %}
 						<p>Занятие {{ lic.order }}. <a href="/lessons/{{ lic.lesson.urlname }}/">{{ lic.lesson.title }}</a></p>
 					{% endfor %}
-
-					<a href="/standings/">Результаты курса</a>
 				</div>
 			{% endfor %}
 
