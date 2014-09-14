@@ -41,7 +41,6 @@ $(function() {
 		return false;
 	});
 
-	if()
 	$('#exampleLinks .default').click();
 });
 
