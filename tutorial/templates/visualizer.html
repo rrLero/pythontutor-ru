@@ -10,15 +10,6 @@
 
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/visualizer.css">
-
-	<script type="text/javascript">
-		var visualizer;
-
-		$(function() {
-			visualizer = new Visualizer('#visualizer', '', '', {'show_stdin_initially': true});
-			visualizer.focusCodeEditor();
-		});
-	</script>
 {% endblock %}
 
 {% block body %}
