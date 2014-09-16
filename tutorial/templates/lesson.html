@@ -21,10 +21,6 @@
 {% block lesson_body %}
 	<h1 class="page-header"><small>Занятие {{ lesson_in_course.order }}.</small> {{ lesson.title }}</h1>
 
-<!--	<div class="lesson">
-		<div class="sections">
-			Содержание:<br><a href="#0">Синтаксис условной инструкции</a><br><a href="#1">Вложенные условные инструкции</a><br><a href="#2">Операторы сравнения</a><br><a href="#3">Тип данных bool</a><br><a href="#4">Каскадные условные инструкции</a></div>-->
-
 	{{ lesson|lesson_content }}
 
 	{% if problems %}
