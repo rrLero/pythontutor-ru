@@ -23,6 +23,10 @@
 	border-bottom: solid 2px #428bca;
 }
 
+.lesson_sections li {
+	position: relative;
+}
+
 .lesson_sections li > a {
 	text-decoration: none !important;
 	padding: 5px 0;
@@ -38,6 +42,16 @@
 	background: rgba(0, 0, 0, 0.03);
 }
 
+.lesson_sections li > .position_spin {
+	background: #6CBAEE;
+	position: absolute;
+	top: 0px;
+	left: 20px;
+	width: 2px;
+	height: 0px;
+}
+
+
 .lesson_sections .problems_link {
 	border-top: solid 1px #6CBAEE;
 	background: rgba(255, 255, 255, 0.4);
@@ -49,6 +63,8 @@
 	/* from http://nicolasgallagher.com/jump-links-and-viewport-positioning/demo/#method-D */
 	border-top: 60px solid transparent;
 	margin-top: -60px;
+	position: relative;
+	top: 0px;
 	-webkit-background-clip: padding-box;
 	-moz-background-clip: padding;
 	background-clip: padding-box;
