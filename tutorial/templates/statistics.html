@@ -1,0 +1,12 @@
+{% extends '_base_basic.html' %}
+
+{% block headers %}
+	{{ block.super }}
+{% endblock %}
+
+{% block body %}
+<div>Новых пользователей за последнюю неделю: {{ new_users_in_last_week }}</div>
+<div>Новых пользователей за последний месяц: {{ new_users_in_last_month }}</div>
+<div>Отправленных решений за последнюю неделю: {{ submissions_in_last_week }}</div>
+<div>Отправленных решений за последний месяц: {{ submissions_in_last_month }}</div>
+{% endblock %}

@@ -53,3 +53,6 @@ logs
 
 # Static files
 collected_static
+
+# IDEs
+.idea
