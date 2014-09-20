@@ -9,6 +9,7 @@ from tutorial.views.home import home
 from tutorial.views.lesson import lesson_in_course
 from tutorial.views.problem import problem_in_lesson
 from tutorial.views.profile import profile, register_user
+from tutorial.views.statistics import statistics
 from tutorial.views.tester import tester_submit
 from tutorial.views.visualizer import execute, visualizer
 
@@ -42,4 +43,6 @@ urlpatterns = patterns('',
     url(r'^accounts/profile/$', profile, name='profile'),
 
     url(r'^teacher_statistics/course_success/([^/]+)/$', course_success, name='course_success'),
+
+    url(r'^statistics/$', statistics, name='statistics'),
 )
