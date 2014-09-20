@@ -1,1 +1,1 @@
-from .explain import get_error_explanation
+from errors.error_translations import translate_error

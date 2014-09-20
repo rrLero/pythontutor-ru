@@ -99,6 +99,8 @@ def parse_exception(exc):
     elif hasattr(exc[1], 'args') and len(exc[1].args) > 0:
         exception['exception_msg'] = exc[1].args[0]
 
+    exception['exception_str'] = exception['exception_type'] + ': ' + exception['exception_msg']
+
     return exception
 
 
