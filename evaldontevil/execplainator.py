@@ -63,7 +63,10 @@ def type_name(obj):
 
     module = t.__module__
     if module == 'builtins':
-        return t.__qualname__
+        if hasattr(t, '__qualname__'):
+            return t.__qualname__
+        else: # http://bugs.python.org/issue13577
+            return t.__name__ # __qualname__ is not present on builtin methods and functions on Python <= 3.2
 
     return t.__module__ + '.' + t.__qualname__
 
