@@ -3,10 +3,9 @@ from json import dumps
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
 
-from tutorial.models import Course, Lesson
-from tutorial.views import DEFAULT_COURSE
+from tutorial.models import Lesson
 
-from errors import get_error_explanation
+from errors import translate_error
 from evaldontevil import execute_python
 
 
@@ -25,8 +24,8 @@ def visualizer(request):
 def explain_error(exc, code):
     msg = exc.get('exception_type', '') + ': ' + exc.get('exception_msg', '')
     line = code.split('\n')[exc['line'] - 1]
-    exc['exception_translation'] = get_error_explanation(msg, line)
-    return exc['exception_translation']
+    exc['exception_translation'] = translate_error(msg, line)
+
 
 def execute(request):
     # AJAX request
@@ -46,7 +45,7 @@ def execute(request):
 
         if 'trace' in res:
             event = res['trace'][-1]
-            if event['event'] == 'exception':
+            if event['event'] == 'exception' or event['event'] == 'uncaught_exception':
                 explain_error(event, user_script)
 
         if 'exception' in res and res['exception'] is not None:

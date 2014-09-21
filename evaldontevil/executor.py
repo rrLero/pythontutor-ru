@@ -41,7 +41,7 @@ class ExecuteResult:
 			self.result = 'internal_error'
 
 			stderr.write('Visualizer backend internal error :(\n')
-			stderr.write(e.args[0])
+			stderr.write(e.args[0] + '\n')
 			stderr.flush()
 
 			return
@@ -72,19 +72,20 @@ def execute_python(code, stdin='', explain=False):
 
 	this_dir = dirname(__file__)
 
-	script = open(this_dir + '/script.py', 'rb').read()
-	jail_res = jail_code(
-		'python', script,
+	with open(this_dir + '/script.py', 'rb') as script_file:
+		script = script_file.read()
+		jail_res = jail_code(
+			'python', script,
 
-		files = [this_dir + '/execplainator.py', this_dir + '/execplainator_encoder.py'],
-		extra_files = [
-			('code.py', code),
-			('stdin.txt', stdin),
-		],
+			files = [this_dir + '/execplainator.py', this_dir + '/execplainator_encoder.py'],
+			extra_files = [
+				('code.py', code),
+				('stdin.txt', stdin),
+			],
 
-		stdin = bytes(dumps({ # options
-			'trace': explain,
-		}), 'utf-8'),
-	)
+			stdin = bytes(dumps({ # options
+				'trace': explain,
+			}), 'utf-8'),
+		)
 
-	return ExecuteResult(jail_res)
+		return ExecuteResult(jail_res)
