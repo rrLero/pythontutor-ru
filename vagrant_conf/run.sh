@@ -6,7 +6,7 @@ cd /vagrant/
 
 sudo pkill -f "manage.py"
 
-sudo pip3.2 install -v --log venv/install.log -r requirements.txt
+sudo pip3 install -v --log venv/install.log -r requirements.txt
 
 cat vagrant_conf/db_admin_credentials.txt | python3 manage.py syncdb
 python3 manage.py migrate tutorial
