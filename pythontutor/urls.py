@@ -3,7 +3,6 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.contrib.auth.views import login, logout
 
-from tutorial.views.course import course_success
 from tutorial.views.home import home
 from tutorial.views.lesson import lesson_in_course
 from tutorial.views.log_events import log_user_action
@@ -41,8 +40,6 @@ urlpatterns = patterns('',
     url(r'^accounts/register/$', register_user, name='register'),
 
     url(r'^accounts/profile/$', profile, name='profile'),
-
-    url(r'^teacher_statistics/course_success/([^/]+)/$', course_success, name='course_success'),
 
     url(r'^statistics/$', statistics, name='statistics'),
 
