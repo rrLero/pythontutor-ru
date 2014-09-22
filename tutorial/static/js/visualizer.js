@@ -207,6 +207,17 @@ function Visualizer(block, init_code, init_stdin, passed_options) {
 						'<div class="visualizer_error_raw"></div>\n' +
 						'<div class="visualizer_error_translation"></div>\n' +
 					'</div>\n' +
+					'<div class="visualizer_error_rate">\n' +
+						'<div class="visualizer_error_rate_question well">\n' +
+							'<div class="row">Вам помог этот перевод?</div>\n' +
+							'<div class="row">\n' +
+								'<button class="btn btn-info" data-helped="true">Да</button>\n' +
+								'<button class="btn btn-warning" data-helped="false">Нет</button>\n' +
+							'</div>\n' +
+						'</div>\n' +
+						'<div class="visualizer_error_rate_thank well">\n' +
+						'</div>\n' +
+					'</div>\n' +
 
 					'<div class="col-xs-6">\n' +
 						'<div class="visualizer_dataviz">\n' +
@@ -235,6 +246,8 @@ function Visualizer(block, init_code, init_stdin, passed_options) {
 		blocks.stdout = mblock.find('.visualizer_prog_stdout');
 
 		blocks.error = mblock.find('.visualizer_error');
+		blocks.error_rate_question = mblock.find('.visualizer_error_rate_question');
+		blocks.error_rate_thank = mblock.find('.visualizer_error_rate_thank');
 
 		blocks.vcr = mblock.find('.visualizer_vcr');
 		blocks.dataviz = mblock.find('.visualizer_dataviz');
@@ -301,7 +314,7 @@ function Visualizer(block, init_code, init_stdin, passed_options) {
 			updateStatus();
 
 			if(options.auto_height && e.data.action == 'insertText' &&
-			                          e.data.text.indexOf('\n') > 0) {
+									  e.data.text.indexOf('\n') > 0) {
 				autoHeight();
 			}
 
@@ -360,6 +373,11 @@ function Visualizer(block, init_code, init_stdin, passed_options) {
 
 		$(window).resize(function() {
 			plumb.repaintEverything();
+		});
+
+		_hide_rate_question();
+		blocks.error_rate_question.find('button').click(function() {
+			_record_rate_choice($(this).attr('data-helped') == 'true');
 		});
 	}
 
@@ -587,8 +605,12 @@ function Visualizer(block, init_code, init_stdin, passed_options) {
 			blocks.error.find('.visualizer_error_translation').toggle(current.error_translation != null).html(current.error_translation || '');
 			blocks.error.show();
 
+			if (current.error_translation != null) {
+				_init_rate_question(error_msg, current.error_translation, viss.code, viss.stdin);
+			}
 		} else {
 			blocks.error.hide();
+			_hide_rate_question();
 		}
 	}
 
@@ -602,7 +624,7 @@ function Visualizer(block, init_code, init_stdin, passed_options) {
 		   current.line >= editors.code.renderer.getLastFullyVisibleRow() - 1) {
 
 			var size = editors.code.renderer.getLastFullyVisibleRow()
-			         - editors.code.renderer.getFirstFullyVisibleRow();
+					 - editors.code.renderer.getFirstFullyVisibleRow();
 
 			var scroll_to_line = current.line;
 			if(current.line >= editors.code.getLastVisibleRow() - 1) {
@@ -1365,8 +1387,8 @@ function Visualizer(block, init_code, init_stdin, passed_options) {
 			is_executing = false;
 
 			if(server_res.result == 'internal_error') {
-				alert('Упс... На сервере случилась какая-то внутренняя ошибка :(');
-				setStatus('Внутренняя ошибка сервера');
+				alert('На сервере случилась какая-то ошибка.');
+				setStatus('Ошибка сервера');
 				return;
 			} else if(server_res.result == 'realtime_limited') {
 				alert('Ваш код слишком долго выполнялся и был остановлен досрочно. Возможно, в программе содержится бесконечный цикл.');
@@ -1389,7 +1411,7 @@ function Visualizer(block, init_code, init_stdin, passed_options) {
 
 		req.fail(function() {
 			fireEvent('after_run', false);
-			alert('Ой! Не удалось выполнить запрос к серверу :(');
+			alert('Не удалось выполнить запрос к серверу. Возможно, нет соединения с интернетом.');
 		});
 	}
 
@@ -1413,6 +1435,50 @@ function Visualizer(block, init_code, init_stdin, passed_options) {
 		}
 
 		updateUI();
+	}
+
+
+	///// Error translation rate helpers /////
+
+	var rate_question_data;
+
+	function _init_rate_question(error_msg, error_translation, code, stdin) {
+		rate_question_data = {
+			error_msg: error_msg,
+			error_translation: error_translation,
+			code: code,
+			stdin: stdin
+		};
+		blocks.error_rate_question.show();
+		blocks.error_rate_thank.hide();
+	}
+
+	function _hide_rate_question() {
+		blocks.error_rate_question.hide();
+		blocks.error_rate_thank.hide();
+	}
+
+	function _record_rate_choice(helped) {
+		log_user_action('error_rate', {
+			helped: helped,
+			rate_question_data: rate_question_data
+		});
+
+		blocks.error_rate_question.hide();
+
+		if (helped) {
+			blocks.error_rate_thank.text('Спасибо.');
+		} else {
+			blocks.error_rate_thank.text('Спасибо, мы попробуем улучшить его.');
+		}
+		blocks.error_rate_thank.show();
+	}
+
+	function log_user_action(action, data) {
+		$.post('/log_user_action/', {
+			action: action,
+			data: JSON.stringify(data)
+		});
 	}
 
 

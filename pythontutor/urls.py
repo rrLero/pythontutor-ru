@@ -1,12 +1,12 @@
 from django.conf import settings
 from django.conf.urls import patterns, include, url
-from django.contrib import admin, auth
+from django.contrib import admin
 from django.contrib.auth.views import login, logout
 
-from tutorial.views import dummy
 from tutorial.views.course import course_success
 from tutorial.views.home import home
 from tutorial.views.lesson import lesson_in_course
+from tutorial.views.log_events import log_user_action
 from tutorial.views.problem import problem_in_lesson
 from tutorial.views.profile import profile, register_user
 from tutorial.views.statistics import statistics
@@ -45,4 +45,6 @@ urlpatterns = patterns('',
     url(r'^teacher_statistics/course_success/([^/]+)/$', course_success, name='course_success'),
 
     url(r'^statistics/$', statistics, name='statistics'),
+
+    url(r'^log_user_action/$', log_user_action, name='log_user_action'),
 )

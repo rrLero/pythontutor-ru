@@ -13,10 +13,10 @@ TEMPLATE_DEBUG = DEBUG
 NEED_LOGIN = True
 
 if not DEBUG:
-	ALLOWED_HOSTS = ['*']
+	ALLOWED_HOSTS = ['pythontutor.ru', 'learnpython.ru']
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    ('Vitaly Pavlenko', 'cxielamiko@gmail.com'),
 )
 
 MANAGERS = ADMINS
@@ -165,7 +165,7 @@ LOGGING = {
     },
     'handlers': {
         'mail_admins': {
-            'level': 'ERROR',
+            'level': 'INFO',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
         },
@@ -177,8 +177,13 @@ LOGGING = {
     },
     'loggers': {
         'django.request': {
-            'handlers': ['console'],
+            'handlers': ['console', 'mail_admins'],
             'level': 'ERROR',
+            'propagate': True,
+        },
+        'pythontutor': {
+            'handlers': ['console', 'mail_admins'],
+            'level': 'INFO',
             'propagate': True,
         },
     }
