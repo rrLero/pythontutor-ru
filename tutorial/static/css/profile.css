@@ -12,7 +12,6 @@
 	max-width: 330px;
 	padding: 15px;
 	margin: 0 auto;
-	margin-bottom: 25px;
 }
 
 .login_form .form-control {
@@ -30,6 +29,11 @@
 }
 
 
+#social_login {
+	margin-bottom: 40px;
+}
+
+
 .login_form input[type="text"] {
 	margin-bottom: -1px;
 	border-bottom-right-radius: 0;
@@ -37,7 +41,6 @@
 }
 
 .login_form input[type="password"] {
-	margin-bottom: 10px;
 	border-top-left-radius: 0;
 	border-top-right-radius: 0;
 }

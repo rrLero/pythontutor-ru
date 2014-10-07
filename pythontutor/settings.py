@@ -141,9 +141,17 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'south',
     'tutorial',
+    'social_login',
     #'django_demo_app',
     #'misc',
 )
+
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'social_login.user.OAuthUserAuthBackend',
+)
+
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

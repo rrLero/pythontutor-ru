@@ -1,17 +1,20 @@
 {% extends '_base_basic.html' %}
 
+{% load social_login %}
+
 {% block headers %}
 	{{ block.super }}
 
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}social_login/css/social-login.css">
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/profile.css">
+
+	<script type="text/javascript" src="{{ STATIC_URL }}social_login/js/social-login.js"></script>
 {% endblock %}
 
 {% block body %}
 	<h3 class="text-center">Вход для зарегистрированных пользователей</h3>
 
-	{% if form.errors %}
-		<div class="text-danger invalid_login">Неверное имя пользователя или пароль</div>
-	{% endif %}
+	<div class="text-danger invalid_login">{% if form.errors %}Неверное имя пользователя или пароль{% endif %}</div>
 
 	<form method="post" action="{% url 'django.contrib.auth.views.login' %}" class="login_form" role="form">
 		{% csrf_token %}
@@ -24,4 +27,11 @@
 
 		<button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
 	</form>
+
+	<hr>
+
+	<h3 class="text-center">Вход через социальную сеть</h3>
+	<div class="text-center">
+		{% social-login vk facebook twitter google yandex %}
+	</div>
 {% endblock %}

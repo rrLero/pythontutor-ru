@@ -33,11 +33,11 @@ urlpatterns = patterns('',
 
     url(r'^tester/submit/$', tester_submit, name='tester_submit'),
 
-    url(r'^accounts/login/$', login, {'template_name': 'login.html'}, name='login'),
-
-    url(r'^accounts/logout/$', logout, {'next_page': settings.LOGIN_REDIRECT_URL}, name="logout"),
-
     url(r'^accounts/register/$', register_user, name='register'),
+
+    url(r'^accounts/login/', include('social_login.urls')),
+    url(r'^accounts/login/$', login, {'template_name': 'login.html'}, name='login'),
+    url(r'^accounts/logout/$', logout, {'next_page': settings.LOGIN_REDIRECT_URL}, name='logout'),
 
     url(r'^accounts/profile/$', profile, name='profile'),
 
