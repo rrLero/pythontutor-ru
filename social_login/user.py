@@ -45,8 +45,6 @@ class OAuthUserAuthBackend:
 
 			user.is_active = True
 
-		print(username, user)
-
 		return user
 
 	def get_user(self, user_id):
