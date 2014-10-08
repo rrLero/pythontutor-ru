@@ -3,7 +3,14 @@ from importlib import import_module
 from django.core.urlresolvers import reverse
 from requests_oauthlib import OAuth1Session, OAuth2Session
 
-from ..config import PROVIDERS
+from .. import logger
+
+
+try:
+	from ..config import PROVIDERS
+except ImportError:
+	PROVIDERS = {}
+	logger.error('Cannot find social_login config file. Please, copy config.example.py as config.py and set up your OAuth credentials.')
 
 
 provider_classes = None
@@ -18,7 +25,7 @@ def init_providers():
 		try:
 			module = import_module(__package__ + '.' + name)
 		except ImportError:
-			print('social-login: ' + name + ' - no such OAuth provider implemented')
+			logger.error(name + ' - no such OAuth provider implemented')
 			continue
 
 		provider_classes[name] = module.Provider
