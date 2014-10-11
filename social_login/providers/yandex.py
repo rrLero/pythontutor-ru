@@ -12,7 +12,6 @@ class YandexOAuth(BaseProvider_OAuth2):
 
 	def fetch_user_info(self):
 		json = self.oauth.get('https://login.yandex.ru/info').json()
-		print(json)
 
 		return OAuthUser(
 			'yandex-' + json['id'],
