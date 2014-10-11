@@ -1,5 +1,7 @@
 from django.contrib.auth.models import User, UserManager
 
+from . import fire_event
+
 
 class OAuthUser:
 	def __init__(self, id, email, name, first_name=None, last_name=None, gender=None, locale=None, all_emails=None):
@@ -42,8 +44,13 @@ class OAuthUserAuthBackend:
 				first_name = oauser.name['first'] or '',
 				last_name = oauser.name['last'] or '',
 			)
-
 			user.is_active = True
+
+			user.save()
+
+			fire_event('register', user)
+
+		fire_event('login', user)
 
 		return user
 
