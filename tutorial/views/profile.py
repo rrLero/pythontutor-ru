@@ -2,9 +2,17 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
 from django.conf import settings
 
+from social_login import sociallogin_callback
+
 from tutorial.forms import UserCreationForm, UserProfileForm
 from tutorial.models import UserProfile
 from tutorial.views import need_login
+
+
+@sociallogin_callback('register')
+def register_callback(user):
+    user_profile = UserProfile(user=user)
+    user_profile.save()
 
 
 @need_login
