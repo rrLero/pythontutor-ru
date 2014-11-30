@@ -37,7 +37,7 @@
 			</ol>
 		</div>
 	{% endif %}
-	{% if lesson.external_contest_link %}
-		<h4><a href="{{ lesson.external_contest_link }}">Внешний контест с задачами</a></h4>
+	{% if lesson_db.external_contest_link %}
+		<h4><a href="{{ lesson_db.external_contest_link }}">Внешний контест с задачами</a></h4>
 	{% endif %}
 {% endblock %}
