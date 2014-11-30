@@ -108,12 +108,16 @@ Copyright (C) 2012 Vitaly Pavlenko (cxielamiko@gmail.com)
 				&copy; 2012&ndash;2014
 				</p>
 
-				<!-- VK Like Button -->
 				<div class="like-buttons">
-				<div id="vk_like"></div>
-				<script type="text/javascript">
-				VK.Widgets.Like("vk_like", {type: "mini", height: 18});
-				</script>
+					<!-- VK Like Button -->
+					<div id="vk_like"></div>
+					<script type="text/javascript">
+					VK.Widgets.Like("vk_like", {type: "mini", height: 18});
+					</script>
+
+					<!-- Twitter Like Button -->
+					<a href="https://twitter.com/share" class="twitter-share-button" data-via="vitalypavlenko">Tweet</a>
+					<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 				</div>
 			</footer>
 		{% endblock %}
