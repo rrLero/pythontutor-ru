@@ -68,6 +68,7 @@ Copyright (C) 2012 Vitaly Pavlenko (cxielamiko@gmail.com)
 					<li{% ifpageis lesson_in_course problem_in_lesson %} class="active"{% endif %}><a href="{% url 'home' %}">Уроки</a></li>
 					<li{% ifpageis visualizer %} class="active"{% endif %}><a href="{% url 'visualizer' %}">Визуализатор</a></li>
 					<li{% ifpageis statistics %} class="active"{% endif %}><a href="{% url 'statistics' %}">Статистика</a></li>
+					<li><a href="https://github.com/pythontutor/pythontutor-ru/issues">Пожелания</a></li>
 				</ul>
 				<div class="navbar-text navbar-right">
 					{% if request.user.is_authenticated %}
