@@ -114,4 +114,6 @@ $(function() {
 			$('body').animate({scrollTop: visualizer_top}, 500);
 		}
 	});
+
+	$('#example_tests .debug_me')[1].click();
 })
