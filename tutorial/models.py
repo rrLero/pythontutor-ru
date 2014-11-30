@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 class Language(models.Model):
     name = models.CharField('Внутреннее название языка', max_length=200, unique=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -16,7 +16,7 @@ class Problem(models.Model):
     urlname = models.CharField('Имя для адресной строки', max_length=200, unique=True, db_index=True)
     filename = models.CharField('Имя файла с задачей', max_length=200, blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return '{self.urlname}'.format(**locals())
 
 
@@ -29,7 +29,7 @@ class Lesson(models.Model):
     problems = models.ManyToManyField(Problem, through='ProblemInLesson', blank=True, null=True)
     external_contest_link = models.CharField('Внешняя ссылка на контест', max_length=200, blank=True, null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return '{self.urlname}: {self.title} (файл: {self.filename})'.format(**locals())
 
     def __le__(self, other):
@@ -55,7 +55,7 @@ class Course(models.Model):
     language = models.ForeignKey(Language, blank=True, null=True)  # unused field
     ok_ac_policy = models.IntegerField(choices=OK_AC_POLICY_CHOICES)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
 
@@ -91,6 +91,6 @@ class Submission(models.Model):
     time = models.DateTimeField(auto_now_add=True)
     comment = models.TextField(blank=True, null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return '{self.user.first_name} {self.user.last_name} on {self.problem}: {0} ({self.time})'\
                 .format(self.get_status_display(), **locals())
