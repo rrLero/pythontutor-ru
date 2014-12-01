@@ -133,7 +133,12 @@ Copyright (C) 2012 Vitaly Pavlenko (cxielamiko@gmail.com)
 						  js.src = "//connect.facebook.net/ru_RU/sdk.js#xfbml=1&version=v2.0";
 						  fjs.parentNode.insertBefore(js, fjs);
 						}(document, 'script', 'facebook-jssdk'));</script>
-						<div class="fb-like" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button_count" data-action="like" data-show-faces="true" data-share="false"></div>
+						<script>
+						    $(document).ready(function() {
+						        $('.fb-like').attr("data-href", document.URL);
+						    });
+						</script>
+						<div class="fb-like" data-href="http://pythontutor.ru/" data-layout="button_count" data-action="like" data-show-faces="true" data-share="false"></div>
 					</div>
 				</div>
 			</footer>
