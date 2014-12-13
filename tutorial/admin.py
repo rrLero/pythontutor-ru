@@ -45,11 +45,8 @@ class NameSurnameListFilter(admin.SimpleListFilter):
     parameter_name = 'name_surname'
 
     def lookups(self, request, model_admin):
-        users = [(user.submission_set.count(), user.last_name, user) for user in User.objects.prefetch_related().all()]
-        users = sorted(users, key=lambda x: x[1].lower())
-        users = sorted(users, key=lambda x: x[0], reverse=True)
-        users = [user[2] for user in users]
-        return [(user.username, '{1} {0} ({2}) [{3}]'.format(user.first_name, user.last_name, user.username, user.submission_set.count())) for user in users]
+        users = User.objects.prefetch_related().all()
+        return [(user.username, '{1} {0} ({2})'.format(user.first_name, user.last_name, user.username)) for user in users]
 
     def queryset(self, request, queryset):
         if self.value():
