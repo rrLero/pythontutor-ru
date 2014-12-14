@@ -37,6 +37,10 @@
 	<hr>
 	<div id="visualizer">{{ saved_code }}</div>
 
+    <div class="submit_solution">
+		<button class="btn btn-primary">Отправить решение на проверку</button>
+	</div>
+
 	<table id="example_tests" class="table table-condensed">
 		<thead>
 			<th class="debug_me"></th>
@@ -57,8 +61,4 @@
 			{% endfor %}
 		</tbody>
 	</table>
-
-	<div id="submit_solution">
-		<button><span class="glyphicon glyphicon-ok"></span> Отправить решение на проверку</button>
-	</div>
 {% endblock %}

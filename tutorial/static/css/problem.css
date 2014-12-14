@@ -58,7 +58,6 @@
 	display: none;
 }
 
-#submit_solution {
-	text-align: center;
+.submit_solution {
 	margin-bottom: 35px;
 }

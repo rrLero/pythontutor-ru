@@ -38,7 +38,7 @@ $(function() {
 	visualizer.focusCodeEditor();
 
 	visualizer.on('change_code', function() {
-		$('#submit_solution').toggle(visualizer.code.trim() != '');
+		$('.submit_solution').toggle(visualizer.code.trim() != '');
 	});
 
 
@@ -52,9 +52,9 @@ $(function() {
 	}, 1000);
 
 
-	$('#submit_solution').toggle((code || '').trim() != '');
+	$('.submit_solution').toggle((code || '').trim() != '');
 
-	$('#submit_solution button').click(function() {
+	$('.submit_solution button').click(function() {
 		var test_rows = $('#example_tests > tbody > tr')
 
 		var button = $(this);
