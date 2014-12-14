@@ -4,9 +4,8 @@ from django.conf import settings
 
 from social_login import sociallogin_callback
 
-from tutorial.forms import UserCreationForm, UserProfileForm
-from tutorial.models import UserProfile
-from tutorial.views import need_login
+from tutorial.forms import UserCreationForm
+from tutorial.models import Submission, UserProfile
 
 
 @sociallogin_callback('register')
@@ -15,28 +14,9 @@ def register_callback(user):
     user_profile.save()
 
 
-@need_login
-def profile(request):
-    errors = []
-    messages = []
-    if request.method == 'POST':
-        form = UserProfileForm(request.POST)
-        if form.is_valid():
-            data = form.cleaned_data
-            if data['new_password']:
-                if data['new_password'] != data['new_password_repeated']:
-                    errors.append('Новый пароль повторен неправильно')
-                else:
-                    request.user.set_password(data['new_password'])
-                    messages.append('Пароль успешно изменен')
-            if data['first_name'] and data['last_name']:
-                request.user.first_name = data['first_name']
-                request.user.last_name = data['last_name']
-            else:
-                errors.append('Имя и фамилия не могут быть пустыми')
-            request.user.save()
-    else:
-        form = UserProfileForm(dict(first_name=request.user.first_name, last_name=request.user.last_name))
+def profile(request, username):
+    user = User.objects.get(username=username)
+    submissions = Submission.objects.filter(user=user)
     return render(request, 'profile.html', locals())
 
 

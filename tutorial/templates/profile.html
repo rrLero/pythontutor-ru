@@ -1,22 +1,9 @@
-{% extends "base.html" %}
+{% extends '_base_basic.html' %}
 
 {% block body %}
 
-<h2>Редактировать данные профиля</h2>
+<h2>Пользователь {{ user.first_name }} {{ user.last_name }}</h2>
 
-{% if errors %}
-<div class="errorMessage">
-    {% for error in errors %}
-        <p>{{ error }}</p>
-    {% endfor %}
-</div>
-{% endif %}
+Всего сделано посылок: {{ submissions|length }}
 
-<form action="{% url 'profile' %}" method="POST">
-{% csrf_token %}
-<table>
-{{ form.as_table }}
-</table>
-<input type="submit" value="Сохранить">
-</form>
 {% endblock %}

@@ -79,7 +79,7 @@ Copyright (C) 2012 Vitaly Pavlenko (cxielamiko@gmail.com)
 				</ul>
 				<div class="navbar-text navbar-right">
 					{% if request.user.is_authenticated %}
-						Вы вошли как <span class="glyphicon glyphicon-user"></span> <a href="{% url 'profile' %}">{{ request.user.first_name }} {{ request.user.last_name }}</a>.
+						Вы вошли как <span class="glyphicon glyphicon-user"></span> <a href="{% url 'profile' request.user.username %}">{{ request.user.first_name }} {{ request.user.last_name }}</a>.
 						<a href="{% url 'logout' %}">Выйти</a>
 					{% else %}
 						<a href="{% url 'login' %}">Войти</a> или <a href="{% url 'register' %}">зарегистрироваться</a>

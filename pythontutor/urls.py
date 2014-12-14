@@ -39,7 +39,7 @@ urlpatterns = patterns('',
     url(r'^accounts/login/$', login, {'template_name': 'login.html'}, name='login'),
     url(r'^accounts/logout/$', logout, {'next_page': settings.LOGIN_REDIRECT_URL}, name='logout'),
 
-    url(r'^accounts/profile/$', profile, name='profile'),
+    url(r'^profile/([^/]+)/$', profile, name="profile"),
 
     url(r'^statistics/$', statistics, name='statistics'),
 
