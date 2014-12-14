@@ -67,7 +67,7 @@ class IdealSolutionNode(Node):
         if not user.is_authenticated():
             return ''
 
-        user_solution = Submission.objects.filter(user=user, problem=problem['db_object'], status=1).order_by('time').first()
+        user_solution = Submission.objects.filter(user=user, problem=problem['db_object'], status=1).order_by('time').last()
         if user_solution is None:
             return ''
 
