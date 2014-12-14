@@ -7,7 +7,7 @@
 
 2. Склонируйте репозиотрий себе:
     
-        git clone git@github.com:vpavlenko/pythontutor-ru.git
+        git clone git@github.com:pythontutor/pythontutor-ru.git
 
 3. Перейдите в папку с репозиторием и скажите
 
