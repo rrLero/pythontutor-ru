@@ -94,9 +94,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 .visualizer_code_toppanel,
 .visualizer_code_bottompanel {
 	background: #F0F0F0;
-	height: 27px;
 	border: solid 1px #929DB8;
-	padding: 1px 9px;
+	padding: 5px 9px;
 	font-size: 13px;
 }
 .visualizer_code_toppanel { border-bottom: none; }
@@ -106,8 +105,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 .visualizer_code_bottompanel button {
 	height: 24px;
 	border: none;
+    margin-right: 1em;
 	padding: 0 8px;
-	margin: 0;
 	line-height: 22px;
 }
 
@@ -150,18 +149,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	min-width: 85px;
 }
 
-.visualizer_code_toppanel {
-	text-align: right;
-}
-
 .visualizer_status {
 	float: left;
 	line-height: 24px;
 	font-size: 14px;
-}
-
-.visualizer_run_btn > .glyphicon {
-	line-height: 20px;
 }
 
 

@@ -171,8 +171,8 @@ function Visualizer(block, init_code, init_stdin, passed_options) {
 								'<span class="visualizer_status_code_changed">[*] </span>\n' +
 								'<span class="visualizer_status_text"></span>\n' +
 							'</span>\n' +
+							'<button class="visualizer_run_btn btn btn-primary">запустить <span class="glyphicon glyphicon-play"></span></button>\n' +
 							'<label class="visualizer_explain_mode">выполнить пошагово <input type="checkbox" checked></label>\n' +
-							'<button class="visualizer_run_btn">запустить <span class="glyphicon glyphicon-play"></span></button>\n' +
 						'</div>\n' +
 
 						'<pre class="visualizer_prog_code"></pre>\n' +
