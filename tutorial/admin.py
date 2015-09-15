@@ -99,6 +99,7 @@ class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', 'course')
     list_filter = ('course',)
     list_editable = ('course',)
+    search_fields = ('user__username', 'user__first_name', 'user__last_name')
 
 
 admin.site.register(models.Language, LanguageAdmin)
