@@ -37,7 +37,7 @@ def problem_in_lesson(request, lesson_name, problem_name):
     problems = get_sorted_problems(lesson=lesson_db)
     for problem in problems:
         if request.user.is_authenticated():
-            statuses = [submission.get_status_display() for submission 
+            statuses = [submission.get_status_display() for submission
                     in Submission.objects.filter(user=request.user, problem=problem['db_object'])]
         else:
             statuses = []

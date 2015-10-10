@@ -63,6 +63,12 @@ $(function() {
 		button.attr('disabled', true).html('<span class="glyphicon glyphicon-time"></span> Решение отправляется...');
 
 		submit_solution(problem_name, visualizer.code, function(success, result) {
+			if (result.status == 'ok') {
+				window.yaCounter.reachGoal('SOLVED', {
+					problem: problem_name
+				});
+			}
+
 			button.attr('disabled', false).html(initial_text);
 
 			if(!success) {
