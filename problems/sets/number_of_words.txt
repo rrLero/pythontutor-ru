@@ -1,0 +1,125 @@
+Name:
+Количество слов в тексте
+
+Statement:
+<p>Во входном файле (вы можете читать данные из файла <code>input.txt</code>)
+записан текст. Словом считается последовательность непробельных символов
+идущих подряд, слова разделены одним или большим числом пробелов
+или символами конца строки.</p>
+
+<p>Определите, сколько различных слов содержится в этом тексте.</p>
+
+Test:
+She sells sea shells on the sea shore;
+The shells that she sells are sea shells I'm sure.
+So if she sells sea shells on the sea shore,
+I'm sure that the shells are sea shore shells.
+
+Answer:
+19
+
+
+Test:
+aba aba; aba @?"
+
+Answer:
+3
+
+
+Test:
+AA aa Aa aA
+
+Answer:
+4
+
+
+Test:
+a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+
+Answer:
+1
+
+
+Test:
+a b a c a b a d a b a c a b a
+
+Answer:
+4
+
+
+Test:
+Little girl, little girl Why are you crying? Inside your restless soul your heart is dying Little one, little one Your soul is purging Of love and razor blades Your blood is surging Runaway From the river to the street And find yourself with your face in the gutter Your a stray for the salvation army There is no place like home When you got no place to go Little girl, little girl Your life is calling The charlatans and saints of your abandon Little one little one The sky is falling The lifeboat of deception is now sailing In the wake all the way No rhyme or reason Your bloodshot eyes Will show your heart of treason Little girl little girl You dirty liar You're just a junkie Preaching to the choir Runaway To your lost tranquility And find yourself with your face in the gutter Your a stray for the dregs of humanity There is no place like home When you got no place to go The traces of blood Always follow you home Like the Mascara tears From your getaway Your walking with blisters And running with shears So unholy. Sister of grace. Runaway From the river to the street And find yourself with your face in the gutter You're a stray for the salvation army There is no place like home When you got no place to go
+
+Answer:
+106
+
+
+Test:
+dsgsdf ' sdfg gdf ghgh sdfg sdh ghhfgjgj sdfg fhdh dfh dfh dfh
+
+Answer:
+9
+
+
+Test:
+Dashingthrough the snow On a one-horse open sleigh Over the fields we go Laughing all the way Bells on bobtail ring Making spirits bright What fun it is to ride and sing A sleighing song tonight Chorus Jingle bells jingle bells Jingle all the way O what fun it is to ride In a onehorse open sleigh A day or two ago I thought Id take a ride And soon Miss Fanny Bright Was seated by my side The horse was lean and lank Misfortune seemed his lot He got into a drifted bank And we we got upsot Chorus Jingle bells jingle bells Jingle all the way O what fun it is to ride In a onehorse open sleigh A day or two ago The story I must tell I went out on the snow And on my back I fell A gent was riding by In a onehorse open sleigh He laughed as there I sprawling lie But quickly drove away Chorus Jingle bells jingle bells Jingle all the way O what fun it is to ride In a onehorse open sleigh Now the ground is white Go it while youre young Take the girls tonight And sing this sleighing song Just get a bobtailed bay Twoforty as his speed Hitch him to an open sleigh And crack youll take the lead Chorus Jingle bells jingle bells Jingle all the way O what fun it is to ride In a onehorse open sleigh
+
+Answer:
+115
+
+
+Test:
+
+
+Answer:
+0
+
+
+Test:
+Lady of luck come out of your hiden course bless your light upon me as the light of the moon shines above and in the light of luck will be blessed i, when the moon is next to be full
+
+Answer:
+28
+
+
+Test:
+As I prick this candle, I prick at thee Broken hearts unhappy be May you part another day Soon to go your separate ways
+
+Answer:
+22
+
+
+Test:
+this is google translate's street magic, is not it?
+
+Answer:
+8
+
+
+Test:
+you will not solve this test. This @problem@ is unsolvable.
+
+Answer:
+10
+
+
+Test:
+WA, ML, TL, RE, RJ, all this will !@#$%^&*() your problem Re, rE, RE RE, re, ML, ml, Ml, mL
+
+Answer:
+18
+
+
+Test:
+Your solution is wrong. it will fail on test number *&S $%S *&S *&S *&S
+
+Answer:
+12
+
+
+Test:
+dfs bfs dejkstra bubble sort floid kmp z-function kormen bfs dejkstra bubble sort qsort merge sort heap sort genetic algorythm
+
+Answer:
+14
+

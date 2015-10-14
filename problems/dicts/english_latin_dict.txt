@@ -1,0 +1,509 @@
+Name:
+Англо-латинский словарь
+
+Statement:
+<p>Однажды, разбирая старые книги на чердаке, школьник Вася нашёл англо-латинский словарь.
+Английский он к тому времени знал в совершенстве, и его мечтой было изучить латынь.
+Поэтому попавшийся словарь был как раз кстати.</p>
+
+<p>К сожалению, для полноценного изучения языка недостаточно только одного словаря: кроме англо-латинского необходим
+латинско-английский. За неимением лучшего он решил сделать второй словарь из первого.</p>
+
+<p>Как известно, словарь состоит из переводимых слов, к каждому из которых приводится несколько слов-переводов.
+Для каждого латинского слова, встречающегося где-либо в словаре, Вася предлагает найти все его переводы
+(то есть все английские слова, для которых наше латинское встречалось в его списке переводов),
+и считать их и только их переводами этого латинского слова.</p>
+
+<p>Помогите Васе выполнить работу по созданию латинско-английского словаря из англо-латинского.</p>
+
+Test:
+3
+apple - malum, pomum, popula
+fruit - baca, bacca, popum
+punishment - malum, multa
+
+Answer:
+7
+baca - fruit
+bacca - fruit
+malum - apple, punishment
+multa - punishment
+pomum - apple
+popula - apple
+popum - fruit
+
+
+Test:
+1
+school - schola
+
+Answer:
+1
+schola - school
+
+
+Test:
+3
+greet - empfangen, willkommen
+silicon - silicon
+welcome - willkommen
+
+Answer:
+3
+empfangen - greet
+silicon - silicon
+willkommen - greet, welcome
+
+
+Test:
+2
+mef - mqax, xkr
+wemu - mqax
+
+Answer:
+2
+mqax - mef, wemu
+xkr - mef
+
+
+Test:
+3
+gfk - whao
+icfx - nil, whao
+utzs - brh
+
+Answer:
+3
+brh - utzs
+nil - icfx
+whao - gfk, icfx
+
+
+Test:
+5
+casy - moxd, oosz, pfh, wfp
+cgsy - pfh
+dlx - fma, lyq
+vja - fma, lyq, moxd, oosz, pfh, wfp, xrwv
+zfq - fma, lyq, tnqq, xrwv
+
+Answer:
+8
+fma - dlx, vja, zfq
+lyq - dlx, vja, zfq
+moxd - casy, vja
+oosz - casy, vja
+pfh - casy, cgsy, vja
+tnqq - zfq
+wfp - casy, vja
+xrwv - vja, zfq
+
+
+Test:
+6
+drxpeycnkp - fgoezltv, fgqedltc, fgqezltc, fsqezltc, tgqehltc
+oaxpeycnkp - fgqedltc, pgqezltu, tgqehltc
+yaxpefcnkr - fgqedltc, fgqezljc, fgqezlqc, fgqezltc, tgqehltc
+yaxpeycnkp - fgqedltc, fgqezlqc, fsqezltc
+yaxpeycnks - fgqedltc, fsqezltc, pgqezltu
+yaxteyckp - fgqedltc, fgqezljc, fgqezlqc, fsqezltc, pgqezltu
+
+Answer:
+8
+fgoezltv - drxpeycnkp
+fgqedltc - drxpeycnkp, oaxpeycnkp, yaxpefcnkr, yaxpeycnkp, yaxpeycnks, yaxteyckp
+fgqezljc - yaxpefcnkr, yaxteyckp
+fgqezlqc - yaxpefcnkr, yaxpeycnkp, yaxteyckp
+fgqezltc - drxpeycnkp, yaxpefcnkr
+fsqezltc - drxpeycnkp, yaxpeycnkp, yaxpeycnks, yaxteyckp
+pgqezltu - oaxpeycnkp, yaxpeycnks, yaxteyckp
+tgqehltc - drxpeycnkp, oaxpeycnkp, yaxpefcnkr
+
+
+Test:
+5
+fnpa - kbyip
+kbyip - kbyip, ojawe, ysye
+ojawe - fnpa, kbyip
+uyjge - kbyip
+ysye - ojawe
+
+Answer:
+4
+fnpa - ojawe
+kbyip - fnpa, kbyip, ojawe, uyjge
+ojawe - kbyip, ysye
+ysye - kbyip
+
+
+Test:
+6
+ddf - ngyj, nrbb, nrkh, wryj
+deds - ngyj, nrbb, nrkh, nryj, wryj
+dpds - ngyj, nrkh, nryj
+dudm - ngyj, nrkh, nrni, nryj, wryj
+duds - ngyj, nrbb, nrkh, nryj
+dujs - ngyj, nrbb, nrkh, wryj
+
+Answer:
+6
+ngyj - ddf, deds, dpds, dudm, duds, dujs
+nrbb - ddf, deds, duds, dujs
+nrkh - ddf, deds, dpds, dudm, duds, dujs
+nrni - dudm
+nryj - deds, dpds, dudm, duds
+wryj - ddf, deds, dudm, dujs
+
+
+Test:
+6
+cdb - cdb, crke, meqb, pyk, uel
+crke - cdb, crke, meqb, pyk, uel
+fvl - crke, meqb
+meqb - cdb
+pyk - crke, meqb, uel
+uel - cdb, crke, fvl
+
+Answer:
+6
+cdb - cdb, crke, meqb, uel
+crke - cdb, crke, fvl, pyk, uel
+fvl - uel
+meqb - cdb, crke, fvl, pyk
+pyk - cdb, crke
+uel - cdb, crke, pyk
+
+
+Test:
+10
+csklt - groreqvt, jhlsh, jmrlbza, oohwhc, tppsgs, vkzkqr, wegtiih, yiuxfoy, zthmmd
+gibwv - fmvevj, groreqvt, jhlsh, jmrlbza, kdgnbr, lkmsvfvl, mdzuisma, oohwhc, tppsgs, vkzkqr, wegtiih, yiuxfoy, zthmmd
+jhooyfak - erlcggo, fmvevj, groreqvt, jhlsh, jmrlbza, lkmsvfvl, mdzuisma, oohwhc, tppsgs, wegtiih, yiuxfoy, zthmmd
+lpyyerju - erlcggo, fmvevj, groreqvt, jhlsh, kdgnbr, lkmsvfvl, mdzuisma, oohwhc, tppsgs, vkzkqr, wegtiih, yiuxfoy
+mqmnwqpw - erlcggo, fmvevj, groreqvt, jmrlbza, kdgnbr, lkmsvfvl, mdzuisma, tppsgs, wegtiih, yiuxfoy, zthmmd
+nbyzqshd - fmvevj, groreqvt, jmrlbza, kdgnbr, mdzuisma, oohwhc, tppsgs, vkzkqr, wegtiih, yiuxfoy, zthmmd
+texjgnzv - erlcggo, fmvevj, groreqvt, lkmsvfvl, mdzuisma, oohwhc, tppsgs, wegtiih, zthmmd
+uufvvlje - erlcggo, fmvevj, groreqvt, jmrlbza, kdgnbr, lkmsvfvl, mdzuisma, tppsgs, vkzkqr, wegtiih, yiuxfoy, zthmmd
+uzgxz - erlcggo, fmvevj, jhlsh, jmrlbza, kdgnbr, lkmsvfvl, mdzuisma, oohwhc, tppsgs, wegtiih, yiuxfoy, zthmmd
+vyavn - erlcggo, fmvevj, groreqvt, jhlsh, jmrlbza, kdgnbr, lkmsvfvl, mdzuisma, tppsgs, vkzkqr, yiuxfoy, zthmmd
+
+Answer:
+14
+erlcggo - jhooyfak, lpyyerju, mqmnwqpw, texjgnzv, uufvvlje, uzgxz, vyavn
+fmvevj - gibwv, jhooyfak, lpyyerju, mqmnwqpw, nbyzqshd, texjgnzv, uufvvlje, uzgxz, vyavn
+groreqvt - csklt, gibwv, jhooyfak, lpyyerju, mqmnwqpw, nbyzqshd, texjgnzv, uufvvlje, vyavn
+jhlsh - csklt, gibwv, jhooyfak, lpyyerju, uzgxz, vyavn
+jmrlbza - csklt, gibwv, jhooyfak, mqmnwqpw, nbyzqshd, uufvvlje, uzgxz, vyavn
+kdgnbr - gibwv, lpyyerju, mqmnwqpw, nbyzqshd, uufvvlje, uzgxz, vyavn
+lkmsvfvl - gibwv, jhooyfak, lpyyerju, mqmnwqpw, texjgnzv, uufvvlje, uzgxz, vyavn
+mdzuisma - gibwv, jhooyfak, lpyyerju, mqmnwqpw, nbyzqshd, texjgnzv, uufvvlje, uzgxz, vyavn
+oohwhc - csklt, gibwv, jhooyfak, lpyyerju, nbyzqshd, texjgnzv, uzgxz
+tppsgs - csklt, gibwv, jhooyfak, lpyyerju, mqmnwqpw, nbyzqshd, texjgnzv, uufvvlje, uzgxz, vyavn
+vkzkqr - csklt, gibwv, lpyyerju, nbyzqshd, uufvvlje, vyavn
+wegtiih - csklt, gibwv, jhooyfak, lpyyerju, mqmnwqpw, nbyzqshd, texjgnzv, uufvvlje, uzgxz
+yiuxfoy - csklt, gibwv, jhooyfak, lpyyerju, mqmnwqpw, nbyzqshd, uufvvlje, uzgxz, vyavn
+zthmmd - csklt, gibwv, jhooyfak, mqmnwqpw, nbyzqshd, texjgnzv, uufvvlje, uzgxz, vyavn
+
+
+Test:
+100
+ahyjvhxc - ihtup, trixhmol, upjifv, xefpn, xifmkt, ziiyunt
+aiuiwqg - hxces, ihtup, munzkfmy, trixhmol, upjifv, xefpn, xifmkt, ziiyunt
+aqdugnxr - hxces, ikhxsbx, munzkfmy, trixhmol, upjifv, xefpn, xifmkt, ziiyunt
+bhlszmv - hxces, ihtup, ikhxsbx, munzkfmy, trixhmol, upjifv, xefpn, xifmkt, ziiyunt
+bidnqw - ihtup, ikhxsbx, munzkfmy, trixhmol, upjifv, xefpn, xifmkt
+blzdxpb - hxces, ihtup, ikhxsbx, munzkfmy, upjifv, xifmkt
+bnkommz - fyrdd, hxces, ihtup, ikhxsbx, trixhmol, upjifv, xefpn, xifmkt
+bwncme - fyrdd, hxces, ihtup, ikhxsbx, munzkfmy, trixhmol, upjifv, xifmkt
+cbpgdll - fyrdd, hxces, ihtup, ikhxsbx, trixhmol, upjifv, xefpn, xifmkt, ziiyunt
+cdllpe - fyrdd, hxces, ihtup, ikhxsbx, munzkfmy, upjifv, xefpn, ziiyunt
+dtbrzxo - hxces, ihtup, munzkfmy, trixhmol, upjifv, xefpn, ziiyunt
+dwasaowx - fyrdd, hxces, ihtup, munzkfmy, upjifv, xefpn
+ejyjsda - fyrdd, ihtup, munzkfmy, upjifv, xifmkt, ziiyunt
+epfebc - fyrdd, hxces, ihtup, ikhxsbx, munzkfmy, trixhmol, upjifv, xifmkt
+eqxzhpw - fyrdd, hxces, ikhxsbx, trixhmol, upjifv, xefpn
+evcexwin - hxces, ihtup, munzkfmy, upjifv, xefpn, ziiyunt
+fcuklqd - ihtup, xefpn, xifmkt
+fgcjgb - fyrdd, ikhxsbx, trixhmol, upjifv, xefpn, ziiyunt
+fgfef - fyrdd, hxces, ihtup, ikhxsbx, munzkfmy, trixhmol, upjifv, xefpn, xifmkt
+foewbk - ihtup, ikhxsbx, munzkfmy, upjifv, xefpn, xifmkt, ziiyunt
+ftnzjgf - hxces, ikhxsbx, munzkfmy, trixhmol, xefpn, xifmkt
+gfvkvk - fyrdd, hxces, ihtup, munzkfmy, trixhmol, upjifv, xefpn, xifmkt, ziiyunt
+gidrlsif - ihtup, ikhxsbx, munzkfmy, trixhmol, xefpn, xifmkt, ziiyunt
+gkfrvu - fyrdd, ikhxsbx, xefpn, ziiyunt
+gxsgp - fyrdd, hxces, ihtup, ikhxsbx, trixhmol, upjifv, xefpn, xifmkt, ziiyunt
+hdpaqe - fyrdd, ihtup, munzkfmy, upjifv, ziiyunt
+hylcq - hxces, munzkfmy, trixhmol, upjifv, xifmkt, ziiyunt
+ibvbnn - hxces, ikhxsbx, munzkfmy, trixhmol, upjifv, xefpn, xifmkt, ziiyunt
+igvhnmr - fyrdd, ihtup, munzkfmy, trixhmol, upjifv, xefpn, ziiyunt
+ijhxewss - fyrdd, ihtup, ikhxsbx, munzkfmy, trixhmol, upjifv, xifmkt
+jbblhou - fyrdd, hxces, ikhxsbx, munzkfmy, trixhmol, upjifv, ziiyunt
+jhubib - fyrdd, hxces, ihtup, ikhxsbx, munzkfmy, xefpn
+jrtyqlh - fyrdd, hxces, ihtup, ikhxsbx, munzkfmy, trixhmol, xefpn, xifmkt
+jyplwfyt - fyrdd, hxces, ihtup, munzkfmy, trixhmol, upjifv, xefpn
+kwebzuzf - fyrdd, hxces, ihtup, munzkfmy, trixhmol, upjifv, xefpn, ziiyunt
+kwqnot - ihtup, ikhxsbx, upjifv, xefpn, ziiyunt
+lywhsmyv - hxces, ihtup, ikhxsbx, munzkfmy, trixhmol, upjifv, xefpn, xifmkt, ziiyunt
+mbmbzlpr - hxces, ihtup, ikhxsbx, munzkfmy, upjifv, xefpn, xifmkt
+mgrutqsr - fyrdd, hxces, ihtup, ikhxsbx, munzkfmy, upjifv, xifmkt
+mimjpmr - fyrdd, hxces, ihtup, ikhxsbx, munzkfmy, trixhmol, upjifv, xefpn, ziiyunt
+mjjjsao - fyrdd, hxces, ikhxsbx, munzkfmy, trixhmol, upjifv, xefpn, xifmkt
+mlnfs - hxces, ikhxsbx, trixhmol, upjifv, xefpn, xifmkt
+mqatn - hxces, ikhxsbx, trixhmol, xifmkt
+myhhicdt - fyrdd, hxces, ikhxsbx, trixhmol, upjifv, xifmkt, ziiyunt
+ndezxt - fyrdd, ikhxsbx, munzkfmy, trixhmol, upjifv, xefpn, xifmkt, ziiyunt
+ngtqbtt - fyrdd, hxces, ikhxsbx, munzkfmy, trixhmol, xefpn, xifmkt, ziiyunt
+nljxip - fyrdd, hxces, ikhxsbx, trixhmol, xefpn, xifmkt
+nmepiazp - fyrdd, hxces, ihtup, ikhxsbx, upjifv, xefpn, ziiyunt
+nndfxzev - fyrdd, ihtup, munzkfmy, xefpn, ziiyunt
+nojtnkmt - fyrdd, hxces, ihtup, trixhmol, upjifv, xifmkt, ziiyunt
+nqguip - fyrdd, hxces, ikhxsbx, munzkfmy, upjifv, xefpn, xifmkt, ziiyunt
+oclcg - hxces, ikhxsbx, upjifv, xifmkt, ziiyunt
+ooofmipv - fyrdd, ihtup, ikhxsbx, munzkfmy, trixhmol, upjifv, xefpn
+oytekhid - ihtup, munzkfmy, xifmkt
+pokngt - hxces, ikhxsbx, munzkfmy, trixhmol, upjifv, xefpn, xifmkt
+pumhoqar - fyrdd, ihtup, munzkfmy, trixhmol, xefpn, xifmkt, ziiyunt
+pvmmxjq - fyrdd, hxces, ikhxsbx, munzkfmy, upjifv, xefpn, xifmkt, ziiyunt
+pxmfnu - fyrdd, ihtup, ikhxsbx, munzkfmy, trixhmol, xefpn
+qkudj - fyrdd, ikhxsbx, trixhmol, xefpn, xifmkt
+qlfpahmi - hxces, ihtup, ikhxsbx, munzkfmy, trixhmol, xefpn, xifmkt, ziiyunt
+qslyeajl - hxces, ihtup, ikhxsbx, trixhmol, xefpn, ziiyunt
+qulcl - fyrdd, ikhxsbx, trixhmol, xifmkt, ziiyunt
+rpvvxme - fyrdd, ihtup, ikhxsbx, munzkfmy, xefpn, xifmkt
+rwbuzb - ihtup, ikhxsbx, munzkfmy, upjifv, ziiyunt
+ryxiuhcg - hxces, ihtup, ikhxsbx, munzkfmy, upjifv, xefpn, ziiyunt
+sanizib - fyrdd, hxces, ihtup, ikhxsbx, munzkfmy, trixhmol, upjifv, xifmkt, ziiyunt
+sidupj - fyrdd, hxces, ikhxsbx, munzkfmy, upjifv, xefpn, xifmkt
+siisjko - hxces, munzkfmy, trixhmol, upjifv, xifmkt, ziiyunt
+svelfaz - hxces, ihtup, munzkfmy, trixhmol, upjifv, xefpn, ziiyunt
+tfjuydlz - fyrdd, hxces, ihtup, ikhxsbx, munzkfmy, trixhmol, upjifv, xifmkt, ziiyunt
+tglmwy - fyrdd, ikhxsbx, munzkfmy, upjifv, xifmkt, ziiyunt
+tkbnf - fyrdd, hxces, ihtup, upjifv, xefpn, xifmkt, ziiyunt
+toocad - fyrdd, hxces, munzkfmy, upjifv, xefpn, xifmkt
+ttqlgat - fyrdd, ihtup, ikhxsbx, munzkfmy, trixhmol, xefpn, xifmkt, ziiyunt
+twkkojsq - hxces, ikhxsbx, upjifv, xifmkt, ziiyunt
+txtvzsj - fyrdd, hxces, ihtup, ikhxsbx, munzkfmy, trixhmol, xefpn, xifmkt, ziiyunt
+tzfgb - fyrdd, hxces, ihtup, ikhxsbx, munzkfmy, upjifv, ziiyunt
+uftyeb - fyrdd, hxces, ihtup, ikhxsbx, munzkfmy, upjifv, xefpn, xifmkt, ziiyunt
+ulzwmm - fyrdd, munzkfmy, trixhmol, upjifv, xefpn, xifmkt, ziiyunt
+umsrg - fyrdd, hxces, ikhxsbx, munzkfmy, trixhmol, xefpn, xifmkt
+vdeaamba - fyrdd, hxces, ihtup, ikhxsbx, munzkfmy, trixhmol, upjifv, xefpn, xifmkt
+vdfkb - fyrdd, ihtup, upjifv, xefpn, xifmkt
+vgbwfili - fyrdd, hxces, ihtup, ikhxsbx, munzkfmy, trixhmol, xifmkt, ziiyunt
+vgjrpemk - fyrdd, hxces, trixhmol, upjifv, xefpn, xifmkt, ziiyunt
+vhzoo - hxces, ihtup, ikhxsbx, upjifv, xefpn, xifmkt, ziiyunt
+vthmki - fyrdd, hxces, trixhmol, upjifv, xefpn, ziiyunt
+wkgylo - fyrdd, ikhxsbx, trixhmol, xefpn, ziiyunt
+wpnlde - fyrdd, hxces, ihtup, munzkfmy, xefpn, xifmkt, ziiyunt
+wqugi - hxces, ihtup, munzkfmy, trixhmol, ziiyunt
+wwmrkgvq - fyrdd, hxces, ihtup, munzkfmy, trixhmol, upjifv, xifmkt
+xeplq - fyrdd, hxces, ihtup, munzkfmy, xefpn, xifmkt
+xpqcwddp - fyrdd, hxces, ihtup, ikhxsbx, trixhmol, xifmkt, ziiyunt
+yapbdk - fyrdd, ihtup, ikhxsbx, trixhmol, xifmkt, ziiyunt
+ympgfwp - hxces, ihtup, ikhxsbx, trixhmol, xefpn, xifmkt, ziiyunt
+ynucwzd - fyrdd, hxces, ikhxsbx, xefpn, ziiyunt
+yoizaigp - fyrdd, ihtup, munzkfmy, trixhmol, xefpn, ziiyunt
+zbeycua - fyrdd, hxces, ihtup, ikhxsbx, trixhmol, upjifv, xefpn, xifmkt, ziiyunt
+zcifoce - fyrdd, ihtup, munzkfmy, trixhmol, ziiyunt
+zuhekwgk - fyrdd, ikhxsbx, munzkfmy, upjifv, xifmkt, ziiyunt
+zwwkg - ihtup, ikhxsbx, munzkfmy, trixhmol, upjifv, xefpn, ziiyunt
+
+Answer:
+10
+fyrdd - bnkommz, bwncme, cbpgdll, cdllpe, dwasaowx, ejyjsda, epfebc, eqxzhpw, fgcjgb, fgfef, gfvkvk, gkfrvu, gxsgp, hdpaqe, igvhnmr, ijhxewss, jbblhou, jhubib, jrtyqlh, jyplwfyt, kwebzuzf, mgrutqsr, mimjpmr, mjjjsao, myhhicdt, ndezxt, ngtqbtt, nljxip, nmepiazp, nndfxzev, nojtnkmt, nqguip, ooofmipv, pumhoqar, pvmmxjq, pxmfnu, qkudj, qulcl, rpvvxme, sanizib, sidupj, tfjuydlz, tglmwy, tkbnf, toocad, ttqlgat, txtvzsj, tzfgb, uftyeb, ulzwmm, umsrg, vdeaamba, vdfkb, vgbwfili, vgjrpemk, vthmki, wkgylo, wpnlde, wwmrkgvq, xeplq, xpqcwddp, yapbdk, ynucwzd, yoizaigp, zbeycua, zcifoce, zuhekwgk
+hxces - aiuiwqg, aqdugnxr, bhlszmv, blzdxpb, bnkommz, bwncme, cbpgdll, cdllpe, dtbrzxo, dwasaowx, epfebc, eqxzhpw, evcexwin, fgfef, ftnzjgf, gfvkvk, gxsgp, hylcq, ibvbnn, jbblhou, jhubib, jrtyqlh, jyplwfyt, kwebzuzf, lywhsmyv, mbmbzlpr, mgrutqsr, mimjpmr, mjjjsao, mlnfs, mqatn, myhhicdt, ngtqbtt, nljxip, nmepiazp, nojtnkmt, nqguip, oclcg, pokngt, pvmmxjq, qlfpahmi, qslyeajl, ryxiuhcg, sanizib, sidupj, siisjko, svelfaz, tfjuydlz, tkbnf, toocad, twkkojsq, txtvzsj, tzfgb, uftyeb, umsrg, vdeaamba, vgbwfili, vgjrpemk, vhzoo, vthmki, wpnlde, wqugi, wwmrkgvq, xeplq, xpqcwddp, ympgfwp, ynucwzd, zbeycua
+ihtup - ahyjvhxc, aiuiwqg, bhlszmv, bidnqw, blzdxpb, bnkommz, bwncme, cbpgdll, cdllpe, dtbrzxo, dwasaowx, ejyjsda, epfebc, evcexwin, fcuklqd, fgfef, foewbk, gfvkvk, gidrlsif, gxsgp, hdpaqe, igvhnmr, ijhxewss, jhubib, jrtyqlh, jyplwfyt, kwebzuzf, kwqnot, lywhsmyv, mbmbzlpr, mgrutqsr, mimjpmr, nmepiazp, nndfxzev, nojtnkmt, ooofmipv, oytekhid, pumhoqar, pxmfnu, qlfpahmi, qslyeajl, rpvvxme, rwbuzb, ryxiuhcg, sanizib, svelfaz, tfjuydlz, tkbnf, ttqlgat, txtvzsj, tzfgb, uftyeb, vdeaamba, vdfkb, vgbwfili, vhzoo, wpnlde, wqugi, wwmrkgvq, xeplq, xpqcwddp, yapbdk, ympgfwp, yoizaigp, zbeycua, zcifoce, zwwkg
+ikhxsbx - aqdugnxr, bhlszmv, bidnqw, blzdxpb, bnkommz, bwncme, cbpgdll, cdllpe, epfebc, eqxzhpw, fgcjgb, fgfef, foewbk, ftnzjgf, gidrlsif, gkfrvu, gxsgp, ibvbnn, ijhxewss, jbblhou, jhubib, jrtyqlh, kwqnot, lywhsmyv, mbmbzlpr, mgrutqsr, mimjpmr, mjjjsao, mlnfs, mqatn, myhhicdt, ndezxt, ngtqbtt, nljxip, nmepiazp, nqguip, oclcg, ooofmipv, pokngt, pvmmxjq, pxmfnu, qkudj, qlfpahmi, qslyeajl, qulcl, rpvvxme, rwbuzb, ryxiuhcg, sanizib, sidupj, tfjuydlz, tglmwy, ttqlgat, twkkojsq, txtvzsj, tzfgb, uftyeb, umsrg, vdeaamba, vgbwfili, vhzoo, wkgylo, xpqcwddp, yapbdk, ympgfwp, ynucwzd, zbeycua, zuhekwgk, zwwkg
+munzkfmy - aiuiwqg, aqdugnxr, bhlszmv, bidnqw, blzdxpb, bwncme, cdllpe, dtbrzxo, dwasaowx, ejyjsda, epfebc, evcexwin, fgfef, foewbk, ftnzjgf, gfvkvk, gidrlsif, hdpaqe, hylcq, ibvbnn, igvhnmr, ijhxewss, jbblhou, jhubib, jrtyqlh, jyplwfyt, kwebzuzf, lywhsmyv, mbmbzlpr, mgrutqsr, mimjpmr, mjjjsao, ndezxt, ngtqbtt, nndfxzev, nqguip, ooofmipv, oytekhid, pokngt, pumhoqar, pvmmxjq, pxmfnu, qlfpahmi, rpvvxme, rwbuzb, ryxiuhcg, sanizib, sidupj, siisjko, svelfaz, tfjuydlz, tglmwy, toocad, ttqlgat, txtvzsj, tzfgb, uftyeb, ulzwmm, umsrg, vdeaamba, vgbwfili, wpnlde, wqugi, wwmrkgvq, xeplq, yoizaigp, zcifoce, zuhekwgk, zwwkg
+trixhmol - ahyjvhxc, aiuiwqg, aqdugnxr, bhlszmv, bidnqw, bnkommz, bwncme, cbpgdll, dtbrzxo, epfebc, eqxzhpw, fgcjgb, fgfef, ftnzjgf, gfvkvk, gidrlsif, gxsgp, hylcq, ibvbnn, igvhnmr, ijhxewss, jbblhou, jrtyqlh, jyplwfyt, kwebzuzf, lywhsmyv, mimjpmr, mjjjsao, mlnfs, mqatn, myhhicdt, ndezxt, ngtqbtt, nljxip, nojtnkmt, ooofmipv, pokngt, pumhoqar, pxmfnu, qkudj, qlfpahmi, qslyeajl, qulcl, sanizib, siisjko, svelfaz, tfjuydlz, ttqlgat, txtvzsj, ulzwmm, umsrg, vdeaamba, vgbwfili, vgjrpemk, vthmki, wkgylo, wqugi, wwmrkgvq, xpqcwddp, yapbdk, ympgfwp, yoizaigp, zbeycua, zcifoce, zwwkg
+upjifv - ahyjvhxc, aiuiwqg, aqdugnxr, bhlszmv, bidnqw, blzdxpb, bnkommz, bwncme, cbpgdll, cdllpe, dtbrzxo, dwasaowx, ejyjsda, epfebc, eqxzhpw, evcexwin, fgcjgb, fgfef, foewbk, gfvkvk, gxsgp, hdpaqe, hylcq, ibvbnn, igvhnmr, ijhxewss, jbblhou, jyplwfyt, kwebzuzf, kwqnot, lywhsmyv, mbmbzlpr, mgrutqsr, mimjpmr, mjjjsao, mlnfs, myhhicdt, ndezxt, nmepiazp, nojtnkmt, nqguip, oclcg, ooofmipv, pokngt, pvmmxjq, rwbuzb, ryxiuhcg, sanizib, sidupj, siisjko, svelfaz, tfjuydlz, tglmwy, tkbnf, toocad, twkkojsq, tzfgb, uftyeb, ulzwmm, vdeaamba, vdfkb, vgjrpemk, vhzoo, vthmki, wwmrkgvq, zbeycua, zuhekwgk, zwwkg
+xefpn - ahyjvhxc, aiuiwqg, aqdugnxr, bhlszmv, bidnqw, bnkommz, cbpgdll, cdllpe, dtbrzxo, dwasaowx, eqxzhpw, evcexwin, fcuklqd, fgcjgb, fgfef, foewbk, ftnzjgf, gfvkvk, gidrlsif, gkfrvu, gxsgp, ibvbnn, igvhnmr, jhubib, jrtyqlh, jyplwfyt, kwebzuzf, kwqnot, lywhsmyv, mbmbzlpr, mimjpmr, mjjjsao, mlnfs, ndezxt, ngtqbtt, nljxip, nmepiazp, nndfxzev, nqguip, ooofmipv, pokngt, pumhoqar, pvmmxjq, pxmfnu, qkudj, qlfpahmi, qslyeajl, rpvvxme, ryxiuhcg, sidupj, svelfaz, tkbnf, toocad, ttqlgat, txtvzsj, uftyeb, ulzwmm, umsrg, vdeaamba, vdfkb, vgjrpemk, vhzoo, vthmki, wkgylo, wpnlde, xeplq, ympgfwp, ynucwzd, yoizaigp, zbeycua, zwwkg
+xifmkt - ahyjvhxc, aiuiwqg, aqdugnxr, bhlszmv, bidnqw, blzdxpb, bnkommz, bwncme, cbpgdll, ejyjsda, epfebc, fcuklqd, fgfef, foewbk, ftnzjgf, gfvkvk, gidrlsif, gxsgp, hylcq, ibvbnn, ijhxewss, jrtyqlh, lywhsmyv, mbmbzlpr, mgrutqsr, mjjjsao, mlnfs, mqatn, myhhicdt, ndezxt, ngtqbtt, nljxip, nojtnkmt, nqguip, oclcg, oytekhid, pokngt, pumhoqar, pvmmxjq, qkudj, qlfpahmi, qulcl, rpvvxme, sanizib, sidupj, siisjko, tfjuydlz, tglmwy, tkbnf, toocad, ttqlgat, twkkojsq, txtvzsj, uftyeb, ulzwmm, umsrg, vdeaamba, vdfkb, vgbwfili, vgjrpemk, vhzoo, wpnlde, wwmrkgvq, xeplq, xpqcwddp, yapbdk, ympgfwp, zbeycua, zuhekwgk
+ziiyunt - ahyjvhxc, aiuiwqg, aqdugnxr, bhlszmv, cbpgdll, cdllpe, dtbrzxo, ejyjsda, evcexwin, fgcjgb, foewbk, gfvkvk, gidrlsif, gkfrvu, gxsgp, hdpaqe, hylcq, ibvbnn, igvhnmr, jbblhou, kwebzuzf, kwqnot, lywhsmyv, mimjpmr, myhhicdt, ndezxt, ngtqbtt, nmepiazp, nndfxzev, nojtnkmt, nqguip, oclcg, pumhoqar, pvmmxjq, qlfpahmi, qslyeajl, qulcl, rwbuzb, ryxiuhcg, sanizib, siisjko, svelfaz, tfjuydlz, tglmwy, tkbnf, ttqlgat, twkkojsq, txtvzsj, tzfgb, uftyeb, ulzwmm, vgbwfili, vgjrpemk, vhzoo, vthmki, wkgylo, wpnlde, wqugi, xpqcwddp, yapbdk, ympgfwp, ynucwzd, yoizaigp, zbeycua, zcifoce, zuhekwgk, zwwkg
+
+
+Test:
+10
+ctbrkzmd - aanmajm, afjsuqievg, afyspcgg, agduofgaal, aioderjv, avqymtemgg, bnvmvay, bznjcpydh, ctbrkzmd, cwdxpy, cyywyveh, czlcfq, dablvhf, dktceoqzpf, doadnxb, erawcxeuv, ewrbilyy, fehonnj, fpolgaaij, fyskcb, gfazrv, ggrxvkzu, gmzgtmljqq, goxdxviku, hcdhznejm, jmxifesx, jxivdoadn, mmcpkmz, mvjylt, niodcuuhd, objsqeojc, oepqhzza, ohpprafxv, otfqdtj, oxxdgmpzgh, oyksobneb, pwaguw, qbreuhji, qlvigueo, qtheuas, qygpgaga, rwfclth, saagqpyicd, svojmzq, tcdkfih, tdytvwst, tfpndwx, tkdfew, tuzkyvinwl, upznuv, uscebrsy, uzhkzwksu, vcusxnu, viufninyn, vmmyda, vrezxbzude, wseufjdpi, wtkgyh, xaitfdlgfl, xgrvupr, xucqjr, ycjnjma, ygvtfmhr, ynvxrypf, zcrpaexilf, zyhjvhdyz
+ewrbilyy - aanmajm, afjsuqievg, agduofgaal, aioderjv, avqymtemgg, bmrgvmgyz, bnvmvay, btkxsist, bznjcpydh, cfsedeneiv, cqynrdgeu, ctbrkzmd, cvancp, cwdxpy, czlcfq, dablvhf, dmnsxmus, doadnxb, dpmvpnnpef, emnidi, ewrbilyy, ffzywx, fyskcb, gfazrv, ggrxvkzu, gmzgtmljqq, goxdxviku, hcdhznejm, ijzejtxyt, kzhagp, lfehbetye, ljuxoxosmx, niodcuuhd, objsqeojc, oepqhzza, ohpprafxv, oyksobneb, paijpahkzy, pwaguw, pwzazg, qbreuhji, qtheuas, qygpgaga, qyxkntxdh, rraxnszxr, rwfclth, saagqpyicd, seaqmq, suwmagpjhy, svojmzq, tcdkfih, tdytvwst, tfpndwx, tuzkyvinwl, tyoqmbyv, upznuv, uscebrsy, uwerjgus, uzhkzwksu, viufninyn, vmmyda, vphuewrv, wtkgyh, wxjekmaoz, xaitfdlgfl, xrsppkc, xucqjr, ycjnjma, ynvxrypf, zcgnflykje, zcrpaexilf
+gmzgtmljqq - afjsuqievg, afyspcgg, aioderjv, avqymtemgg, bmrgvmgyz, bnvmvay, bznjcpydh, cvancp, cwdxpy, cyywyveh, dablvhf, dktceoqzpf, dmnsxmus, doadnxb, dpmvpnnpef, emnidi, erawcxeuv, ewrbilyy, ffzywx, fpolgaaij, ggrxvkzu, gmzgtmljqq, goxdxviku, gslufemk, hcdhznejm, ijutndodw, ijzejtxyt, jmxifesx, jxivdoadn, lfehbetye, lismyjm, ljuxoxosmx, mmcpkmz, mvjylt, niodcuuhd, oepqhzza, ohpprafxv, otfqdtj, oxxdgmpzgh, oyksobneb, paijpahkzy, qbreuhji, qdatzfw, qlvigueo, qrbvycnxyt, qtheuas, qygpgaga, saagqpyicd, seaqmq, suwmagpjhy, tfpndwx, tuzkyvinwl, tyoqmbyv, uinbgcsg, upznuv, uscebrsy, uwerjgus, uzhkzwksu, vcusxnu, viufninyn, vmmyda, vphuewrv, vrezxbzude, wtkgyh, wxjekmaoz, xaitfdlgfl, xgrvupr, xucqjr, ygvtfmhr, zcgnflykje
+mmcpkmz - afyspcgg, agduofgaal, aioderjv, avqymtemgg, btkxsist, bznjcpydh, cfsedeneiv, cqynrdgeu, ctbrkzmd, cvancp, cyywyveh, czlcfq, dktceoqzpf, dmnsxmus, doadnxb, dpmvpnnpef, emnidi, erawcxeuv, ffzywx, fpolgaaij, gfazrv, ggrxvkzu, gmzgtmljqq, goxdxviku, gslufemk, hcdhznejm, ijutndodw, ijzejtxyt, jmxifesx, kzhagp, lfehbetye, lismyjm, ljuxoxosmx, mmcpkmz, mvjylt, oepqhzza, ohpprafxv, otfqdtj, oxxdgmpzgh, paijpahkzy, pwaguw, pwzazg, qbreuhji, qtheuas, qyxkntxdh, rraxnszxr, saagqpyicd, seaqmq, suwmagpjhy, tcdkfih, tdytvwst, tkdfew, tyoqmbyv, uinbgcsg, upznuv, uscebrsy, uzhkzwksu, vcusxnu, vmmyda, vphuewrv, vrezxbzude, wtkgyh, wxjekmaoz, xaitfdlgfl, xgrvupr, xrsppkc, xucqjr, ycjnjma, ygvtfmhr, ynvxrypf, zcrpaexilf, zyhjvhdyz
+oepqhzza - afyspcgg, avqymtemgg, bmrgvmgyz, bnvmvay, btkxsist, bznjcpydh, cfsedeneiv, cqynrdgeu, ctbrkzmd, cvancp, cwdxpy, cyywyveh, dablvhf, dktceoqzpf, dmnsxmus, doadnxb, drzkxlygu, erawcxeuv, ewrbilyy, fehonnj, ffzywx, fyskcb, gfazrv, ggrxvkzu, gmzgtmljqq, gslufemk, ijutndodw, ijzejtxyt, jmxifesx, jxivdoadn, kyhfohnum, lfehbetye, lismyjm, ljuxoxosmx, mvjylt, objsqeojc, oepqhzza, ohpprafxv, otfqdtj, oxxdgmpzgh, oyksobneb, paijpahkzy, pwzazg, qlvigueo, qrbvycnxyt, qtheuas, qygpgaga, qyxkntxdh, rraxnszxr, saagqpyicd, seaqmq, suwmagpjhy, svojmzq, tcdkfih, tdytvwst, tfpndwx, tuzkyvinwl, uinbgcsg, uscebrsy, uwerjgus, uzhkzwksu, vcusxnu, viufninyn, wseufjdpi, wtkgyh, wxjekmaoz, xaitfdlgfl, xrsppkc, xucqjr, ygvtfmhr, ynvxrypf, zcgnflykje
+qbreuhji - afjsuqievg, afyspcgg, agduofgaal, aioderjv, bmrgvmgyz, bnvmvay, bznjcpydh, cfsedeneiv, cqynrdgeu, ctbrkzmd, cvancp, cwdxpy, cyywyveh, czlcfq, dablvhf, dktceoqzpf, dpmvpnnpef, emnidi, erawcxeuv, ewrbilyy, fehonnj, ffzywx, fpolgaaij, gfazrv, ggrxvkzu, goxdxviku, gslufemk, hcdhznejm, ijzejtxyt, jmxifesx, jxivdoadn, kyhfohnum, kzhagp, lfehbetye, lismyjm, mmcpkmz, objsqeojc, ohpprafxv, paijpahkzy, pnjrngmd, pwzazg, qbreuhji, qdatzfw, qlvigueo, qrbvycnxyt, qygpgaga, qyxkntxdh, rraxnszxr, rwfclth, saagqpyicd, suwmagpjhy, svojmzq, tdytvwst, tkdfew, tuzkyvinwl, tyoqmbyv, uinbgcsg, upznuv, uscebrsy, vmmyda, wseufjdpi, wtkgyh, wxjekmaoz, xaitfdlgfl, xgrvupr, xrsppkc, xucqjr, ynvxrypf, zcrpaexilf
+viufninyn - afyspcgg, agduofgaal, bmrgvmgyz, bnvmvay, btkxsist, bznjcpydh, cfsedeneiv, cqynrdgeu, ctbrkzmd, cvancp, cwdxpy, czlcfq, dablvhf, dmnsxmus, doadnxb, drzkxlygu, emnidi, erawcxeuv, fpolgaaij, gfazrv, ggrxvkzu, gmzgtmljqq, gslufemk, hcdhznejm, ijutndodw, jmxifesx, kyhfohnum, kzhagp, lfehbetye, ljuxoxosmx, mmcpkmz, mvjylt, oepqhzza, ohpprafxv, otfqdtj, oxxdgmpzgh, oyksobneb, pwaguw, pwzazg, qbreuhji, qrbvycnxyt, qtheuas, qyxkntxdh, rwfclth, seaqmq, suwmagpjhy, svojmzq, tdytvwst, tfpndwx, tkdfew, tuzkyvinwl, tyoqmbyv, uinbgcsg, upznuv, uscebrsy, uwerjgus, uzhkzwksu, vcusxnu, vphuewrv, vrezxbzude, wseufjdpi, wxjekmaoz, xaitfdlgfl, xgrvupr, xucqjr, ycjnjma, ygvtfmhr, ynvxrypf, zcgnflykje
+vrezxbzude - afjsuqievg, afyspcgg, agduofgaal, aioderjv, avqymtemgg, bmrgvmgyz, btkxsist, bznjcpydh, cfsedeneiv, cqynrdgeu, cvancp, cwdxpy, dmnsxmus, doadnxb, dpmvpnnpef, drzkxlygu, emnidi, ewrbilyy, ffzywx, fpolgaaij, fyskcb, gfazrv, gslufemk, hcdhznejm, jmxifesx, kyhfohnum, lismyjm, mmcpkmz, mvjylt, niodcuuhd, oepqhzza, ohpprafxv, otfqdtj, oyksobneb, paijpahkzy, pnjrngmd, pwaguw, pwzazg, qbreuhji, qtheuas, qygpgaga, qyxkntxdh, rraxnszxr, seaqmq, suwmagpjhy, svojmzq, tdytvwst, tfpndwx, tkdfew, tuzkyvinwl, tyoqmbyv, uinbgcsg, upznuv, uscebrsy, uwerjgus, uzhkzwksu, vcusxnu, viufninyn, vphuewrv, vrezxbzude, wseufjdpi, wtkgyh, wxjekmaoz, xgrvupr, xucqjr, ycjnjma, ygvtfmhr, ynvxrypf, zcgnflykje, zcrpaexilf, zyhjvhdyz
+xaitfdlgfl - afjsuqievg, afyspcgg, agduofgaal, aioderjv, avqymtemgg, bnvmvay, btkxsist, bznjcpydh, cfsedeneiv, cqynrdgeu, ctbrkzmd, cvancp, cwdxpy, czlcfq, dablvhf, dktceoqzpf, doadnxb, drzkxlygu, emnidi, erawcxeuv, ffzywx, fyskcb, gfazrv, gmzgtmljqq, gslufemk, ijutndodw, ijzejtxyt, jmxifesx, jxivdoadn, kyhfohnum, kzhagp, lismyjm, mmcpkmz, mvjylt, niodcuuhd, objsqeojc, oepqhzza, ohpprafxv, otfqdtj, oyksobneb, paijpahkzy, qbreuhji, qlvigueo, qrbvycnxyt, qyxkntxdh, rraxnszxr, rwfclth, saagqpyicd, suwmagpjhy, tcdkfih, tdytvwst, tfpndwx, tkdfew, tyoqmbyv, upznuv, uscebrsy, uwerjgus, uzhkzwksu, viufninyn, vmmyda, vphuewrv, wtkgyh, wxjekmaoz, xaitfdlgfl, xgrvupr, xrsppkc, ynvxrypf, zcgnflykje, zcrpaexilf
+xrsppkc - aanmajm, agduofgaal, bnvmvay, bznjcpydh, cqynrdgeu, ctbrkzmd, cvancp, cyywyveh, czlcfq, dktceoqzpf, dmnsxmus, doadnxb, emnidi, erawcxeuv, ewrbilyy, fehonnj, ffzywx, fpolgaaij, fyskcb, gfazrv, gmzgtmljqq, goxdxviku, gslufemk, hcdhznejm, ijutndodw, ijzejtxyt, jmxifesx, jxivdoadn, kyhfohnum, kzhagp, lfehbetye, ljuxoxosmx, mvjylt, objsqeojc, oepqhzza, otfqdtj, oxxdgmpzgh, oyksobneb, pwaguw, qdatzfw, qrbvycnxyt, qygpgaga, saagqpyicd, seaqmq, tcdkfih, tdytvwst, tfpndwx, tkdfew, tyoqmbyv, uscebrsy, uzhkzwksu, vcusxnu, vmmyda, wtkgyh, xaitfdlgfl, xgrvupr, xrsppkc, ygvtfmhr, zcgnflykje, zcrpaexilf, zyhjvhdyz
+
+Answer:
+100
+aanmajm - ctbrkzmd, ewrbilyy, xrsppkc
+afjsuqievg - ctbrkzmd, ewrbilyy, gmzgtmljqq, qbreuhji, vrezxbzude, xaitfdlgfl
+afyspcgg - ctbrkzmd, gmzgtmljqq, mmcpkmz, oepqhzza, qbreuhji, viufninyn, vrezxbzude, xaitfdlgfl
+agduofgaal - ctbrkzmd, ewrbilyy, mmcpkmz, qbreuhji, viufninyn, vrezxbzude, xaitfdlgfl, xrsppkc
+aioderjv - ctbrkzmd, ewrbilyy, gmzgtmljqq, mmcpkmz, qbreuhji, vrezxbzude, xaitfdlgfl
+avqymtemgg - ctbrkzmd, ewrbilyy, gmzgtmljqq, mmcpkmz, oepqhzza, vrezxbzude, xaitfdlgfl
+bmrgvmgyz - ewrbilyy, gmzgtmljqq, oepqhzza, qbreuhji, viufninyn, vrezxbzude
+bnvmvay - ctbrkzmd, ewrbilyy, gmzgtmljqq, oepqhzza, qbreuhji, viufninyn, xaitfdlgfl, xrsppkc
+btkxsist - ewrbilyy, mmcpkmz, oepqhzza, viufninyn, vrezxbzude, xaitfdlgfl
+bznjcpydh - ctbrkzmd, ewrbilyy, gmzgtmljqq, mmcpkmz, oepqhzza, qbreuhji, viufninyn, vrezxbzude, xaitfdlgfl, xrsppkc
+cfsedeneiv - ewrbilyy, mmcpkmz, oepqhzza, qbreuhji, viufninyn, vrezxbzude, xaitfdlgfl
+cqynrdgeu - ewrbilyy, mmcpkmz, oepqhzza, qbreuhji, viufninyn, vrezxbzude, xaitfdlgfl, xrsppkc
+ctbrkzmd - ctbrkzmd, ewrbilyy, mmcpkmz, oepqhzza, qbreuhji, viufninyn, xaitfdlgfl, xrsppkc
+cvancp - ewrbilyy, gmzgtmljqq, mmcpkmz, oepqhzza, qbreuhji, viufninyn, vrezxbzude, xaitfdlgfl, xrsppkc
+cwdxpy - ctbrkzmd, ewrbilyy, gmzgtmljqq, oepqhzza, qbreuhji, viufninyn, vrezxbzude, xaitfdlgfl
+cyywyveh - ctbrkzmd, gmzgtmljqq, mmcpkmz, oepqhzza, qbreuhji, xrsppkc
+czlcfq - ctbrkzmd, ewrbilyy, mmcpkmz, qbreuhji, viufninyn, xaitfdlgfl, xrsppkc
+dablvhf - ctbrkzmd, ewrbilyy, gmzgtmljqq, oepqhzza, qbreuhji, viufninyn, xaitfdlgfl
+dktceoqzpf - ctbrkzmd, gmzgtmljqq, mmcpkmz, oepqhzza, qbreuhji, xaitfdlgfl, xrsppkc
+dmnsxmus - ewrbilyy, gmzgtmljqq, mmcpkmz, oepqhzza, viufninyn, vrezxbzude, xrsppkc
+doadnxb - ctbrkzmd, ewrbilyy, gmzgtmljqq, mmcpkmz, oepqhzza, viufninyn, vrezxbzude, xaitfdlgfl, xrsppkc
+dpmvpnnpef - ewrbilyy, gmzgtmljqq, mmcpkmz, qbreuhji, vrezxbzude
+drzkxlygu - oepqhzza, viufninyn, vrezxbzude, xaitfdlgfl
+emnidi - ewrbilyy, gmzgtmljqq, mmcpkmz, qbreuhji, viufninyn, vrezxbzude, xaitfdlgfl, xrsppkc
+erawcxeuv - ctbrkzmd, gmzgtmljqq, mmcpkmz, oepqhzza, qbreuhji, viufninyn, xaitfdlgfl, xrsppkc
+ewrbilyy - ctbrkzmd, ewrbilyy, gmzgtmljqq, oepqhzza, qbreuhji, vrezxbzude, xrsppkc
+fehonnj - ctbrkzmd, oepqhzza, qbreuhji, xrsppkc
+ffzywx - ewrbilyy, gmzgtmljqq, mmcpkmz, oepqhzza, qbreuhji, vrezxbzude, xaitfdlgfl, xrsppkc
+fpolgaaij - ctbrkzmd, gmzgtmljqq, mmcpkmz, qbreuhji, viufninyn, vrezxbzude, xrsppkc
+fyskcb - ctbrkzmd, ewrbilyy, oepqhzza, vrezxbzude, xaitfdlgfl, xrsppkc
+gfazrv - ctbrkzmd, ewrbilyy, mmcpkmz, oepqhzza, qbreuhji, viufninyn, vrezxbzude, xaitfdlgfl, xrsppkc
+ggrxvkzu - ctbrkzmd, ewrbilyy, gmzgtmljqq, mmcpkmz, oepqhzza, qbreuhji, viufninyn
+gmzgtmljqq - ctbrkzmd, ewrbilyy, gmzgtmljqq, mmcpkmz, oepqhzza, viufninyn, xaitfdlgfl, xrsppkc
+goxdxviku - ctbrkzmd, ewrbilyy, gmzgtmljqq, mmcpkmz, qbreuhji, xrsppkc
+gslufemk - gmzgtmljqq, mmcpkmz, oepqhzza, qbreuhji, viufninyn, vrezxbzude, xaitfdlgfl, xrsppkc
+hcdhznejm - ctbrkzmd, ewrbilyy, gmzgtmljqq, mmcpkmz, qbreuhji, viufninyn, vrezxbzude, xrsppkc
+ijutndodw - gmzgtmljqq, mmcpkmz, oepqhzza, viufninyn, xaitfdlgfl, xrsppkc
+ijzejtxyt - ewrbilyy, gmzgtmljqq, mmcpkmz, oepqhzza, qbreuhji, xaitfdlgfl, xrsppkc
+jmxifesx - ctbrkzmd, gmzgtmljqq, mmcpkmz, oepqhzza, qbreuhji, viufninyn, vrezxbzude, xaitfdlgfl, xrsppkc
+jxivdoadn - ctbrkzmd, gmzgtmljqq, oepqhzza, qbreuhji, xaitfdlgfl, xrsppkc
+kyhfohnum - oepqhzza, qbreuhji, viufninyn, vrezxbzude, xaitfdlgfl, xrsppkc
+kzhagp - ewrbilyy, mmcpkmz, qbreuhji, viufninyn, xaitfdlgfl, xrsppkc
+lfehbetye - ewrbilyy, gmzgtmljqq, mmcpkmz, oepqhzza, qbreuhji, viufninyn, xrsppkc
+lismyjm - gmzgtmljqq, mmcpkmz, oepqhzza, qbreuhji, vrezxbzude, xaitfdlgfl
+ljuxoxosmx - ewrbilyy, gmzgtmljqq, mmcpkmz, oepqhzza, viufninyn, xrsppkc
+mmcpkmz - ctbrkzmd, gmzgtmljqq, mmcpkmz, qbreuhji, viufninyn, vrezxbzude, xaitfdlgfl
+mvjylt - ctbrkzmd, gmzgtmljqq, mmcpkmz, oepqhzza, viufninyn, vrezxbzude, xaitfdlgfl, xrsppkc
+niodcuuhd - ctbrkzmd, ewrbilyy, gmzgtmljqq, vrezxbzude, xaitfdlgfl
+objsqeojc - ctbrkzmd, ewrbilyy, oepqhzza, qbreuhji, xaitfdlgfl, xrsppkc
+oepqhzza - ctbrkzmd, ewrbilyy, gmzgtmljqq, mmcpkmz, oepqhzza, viufninyn, vrezxbzude, xaitfdlgfl, xrsppkc
+ohpprafxv - ctbrkzmd, ewrbilyy, gmzgtmljqq, mmcpkmz, oepqhzza, qbreuhji, viufninyn, vrezxbzude, xaitfdlgfl
+otfqdtj - ctbrkzmd, gmzgtmljqq, mmcpkmz, oepqhzza, viufninyn, vrezxbzude, xaitfdlgfl, xrsppkc
+oxxdgmpzgh - ctbrkzmd, gmzgtmljqq, mmcpkmz, oepqhzza, viufninyn, xrsppkc
+oyksobneb - ctbrkzmd, ewrbilyy, gmzgtmljqq, oepqhzza, viufninyn, vrezxbzude, xaitfdlgfl, xrsppkc
+paijpahkzy - ewrbilyy, gmzgtmljqq, mmcpkmz, oepqhzza, qbreuhji, vrezxbzude, xaitfdlgfl
+pnjrngmd - qbreuhji, vrezxbzude
+pwaguw - ctbrkzmd, ewrbilyy, mmcpkmz, viufninyn, vrezxbzude, xrsppkc
+pwzazg - ewrbilyy, mmcpkmz, oepqhzza, qbreuhji, viufninyn, vrezxbzude
+qbreuhji - ctbrkzmd, ewrbilyy, gmzgtmljqq, mmcpkmz, qbreuhji, viufninyn, vrezxbzude, xaitfdlgfl
+qdatzfw - gmzgtmljqq, qbreuhji, xrsppkc
+qlvigueo - ctbrkzmd, gmzgtmljqq, oepqhzza, qbreuhji, xaitfdlgfl
+qrbvycnxyt - gmzgtmljqq, oepqhzza, qbreuhji, viufninyn, xaitfdlgfl, xrsppkc
+qtheuas - ctbrkzmd, ewrbilyy, gmzgtmljqq, mmcpkmz, oepqhzza, viufninyn, vrezxbzude
+qygpgaga - ctbrkzmd, ewrbilyy, gmzgtmljqq, oepqhzza, qbreuhji, vrezxbzude, xrsppkc
+qyxkntxdh - ewrbilyy, mmcpkmz, oepqhzza, qbreuhji, viufninyn, vrezxbzude, xaitfdlgfl
+rraxnszxr - ewrbilyy, mmcpkmz, oepqhzza, qbreuhji, vrezxbzude, xaitfdlgfl
+rwfclth - ctbrkzmd, ewrbilyy, qbreuhji, viufninyn, xaitfdlgfl
+saagqpyicd - ctbrkzmd, ewrbilyy, gmzgtmljqq, mmcpkmz, oepqhzza, qbreuhji, xaitfdlgfl, xrsppkc
+seaqmq - ewrbilyy, gmzgtmljqq, mmcpkmz, oepqhzza, viufninyn, vrezxbzude, xrsppkc
+suwmagpjhy - ewrbilyy, gmzgtmljqq, mmcpkmz, oepqhzza, qbreuhji, viufninyn, vrezxbzude, xaitfdlgfl
+svojmzq - ctbrkzmd, ewrbilyy, oepqhzza, qbreuhji, viufninyn, vrezxbzude
+tcdkfih - ctbrkzmd, ewrbilyy, mmcpkmz, oepqhzza, xaitfdlgfl, xrsppkc
+tdytvwst - ctbrkzmd, ewrbilyy, mmcpkmz, oepqhzza, qbreuhji, viufninyn, vrezxbzude, xaitfdlgfl, xrsppkc
+tfpndwx - ctbrkzmd, ewrbilyy, gmzgtmljqq, oepqhzza, viufninyn, vrezxbzude, xaitfdlgfl, xrsppkc
+tkdfew - ctbrkzmd, mmcpkmz, qbreuhji, viufninyn, vrezxbzude, xaitfdlgfl, xrsppkc
+tuzkyvinwl - ctbrkzmd, ewrbilyy, gmzgtmljqq, oepqhzza, qbreuhji, viufninyn, vrezxbzude
+tyoqmbyv - ewrbilyy, gmzgtmljqq, mmcpkmz, qbreuhji, viufninyn, vrezxbzude, xaitfdlgfl, xrsppkc
+uinbgcsg - gmzgtmljqq, mmcpkmz, oepqhzza, qbreuhji, viufninyn, vrezxbzude
+upznuv - ctbrkzmd, ewrbilyy, gmzgtmljqq, mmcpkmz, qbreuhji, viufninyn, vrezxbzude, xaitfdlgfl
+uscebrsy - ctbrkzmd, ewrbilyy, gmzgtmljqq, mmcpkmz, oepqhzza, qbreuhji, viufninyn, vrezxbzude, xaitfdlgfl, xrsppkc
+uwerjgus - ewrbilyy, gmzgtmljqq, oepqhzza, viufninyn, vrezxbzude, xaitfdlgfl
+uzhkzwksu - ctbrkzmd, ewrbilyy, gmzgtmljqq, mmcpkmz, oepqhzza, viufninyn, vrezxbzude, xaitfdlgfl, xrsppkc
+vcusxnu - ctbrkzmd, gmzgtmljqq, mmcpkmz, oepqhzza, viufninyn, vrezxbzude, xrsppkc
+viufninyn - ctbrkzmd, ewrbilyy, gmzgtmljqq, oepqhzza, vrezxbzude, xaitfdlgfl
+vmmyda - ctbrkzmd, ewrbilyy, gmzgtmljqq, mmcpkmz, qbreuhji, xaitfdlgfl, xrsppkc
+vphuewrv - ewrbilyy, gmzgtmljqq, mmcpkmz, viufninyn, vrezxbzude, xaitfdlgfl
+vrezxbzude - ctbrkzmd, gmzgtmljqq, mmcpkmz, viufninyn, vrezxbzude
+wseufjdpi - ctbrkzmd, oepqhzza, qbreuhji, viufninyn, vrezxbzude
+wtkgyh - ctbrkzmd, ewrbilyy, gmzgtmljqq, mmcpkmz, oepqhzza, qbreuhji, vrezxbzude, xaitfdlgfl, xrsppkc
+wxjekmaoz - ewrbilyy, gmzgtmljqq, mmcpkmz, oepqhzza, qbreuhji, viufninyn, vrezxbzude, xaitfdlgfl
+xaitfdlgfl - ctbrkzmd, ewrbilyy, gmzgtmljqq, mmcpkmz, oepqhzza, qbreuhji, viufninyn, xaitfdlgfl, xrsppkc
+xgrvupr - ctbrkzmd, gmzgtmljqq, mmcpkmz, qbreuhji, viufninyn, vrezxbzude, xaitfdlgfl, xrsppkc
+xrsppkc - ewrbilyy, mmcpkmz, oepqhzza, qbreuhji, xaitfdlgfl, xrsppkc
+xucqjr - ctbrkzmd, ewrbilyy, gmzgtmljqq, mmcpkmz, oepqhzza, qbreuhji, viufninyn, vrezxbzude
+ycjnjma - ctbrkzmd, ewrbilyy, mmcpkmz, viufninyn, vrezxbzude
+ygvtfmhr - ctbrkzmd, gmzgtmljqq, mmcpkmz, oepqhzza, viufninyn, vrezxbzude, xrsppkc
+ynvxrypf - ctbrkzmd, ewrbilyy, mmcpkmz, oepqhzza, qbreuhji, viufninyn, vrezxbzude, xaitfdlgfl
+zcgnflykje - ewrbilyy, gmzgtmljqq, oepqhzza, viufninyn, vrezxbzude, xaitfdlgfl, xrsppkc
+zcrpaexilf - ctbrkzmd, ewrbilyy, mmcpkmz, qbreuhji, vrezxbzude, xaitfdlgfl, xrsppkc
+zyhjvhdyz - ctbrkzmd, mmcpkmz, vrezxbzude, xrsppkc
+
+
+Test:
+10
+fuvyerozanog - ejrorbpibpa, ejrorbpirpa, ejrorbpitpa, ejrorxpiapa, ejuorbpitpr, erorbpitpa, errorbpitpa
+fuwyxrozanog - efrorbpitpa, ejrorbitpa, ejrorbkitta, ejrorbpdtxa, ejrorbpevpa, ejrorbpibpa, ejrorxpiapa, erorbpitpa, errorbpitpa, yjrorbeitpa
+fuyyxaozandg - efrorbpitpa, ejrorbitpa, ejrorbpevpa, ejrorbpibpa, ejrorbpirpa, ejrorbpltpa, errorbpitpa, jrocbpitpa, yjrorbeitpa
+fuyyxqpzanog - efrorbpitpa, ejrorbkitta, ejrorbpevpa, ejrorbpibpa, ejrorbpirpa, ejuorbpitpr, erorbpitpa, errorbpitpa, jrocbpitpa, yjrorbeitpa
+fuyyxroanog - efrorbpitpa, ejrorbitpa, ejrorbkitta, ejrorbpdtxa, ejrorbpevpa, ejrorbpitpa, ejrorxpiapa, ejuorbpitpr, erorbpitpa, jrocbpitpa, yjrorbeitpa
+fuyyxrozanog - efrorbpitpa, ejrorbitpa, ejrorbkitta, ejrorbpdtxa, ejrorbpevpa, ejrorbpirpa, ejrorbpitpa, ejrorxpiapa, ejuorbpitpr, erorbpitpa, errorbpitpa, jrocbpitpa
+fuyyxroznog - ejrorbitpa, ejrorbpevpa, ejrorbpirpa, ejrorbpitpa, ejrorbpltpa, ejuorbpitpr, erorbpitpa, yjrorbeitpa
+fuyyxrozxnog - efrorbpitpa, ejrorbkitta, ejrorbpevpa, ejrorbpirpa, ejrorbpltpa, ejrorxpiapa, erorbpitpa, errorbpitpa, jrocbpitpa
+fvyyxrozanog - efrorbpitpa, ejrorbitpa, ejrorbkitta, ejrorbpdtxa, ejrorbpevpa, ejrorbpibpa, ejrorbpirpa, ejrorbpitpa, ejrorbpltpa, ejuorbpitpr, erorbpitpa, errorbpitpa, jrocbpitpa, yjrorbeitpa
+uyyxroqanog - efrorbpitpa, ejrorbitpa, ejrorbkitta, ejrorbpevpa, ejrorbpibpa, ejrorbpirpa, ejrorbpitpa, ejrorbpltpa, ejrorxpiapa, ejuorbpitpr, erorbpitpa, jrocbpitpa, yjrorbeitpa
+
+Answer:
+15
+efrorbpitpa - fuwyxrozanog, fuyyxaozandg, fuyyxqpzanog, fuyyxroanog, fuyyxrozanog, fuyyxrozxnog, fvyyxrozanog, uyyxroqanog
+ejrorbitpa - fuwyxrozanog, fuyyxaozandg, fuyyxroanog, fuyyxrozanog, fuyyxroznog, fvyyxrozanog, uyyxroqanog
+ejrorbkitta - fuwyxrozanog, fuyyxqpzanog, fuyyxroanog, fuyyxrozanog, fuyyxrozxnog, fvyyxrozanog, uyyxroqanog
+ejrorbpdtxa - fuwyxrozanog, fuyyxroanog, fuyyxrozanog, fvyyxrozanog
+ejrorbpevpa - fuwyxrozanog, fuyyxaozandg, fuyyxqpzanog, fuyyxroanog, fuyyxrozanog, fuyyxroznog, fuyyxrozxnog, fvyyxrozanog, uyyxroqanog
+ejrorbpibpa - fuvyerozanog, fuwyxrozanog, fuyyxaozandg, fuyyxqpzanog, fvyyxrozanog, uyyxroqanog
+ejrorbpirpa - fuvyerozanog, fuyyxaozandg, fuyyxqpzanog, fuyyxrozanog, fuyyxroznog, fuyyxrozxnog, fvyyxrozanog, uyyxroqanog
+ejrorbpitpa - fuvyerozanog, fuyyxroanog, fuyyxrozanog, fuyyxroznog, fvyyxrozanog, uyyxroqanog
+ejrorbpltpa - fuyyxaozandg, fuyyxroznog, fuyyxrozxnog, fvyyxrozanog, uyyxroqanog
+ejrorxpiapa - fuvyerozanog, fuwyxrozanog, fuyyxroanog, fuyyxrozanog, fuyyxrozxnog, uyyxroqanog
+ejuorbpitpr - fuvyerozanog, fuyyxqpzanog, fuyyxroanog, fuyyxrozanog, fuyyxroznog, fvyyxrozanog, uyyxroqanog
+erorbpitpa - fuvyerozanog, fuwyxrozanog, fuyyxqpzanog, fuyyxroanog, fuyyxrozanog, fuyyxroznog, fuyyxrozxnog, fvyyxrozanog, uyyxroqanog
+errorbpitpa - fuvyerozanog, fuwyxrozanog, fuyyxaozandg, fuyyxqpzanog, fuyyxrozanog, fuyyxrozxnog, fvyyxrozanog
+jrocbpitpa - fuyyxaozandg, fuyyxqpzanog, fuyyxroanog, fuyyxrozanog, fuyyxrozxnog, fvyyxrozanog, uyyxroqanog
+yjrorbeitpa - fuwyxrozanog, fuyyxaozandg, fuyyxqpzanog, fuyyxroanog, fuyyxroznog, fvyyxrozanog, uyyxroqanog
+
+
+Test:
+20
+bjsxvtpwo - mfrruqgcvx, udrruqgjtx, ufrruqejva, ufrruqgjvt, ufrruqgjvx, ugrruqgjvx
+bohxvtpwo - mfrruqgcvx, ufrrbqgjvx, ufrruqgbvx, ufrruqgjvx, ufrxuqgjvx, ugrruqgjvx, unrruqgjvx
+byovtpwo - mfrruqgcvx, udrruqgjtx, ufrruqejva, ufrruqgbvx, ufrruqgjvx
+byrxvtpwo - ufrrbqgjvx, ufrruqejva, ufrruqgbvx, ufrruqgjvt, ufrxuqgjvx, ugrruqgjvx
+bysbvtpwt - mfrruqgcvx, udrruqgjtx, ufrrbqgjvx, ufrruqgjvt, ufrruqgjvx, ugrruqgjvx
+byspvtwo - mfrruqgcvx, ufrrbqgjvx, ufrruqejva, ufrruqgbvx, ufrruqgjvt, ufrxuqgjvx, unrruqgjvx
+bysxkzpwo - mfrruqgcvx, ufrruqgbvx, ufrruqgjvt, ugrruqgjvx, unrruqgjvx
+bysxvtfwo - mfrruqgcvx, ufrrbqgjvx, ufrruqejva, ufrruqgbvx, ufrruqgjvx, ufrxuqgjvx, ugrruqgjvx, unrruqgjvx
+bysxvtpwo - udrruqgjtx, ufrruqejva, ufrruqgjvt, ufrruqgjvx, ufrxuqgjvx
+bysxvtywo - mfrruqgcvx, udrruqgjtx, ufrrbqgjvx, ufrruqgjvt, ufrruqgjvx, unrruqgjvx
+byszvtpwo - udrruqgjtx, ufrruqgjvt, ufrruqgjvx, ufrxuqgjvx, ugrruqgjvx
+bywxvtpwo - mfrruqgcvx, udrruqgjtx, ufrruqejva
+bywxvtwo - ufrrbqgjvx, ufrruqgbvx, ufrruqgjvt, ufrruqgjvx, ufrxuqgjvx, ugrruqgjvx, unrruqgjvx
+byzxvtdwo - udrruqgjtx, ufrrbqgjvx, ufrruqejva, ufrruqgbvx, ufrruqgjvt, ufrruqgjvx, ufrxuqgjvx, ugrruqgjvx
+cyjxvtpwo - mfrruqgcvx, udrruqgjtx, ufrrbqgjvx, ufrruqgjvt, ufrxuqgjvx, ugrruqgjvx, unrruqgjvx
+dysxvtfwo - udrruqgjtx, ufrrbqgjvx, ufrruqejva, ufrruqgbvx, ufrruqgjvt, ufrxuqgjvx, ugrruqgjvx, unrruqgjvx
+gasxvtpwo - ufrrbqgjvx, ufrruqgbvx, ufrruqgjvt, ufrruqgjvx
+qysxvtpwn - udrruqgjtx, ufrrbqgjvx, ufrruqejva, ufrruqgjvt, ufrruqgjvx, ufrxuqgjvx, ugrruqgjvx
+tysnvtpwo - mfrruqgcvx, ufrruqejva, ufrruqgbvx, ufrruqgjvt, ufrxuqgjvx, unrruqgjvx
+ybxvtpwo - udrruqgjtx, ufrrbqgjvx, ufrruqejva, ufrruqgbvx, ufrruqgjvx, ufrxuqgjvx, unrruqgjvx
+
+Answer:
+10
+mfrruqgcvx - bjsxvtpwo, bohxvtpwo, byovtpwo, bysbvtpwt, byspvtwo, bysxkzpwo, bysxvtfwo, bysxvtywo, bywxvtpwo, cyjxvtpwo, tysnvtpwo
+udrruqgjtx - bjsxvtpwo, byovtpwo, bysbvtpwt, bysxvtpwo, bysxvtywo, byszvtpwo, bywxvtpwo, byzxvtdwo, cyjxvtpwo, dysxvtfwo, qysxvtpwn, ybxvtpwo
+ufrrbqgjvx - bohxvtpwo, byrxvtpwo, bysbvtpwt, byspvtwo, bysxvtfwo, bysxvtywo, bywxvtwo, byzxvtdwo, cyjxvtpwo, dysxvtfwo, gasxvtpwo, qysxvtpwn, ybxvtpwo
+ufrruqejva - bjsxvtpwo, byovtpwo, byrxvtpwo, byspvtwo, bysxvtfwo, bysxvtpwo, bywxvtpwo, byzxvtdwo, dysxvtfwo, qysxvtpwn, tysnvtpwo, ybxvtpwo
+ufrruqgbvx - bohxvtpwo, byovtpwo, byrxvtpwo, byspvtwo, bysxkzpwo, bysxvtfwo, bywxvtwo, byzxvtdwo, dysxvtfwo, gasxvtpwo, tysnvtpwo, ybxvtpwo
+ufrruqgjvt - bjsxvtpwo, byrxvtpwo, bysbvtpwt, byspvtwo, bysxkzpwo, bysxvtpwo, bysxvtywo, byszvtpwo, bywxvtwo, byzxvtdwo, cyjxvtpwo, dysxvtfwo, gasxvtpwo, qysxvtpwn, tysnvtpwo
+ufrruqgjvx - bjsxvtpwo, bohxvtpwo, byovtpwo, bysbvtpwt, bysxvtfwo, bysxvtpwo, bysxvtywo, byszvtpwo, bywxvtwo, byzxvtdwo, gasxvtpwo, qysxvtpwn, ybxvtpwo
+ufrxuqgjvx - bohxvtpwo, byrxvtpwo, byspvtwo, bysxvtfwo, bysxvtpwo, byszvtpwo, bywxvtwo, byzxvtdwo, cyjxvtpwo, dysxvtfwo, qysxvtpwn, tysnvtpwo, ybxvtpwo
+ugrruqgjvx - bjsxvtpwo, bohxvtpwo, byrxvtpwo, bysbvtpwt, bysxkzpwo, bysxvtfwo, byszvtpwo, bywxvtwo, byzxvtdwo, cyjxvtpwo, dysxvtfwo, qysxvtpwn
+unrruqgjvx - bohxvtpwo, byspvtwo, bysxkzpwo, bysxvtfwo, bysxvtywo, bywxvtwo, cyjxvtpwo, dysxvtfwo, tysnvtpwo, ybxvtpwo
+

@@ -1,0 +1,136 @@
+Name:
+Частотный анализ
+
+Statement:
+<p>Дан текст. Выведите все слова, встречающиеся в тексте, по одному на каждую строку.
+Слова должны быть отсортированы по убыванию их количества появления в тексте,
+а при одинаковой частоте появления&nbsp;&mdash; в лексикографическом порядке.</p>
+
+<p>Указание. После того, как вы создадите словарь всех слов, вам захочется отсортировать
+его по частоте встречаемости слова. Желаемого можно добиться, если создать список,
+элементами которого будут кортежи из двух элементов: частота встречаемости слова
+и само слово. Например, <code>[(2, 'hi'), (1, 'what'), (3, 'is')]</code>.
+Тогда стандартная сортировка будет сортировать список кортежей, при этом
+кортежи сравниваются по первому элементу, а если они равны&nbsp;&mdash;
+то по второму. Это <b>почти</b> то, что требуется в задаче.</p>
+
+Test:
+hi
+hi
+what is your name
+my name is bond
+james bond
+my name is damme
+van damme
+claude van damme
+jean claude van damme
+
+Answer:
+damme
+is
+name
+van
+bond
+claude
+hi
+my
+james
+jean
+what
+your
+
+
+Test:
+oh you touch my tralala
+mmm my ding ding dong
+
+Answer:
+ding
+my
+dong
+mmm
+oh
+touch
+tralala
+you
+
+
+Test:
+ai ai ai ai ai ai ai ai ai ai
+
+Answer:
+ai
+
+
+Test:
+iovjxotfvt h h iovjxotfvt h iovjxotfvt iovjxotfvt h
+h iovjxotfvt
+
+Answer:
+h
+iovjxotfvt
+
+
+Test:
+eqlbahbovv pzpumhz mlcgtbbnfr
+axsjbontg emojwajtfi
+basdu nzyh wpyirkmz xxkmrr blnlqwcpur eqlbahbovv nzyh mlcgtbbnfr
+mlcgtbbnfr axsjbontg mlcgtbbnfr mlcgtbbnfr mlcgtbbnfr blnlqwcpur mlcgtbbnfr
+
+Answer:
+mlcgtbbnfr
+axsjbontg
+blnlqwcpur
+eqlbahbovv
+nzyh
+basdu
+emojwajtfi
+pzpumhz
+wpyirkmz
+xxkmrr
+
+
+Test:
+mqgjduaqqbrfp
+jcwjcfjiyniivnz aypaoid k uxxqdcmj efamebfaxoyzsr exxuqxtwcbllapxqkoze cwzoj kdocaljuic nbwtr nbwtr jcwjcfjiyniivnz uxxqdcmj aypaoid kdocaljuic aypaoid kdocaljuic nbwtr kdocaljuic
+exxuqxtwcbllapxqkoze
+
+Answer:
+kdocaljuic
+aypaoid
+nbwtr
+exxuqxtwcbllapxqkoze
+jcwjcfjiyniivnz
+uxxqdcmj
+cwzoj
+efamebfaxoyzsr
+k
+mqgjduaqqbrfp
+
+
+Test:
+reclvykxqzyogez zdl vijdflazjhrrpupjkeb ugzrtfirjjwqgs wjbeqcnzwkmwudhcohdj
+qndssczyiqorkuhlc qwmlkvdpqidtijnell aimuwuk civqglhpio jxfaqtdkdp sxkcojgtegd binvyhuabx ain f aaqvqxzhcfl ncwubkmniiuzonmxejdq mrpmetpkluyhqp rhseqfhetc bfjsdfnbfo tdlwrza
+
+Answer:
+aaqvqxzhcfl
+aimuwuk
+ain
+bfjsdfnbfo
+binvyhuabx
+civqglhpio
+f
+jxfaqtdkdp
+mrpmetpkluyhqp
+ncwubkmniiuzonmxejdq
+qndssczyiqorkuhlc
+qwmlkvdpqidtijnell
+reclvykxqzyogez
+rhseqfhetc
+sxkcojgtegd
+tdlwrza
+ugzrtfirjjwqgs
+vijdflazjhrrpupjkeb
+wjbeqcnzwkmwudhcohdj
+zdl
+
