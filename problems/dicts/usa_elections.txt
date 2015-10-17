@@ -9,10 +9,13 @@ Statement:
 от штата голосуют в соответствии с результами голосования внутри штата, то есть
 на заключительной стадии выборов в голосовании участвуют штаты, имеющие различное число голосов.</p>
 
-<p>Вам известно за кого проголосовал каждый штат и сколько голосов было отдано данным штатом.
-Подведите итоги выборов: для каждого из участника голосования определите число отданных за него голосов.</p>
+<p> В первой строке дано количество записей. Далее, каждая запись содержит фамилию кандидата и число
+голосов, отданных за него в одном из штатов.
+Подведите итоги выборов: для каждого из участника голосования определите число отданных за него
+голосов. Участников нужно выводить в алфавитном порядке.</p>
 
 Test:
+5
 McCain 10
 McCain 5
 Obama 9
@@ -23,29 +26,37 @@ Answer:
 McCain 16
 Obama 17
 
-
 Test:
-ivanov 100
-ivanov 500
-ivanov 300
-petr 70
-tourist 1
-tourist 2
+13
+McCain 10
+McCain 3
+Obama 19
+Obama 2
+McCain 7
+McCain 2
+Obama 6
+Obama 10
+McCain 11
+McCain 5
+Obama 3
+Obama 12
+McCain 13
 
 Answer:
-ivanov 900
-petr 70
-tourist 3
+McCain 51
+Obama 52
 
 
 Test:
-bur 1
+1
+Obama 1
 
 Answer:
-bur 1
+Obama 1
 
 
 Test:
+7
 ivan 2
 gena 1
 sergey 100000
@@ -59,18 +70,70 @@ gena 101
 ivan 4
 sergey 100000
 
-
 Test:
-bur1 500
-agol 900
-world 100
-russia 17413
-unitedstatesofamerica 500000
+61
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+Obama 1
+McCain 59
 
 Answer:
-agol 900
-bur1 500
-russia 17413
-unitedstatesofamerica 500000
-world 100
-
+McCain 59
+Obama 60

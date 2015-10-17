@@ -2,11 +2,13 @@ Name:
 Самое частое слово
 
 Statement:
-<p>Дан текст. Выведите слово, которое в этом тексте встречается чаще всего.
+<p>Дан текст: в первой строке задано число строк, далее идут сами строки.
+Выведите слово, которое в этом тексте встречается чаще всего.
 Если таких слов несколько, выведите то, которое меньше в лексикографическом
 порядке.</p>
 
 Test:
+1
 apple orange banana banana orange
 
 Answer:
@@ -14,6 +16,7 @@ banana
 
 
 Test:
+3
 q w e r t y u i o p
 a s d f g h j k l
 z x c v b n m
@@ -22,6 +25,7 @@ Answer:
 a
 
 Test:
+3
 vqcg vqcg vqcg vqcg vqcg vqcg vqcg
 vqcg vqcg
 vqcg
@@ -31,6 +35,7 @@ vqcg
 
 
 Test:
+2
 taia ikm ikm ikm taia taia taia
 ikm ikm ikm
 
@@ -39,6 +44,7 @@ ikm
 
 
 Test:
+1
 zc gdwbsv uwsz j bqz cytzpsdpl q zczwrq e zvnisf cytzpsdpl gdwbsv cytzpsdpl e bqz bqz zczwrq gdwbsv gdwbsv e
 
 Answer:
@@ -46,6 +52,7 @@ gdwbsv
 
 
 Test:
+3
 iawkvxlhqwjm rwcahhaesy kbfahrmup huq w rzllq pq ufszcjb
 wmjdbhcwhxzlhlf
 jeeyfhbsauapwnpmskgh rzllq rzllq wmjdbhcwhxzlhlf rzllq rzllq jeeyfhbsauapwnpmskgh wmjdbhcwhxzlhlf rzllq jeeyfhbsauapwnpmskgh jeeyfhbsauapwnpmskgh
@@ -55,6 +62,7 @@ rzllq
 
 
 Test:
+1
 enagtgufzhnmyzkf kaphgquvoanw tkvj sylaejugfsv vuszbsdsv kmyyed rnhcdrpx b ejqa vykiu fjmdqlgxmameddhiytv yy owmldhdcjnoi durqhg ftjnehww aq ou tqxlcnxdpnmo ssdhbcdzzp twjdcvcojgtj
 
 Answer:
@@ -62,6 +70,7 @@ aq
 
 
 Test:
+10
 Death there mirth way the noisy merit. Piqued shy spring nor six though mutual living ask extent. Replying of dashwood advanced ladyship smallest disposal or. Attempt offices own improve now see. Called person are around county talked her esteem. Those fully these way nay thing seems. 
 At distant inhabit amongst by. Appetite welcomed interest the goodness boy not. Estimable education for disposing pronounce her. John size good gay plan sent old roof own. Inquietude saw understood his friendship frequently yet. Nature his marked ham wished. 
 Marianne or husbands if at stronger ye. Considered is as middletons uncommonly. Promotion perfectly ye consisted so. His chatty dining for effect ladies active. Equally journey wishing not several behaved chapter she two sir. Deficient procuring favourite extensive you two. Yet diminution she impossible understood age. 
