@@ -2,13 +2,12 @@ Name:
 Номер появления слова
 
 Statement:
-<p>Во входном файле (вы можете читать данные из файла <code>input.txt</code>)
-записан текст. Словом считается последовательность непробельных символов
+<p>В единственной строке записан текст. 
+Для каждого слова из данного текста подсчитайте, сколько раз оно встречалось в этом тексте ранее.</p>
+
+<p>Словом считается последовательность непробельных символов
 идущих подряд, слова разделены одним или большим числом пробелов
 или символами конца строки.</p>
-
-<p>Для каждого слова из этого текста подсчитайте, сколько раз оно встречалось
-в этом тексте ранее.</p>
 
 Test:
 one two one tho three
@@ -18,10 +17,7 @@ Answer:
 
 
 Test:
-She sells sea shells on the sea shore;
-The shells that she sells are sea shells I'm sure.
-So if she sells sea shells on the sea shore,
-I'm sure that the shells are sea shore shells.
+She sells sea shells on the sea shore; The shells that she sells are sea shells I'm sure. So if she sells sea shells on the sea shore, I'm sure that the shells are sea shore shells.
 
 Answer:
 0 0 0 0 0 0 1 0 0 1 0 0 1 0 2 2 0 0 0 0 1 2 3 3 1 1 4 0 1 0 1 2 4 1 5 0 0 
@@ -63,10 +59,10 @@ Answer:
 
 
 Test:
-
+word 
 
 Answer:
-
+0 
 
 
 Test:
@@ -84,31 +80,10 @@ Answer:
 
 
 Test:
-this is google translate's street magic, is not it?
-
-Answer:
-0 0 0 0 0 0 1 0 0 
-
-
-Test:
 you will not solve this test. This @problem@ is unsolvable.
 
 Answer:
 0 0 0 0 0 0 0 0 0 0 
-
-
-Test:
-WA, ML, TL, RE, RJ, all this will !@#$%^&*() your problem Re, rE, RE RE, re, ML, ml, Ml, mL
-
-Answer:
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 
-
-
-Test:
-Your solution is wrong. it will fail on test number *&S $%S *&S *&S *&S
-
-Answer:
-0 0 0 0 0 0 0 0 0 0 0 0 1 2 3 
 
 
 Test:
