@@ -105,3 +105,31 @@ Answer:
 NO
 
 
+Test:
+2
+4
+5
+7
+
+Answer:
+YES
+
+
+Test:
+3
+5
+7
+1
+
+Answer:
+YES
+
+
+Test:
+5
+2
+5
+8
+
+Answer:
+YES
