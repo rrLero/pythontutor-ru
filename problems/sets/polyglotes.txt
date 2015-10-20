@@ -11,7 +11,8 @@ Statement:
 
 <p>В первой строке выведите количество языков, которые знаю все школьники. Начиная со второй строки
 - список таких языков. Затем - количество языков, которые знает хотя бы один школьник, на следующих
-  строках - список таких языков.</p>
+  строках - список таких языков. Языки нужно выводить в лексикографическом порядке, по одному на
+  строке.</p>
 
 Test:
 3
@@ -29,57 +30,57 @@ Answer:
 1
 English
 3
-Russian
-Japanese
 English
+Japanese
+Russian
 
 
 Test:
 5
 1
-lan
+German
 1
-lan
+German
 1
-lan
+German
 1
-lan
+German
 1
-lan
+German
 
 Answer:
 1
-lan
+German
 1
-lan
+German
 
 
 Test:
 4
 3
-l
-la
-lan
+Russian
+Spanish
+German
 3
-l
-la
-lan
+Russian
+German
+Spanish
 3
-l
-la
-lan
+Spanish
+Russian
+German
 3
-l
-la
-lan
+German
+Russian
+Spanish
 
 Answer:
 3
-la
-lan
-l
+German
+Russian
+Spanish
 3
-la
-lan
-l
+German
+Russian
+Spanish
 
