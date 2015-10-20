@@ -33,6 +33,5 @@
 
 Для запуска консоли разработчика:
 
-        cd vagrant
         export SECRET_KEY='8x*1t3+ifh2sv(u-q+p(c8n=ew%igufnc6bet(2tyg@ww(fw*='
         python3 /vagrant/manage.py shell
