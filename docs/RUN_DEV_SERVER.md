@@ -33,5 +33,6 @@
 
 Для запуска консоли разработчика:
 
+    cd /vagrant/
     `cat /vagrant/vagrant_conf/run.sh | grep SECRET_KEY`
     python3 /vagrant/manage.py shell
