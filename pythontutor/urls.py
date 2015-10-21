@@ -8,6 +8,7 @@ from tutorial.views.lesson import lesson_in_course
 from tutorial.views.log_events import log_user_action
 from tutorial.views.problem import problem_in_lesson
 from tutorial.views.profile import profile, register_user
+from tutorial.views.standings import standings_for_course, standings_for_lesson
 from tutorial.views.statistics import statistics
 from tutorial.views.success_roadmap import success_roadmap
 from tutorial.views.tester import tester_submit
@@ -47,4 +48,7 @@ urlpatterns = patterns('',
     url(r'^log_user_action/$', log_user_action, name='log_user_action'),
 
     url(r'^success_roadmap/([^/]+)/$', success_roadmap, name='success_roadmap'),
+
+    url(r'^standings/([^/]+)/$', standings_for_course, name='standings_for_course'),
+    url(r'^standings/([^/]+)/lesson/([^/]+)/$', standings_for_lesson, name='standings_for_lesson'),
 )
