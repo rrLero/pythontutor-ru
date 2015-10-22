@@ -81,6 +81,6 @@ def standings_for_lesson(request, course_urlname, lesson_urlname):
 
 def standings_for_course(request, course_urlname):
     course = Course.objects.get(urlname=course_urlname)
-    lessons = get_sorted_lessons(course)
+    lessons = Lesson.objects.all()
     navigation = dict(course=course)
     return standings_for_lessons(request, course, lessons, navigation)
