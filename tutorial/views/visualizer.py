@@ -24,7 +24,11 @@ def visualizer(request):
 def explain_error(exc, code):
     msg = exc.get('exception_type', '') + ': ' + exc.get('exception_msg', '')
     line = code.split('\n')[exc['line'] - 1]
-    exc['exception_translation'] = translate_error(msg, line)
+    try:
+        translation = translate_error(msg, line)
+    except:
+        translation = ''
+    exc['exception_translation'] = translation
 
 
 def execute(request):
