@@ -18,7 +18,7 @@
 					<h2>{{ course.title }}</h2>
 					<p><a href="/admin/tutorial/userprofile/?course__id__exact={{ course.id }}">Редактировать список учеников</a></p>
 					<p><a href="/standings/{{ course.urlname }}/">Таблица результатов</a></p>
-					<p><a href="/success_roadmap/{{ course.id }}/">Плоскость с решениями</a></p>
+					<p>Плоскость с решениями: <a href="/success_roadmap/{{ course.id }}/">все</a>, <a href="/success_roadmap_last/{{ course.id }}/">последнее</a></p>
 					{% for lic in lessons %}
 						<p><a href="/standings/{{ course.urlname }}/lesson/{{ lic.lesson.urlname }}/">Результаты занятия {{ lic.order }}. {{ lic.lesson.title }}</a></p>
 					{% endfor %}
