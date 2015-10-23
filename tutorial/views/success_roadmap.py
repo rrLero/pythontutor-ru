@@ -14,7 +14,7 @@ def success_roadmap_common(request, course_index, last_only):
     users = User.objects.filter(userprofile__course=course)
     users_list = list(users)
     submissions = (Submission.objects.filter(user__userprofile__course=course)
-            .prefetch_related('problem').order_by('status', 'time'))
+            .prefetch_related('problem__lesson_set__lessonincourse_set').order_by('status', 'time'))
 
     data = defaultdict(lambda: defaultdict(lambda: [[] for i in range(len(users))]))
     for submission in submissions:
@@ -35,7 +35,6 @@ def success_roadmap_common(request, course_index, last_only):
                 data[lesson_key][problem_key][user_order][:] = [submission]
             else:
                 data[lesson_key][problem_key][user_order].append(submission)
-
     # Convert defaultdicts to dicts because you cannot loop through
     # defaultdicts in Django templates:
     # http://stackoverflow.com/a/12842716
