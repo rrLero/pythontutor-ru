@@ -15,16 +15,16 @@
 
 <table border=1 class="standings">
     <tr>
-        <th>Пользователь</th>
+        <td>Пользователь</td>
         {% for problem in problems %}
-            <th>{{ problem.name }}</th>
+            <td>{{ problem.name }}</td>
         {% endfor %}
-        <th>Решено задач</th>
-        <th>Рейтинг</th>
+        <td>Решено задач</td>
+        <td>Рейтинг</td>
     </tr>
     {% for user, standings_line, num_solved, rating in users %}
     <tr>
-        <th>{{ user.first_name }} {{ user.last_name }}</th>
+        <td>{{ user.first_name }} {{ user.last_name }}</td>
         {% for color, rgb_color, text, problem, submission in standings_line %}
             <!--
             <td title="{{ user.first_name }} {{ user.last_name }}, {{ problem.name }}" class="standings{{ color|capfirst }}Cell" align="center">

@@ -1,0 +1,31 @@
+{% extends '_base_basic.html' %} 
+
+{% block headers %}
+	{{ block.super }}
+
+	<link rel="stylesheet" href="{{ STATIC_URL }}edu-python-title.css">
+{% endblock %}
+
+{% block body %}
+	<center>
+		<div class="titlePane">
+			<h1>Интерфейс учителя</h1>
+		</div>
+
+		<div class="mainBodyPane">
+			{% for course in courses %}
+				<div class="activityPane" id="solvePane">
+					<h2>{{ course.title }}</h2>
+					<p><a href="/admin/tutorial/userprofile/?course__id__exact={{ course.id }}">Редактировать список учеников</a></p>
+					<p><a href="/standings/{{ course.urlname }}/">Таблица результатов</a></p>
+					<p><a href="/success_roadmap/{{ course.id }}/">Плоскость с решениями</a></p>
+					{% for lic in lessons %}
+						<p><a href="/standings/{{ course.urlname }}/lesson/{{ lic.lesson.urlname }}/">Результаты занятия {{ lic.order }}. {{ lic.lesson.title }}</a></p>
+					{% endfor %}
+				</div>
+				<hr>
+			{% endfor %}
+
+		</div>
+	</center>
+{% endblock %}
