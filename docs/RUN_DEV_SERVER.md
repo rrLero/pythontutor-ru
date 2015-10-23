@@ -36,3 +36,8 @@
     cd /vagrant/
     `cat /vagrant/vagrant_conf/run.sh | grep SECRET_KEY`
     python3 /vagrant/manage.py shell
+
+Для корректной работы с кириллицей наберите
+
+    sudo locale-gen ru_RU.UTF-8
+    export LC_ALL='ru_RU.UTF-8'
