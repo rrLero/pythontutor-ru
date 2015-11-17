@@ -78,7 +78,6 @@ class IdealSolutionNode(Node):
 		<thead>
 			<tr>
 				<th>Ваше решение</td>
-				<th>Эталонное решение</td>
 			</tr>
 		</thead>
 		<tbody>
@@ -86,12 +85,24 @@ class IdealSolutionNode(Node):
 				<td>
 					{user_solution}
 				</td>
-				<td>
-					{ideal_solution}
-				</td>
 			</tr>
 		</tfoot>
-	</table>'''.format(**{
+	</table>
+    <table class="table problem_user_and_ideal_solutions hidden-xs hidden-md">
+        <thead>
+            <tr>
+                <th>Эталонное решение</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    {ideal_solution}
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+'''.format(**{
                 'user_solution': _render_code_to_html(code = user_solution.code,
                                                       context = context,
                                                       executable = False),
