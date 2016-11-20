@@ -16,6 +16,7 @@ Statement:
 в лексикографическом порядке.</p>
 
 Test:
+6
 Ivanov paper 10
 Petrov pens 5
 Ivanov marker 3
@@ -34,6 +35,7 @@ pens 5
 
 
 Test:
+13
 Ivanov aaa 1
 Petrov aaa 2
 Sidorov aaa 3
@@ -64,6 +66,7 @@ eee 234
 
 
 Test:
+100
 TKSNUU FKXYPUGQ 855146
 TKSNUU FKXYPUGQ 930060
 TKSNUU FKXYPUGQ 886973
